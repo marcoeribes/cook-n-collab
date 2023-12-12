@@ -1,25 +1,22 @@
+import "./App.css";
 import Navbar from "./components/navbar/Navbar.tsx";
 import AboutScreen from "./pages/AboutScreen.tsx";
 import HomeScreen from "./pages/HomeScreen.tsx";
 import RecipesScreen from "./pages/RecipesScreen.tsx";
 
+import { Route, Routes } from "react-router-dom";
+
 function App() {
-  let Component;
-  switch (window.location.pathname) {
-    case "/":
-      Component = HomeScreen;
-      break;
-    case "/recipes":
-      Component = RecipesScreen;
-      break;
-    case "/about":
-      Component = AboutScreen;
-      break;
-  }
   return (
     <>
       <Navbar />
-      <Component />
+      <div className="container">
+        <Routes>
+          <Route path="/" element={<HomeScreen />} />
+          <Route path="/recipes" element={<RecipesScreen />} />
+          <Route path="/about" element={<AboutScreen />} />
+        </Routes>
+      </div>
     </>
   );
 }
