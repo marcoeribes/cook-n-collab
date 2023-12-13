@@ -2,7 +2,7 @@ import "./App.css";
 import Navbar from "./components/navbar/Navbar.tsx";
 import AboutScreen from "./pages/AboutScreen.tsx";
 import HomeScreen from "./pages/HomeScreen.tsx";
-import RecipesScreen from "./pages/RecipesScreen.tsx";
+import RecipesScreen from "./pages/Recipes/RecipesScreen.tsx";
 
 import { Route, Routes } from "react-router-dom";
 
