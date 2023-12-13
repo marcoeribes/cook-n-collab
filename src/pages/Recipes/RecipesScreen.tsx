@@ -1,7 +1,15 @@
 import RecipeCard from "../../components/RecipeCard";
 import "./Recipes.css";
 
+import { useState } from "react";
+
 export default function RecipesScreen() {
+  const [itemsToShow, setItemsToShow] = useState(3);
+
+  const loadMore = () => {
+    setItemsToShow((prev) => prev + 3);
+  };
+
   return (
     <>
       <h1>Recipes</h1>
@@ -11,9 +19,11 @@ export default function RecipesScreen() {
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "10px",
           backgroundColor: "blue",
+          justifyContent: "center",
+          alignItems: "center",
         }}
       >
-        {fakeData.map((recipe, index) => (
+        {fakeData.slice(0, itemsToShow).map((recipe, index) => (
           <RecipeCard
             key={index}
             imageUrl={recipe.imageUrl}
@@ -22,36 +32,75 @@ export default function RecipesScreen() {
           />
         ))}
       </div>
+
+      {itemsToShow < fakeData.length ? (
+        <button onClick={loadMore}>Load More</button>
+      ) : (
+        <p>No more recipes to load</p>
+      )}
     </>
   );
 }
 
 const fakeData = [
-  { imageUrl: "url1", title: "Recipe 1", subheader: "Subheader 1" },
-  { imageUrl: "url2", title: "Recipe 2", subheader: "Subheader 2" },
-  { imageUrl: "url3", title: "Recipe 3", subheader: "Subheader 3" },
-  { imageUrl: "url4", title: "Recipe 4", subheader: "Subheader 4" },
-  { imageUrl: "url5", title: "Recipe 5", subheader: "Subheader 5" },
-  { imageUrl: "url6", title: "Recipe 6", subheader: "Subheader 6" },
-  { imageUrl: "url7", title: "Recipe 7", subheader: "Subheader 7" },
-  { imageUrl: "url8", title: "Recipe 8", subheader: "Subheader 8" },
-  { imageUrl: "url9", title: "Recipe 9", subheader: "Subheader 9" },
-  { imageUrl: "url1", title: "Recipe 1", subheader: "Subheader 1" },
-  { imageUrl: "url2", title: "Recipe 2", subheader: "Subheader 2" },
-  { imageUrl: "url3", title: "Recipe 3", subheader: "Subheader 3" },
-  { imageUrl: "url4", title: "Recipe 4", subheader: "Subheader 4" },
-  { imageUrl: "url5", title: "Recipe 5", subheader: "Subheader 5" },
-  { imageUrl: "url6", title: "Recipe 6", subheader: "Subheader 6" },
-  { imageUrl: "url7", title: "Recipe 7", subheader: "Subheader 7" },
-  { imageUrl: "url8", title: "Recipe 8", subheader: "Subheader 8" },
-  { imageUrl: "url9", title: "Recipe 9", subheader: "Subheader 9" },
-  { imageUrl: "url1", title: "Recipe 1", subheader: "Subheader 1" },
-  { imageUrl: "url2", title: "Recipe 2", subheader: "Subheader 2" },
-  { imageUrl: "url3", title: "Recipe 3", subheader: "Subheader 3" },
-  { imageUrl: "url4", title: "Recipe 4", subheader: "Subheader 4" },
-  { imageUrl: "url5", title: "Recipe 5", subheader: "Subheader 5" },
-  { imageUrl: "url6", title: "Recipe 6", subheader: "Subheader 6" },
-  { imageUrl: "url7", title: "Recipe 7", subheader: "Subheader 7" },
-  { imageUrl: "url8", title: "Recipe 8", subheader: "Subheader 8" },
-  { imageUrl: "url9", title: "Recipe 9", subheader: "Subheader 9" },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/clamchowder.jpeg",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/wholegraincookies.jpeg",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
+  {
+    imageUrl: "../../dummy data/classic-waffles.png",
+    title: "Classic Waffles",
+    subheader: "Breakfast",
+  },
 ];
