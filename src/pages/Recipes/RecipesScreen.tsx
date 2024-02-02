@@ -1,5 +1,6 @@
 import RecipeCard from "../../components/RecipeCard";
 import "./Recipes.css";
+import { Link } from "react-router-dom";
 
 import { useState } from "react";
 
@@ -24,12 +25,14 @@ export default function RecipesScreen() {
         }}
       >
         {fakeData.slice(0, itemsToShow).map((recipe, index) => (
-          <RecipeCard
-            key={index}
-            imageUrl={recipe.imageUrl}
-            title={recipe.title}
-            subheader={recipe.subheader}
-          />
+          <Link to={`/recipe/${recipe.id}`} key={index}>
+            <RecipeCard
+              key={index}
+              imageUrl={recipe.imageUrl}
+              title={recipe.title}
+              subheader={recipe.subheader}
+            />
+          </Link>
         ))}
       </div>
 
@@ -47,16 +50,19 @@ const fakeData = [
     imageUrl: "../../dummy data/classic-waffles.png",
     title: "Classic Waffles",
     subheader: "Breakfast",
+    id: 1,
   },
   {
     imageUrl: "../../dummy data/clamchowder.jpeg",
     title: "Classic Waffles",
     subheader: "Breakfast",
+    id: 2,
   },
   {
     imageUrl: "../../dummy data/wholegraincookies.jpeg",
     title: "Classic Waffles",
     subheader: "Breakfast",
+    id: 3,
   },
   {
     imageUrl: "../../dummy data/classic-waffles.png",
