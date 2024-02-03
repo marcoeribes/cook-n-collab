@@ -8,10 +8,12 @@ export default function Navbar() {
       <Link to="/" className="site-title">
         Cook 'n' Collab
       </Link>
-      <ul>
-        <CustomLink to="/recipes">Recipes</CustomLink>
-        <CustomLink to="/about">About</CustomLink>
-      </ul>
+      <div>
+        <ul>
+          <CustomLink to="/recipes">Recipes</CustomLink>
+          <CustomLink to="/about">About</CustomLink>
+        </ul>
+      </div>
     </nav>
   );
 }
@@ -27,10 +29,12 @@ function CustomLink({ to, children, ...props }: CustomLinkProps) {
   const isActive = useMatch({ path: resolvedPath.pathname, end: true });
 
   return (
-    <li className={isActive ? "active" : ""}>
-      <Link to={to} {...props}>
-        {children}
-      </Link>
-    </li>
+    <>
+      <li className={isActive ? "active" : ""}>
+        <Link to={to} {...props}>
+          {children}
+        </Link>
+      </li>
+    </>
   );
 }
