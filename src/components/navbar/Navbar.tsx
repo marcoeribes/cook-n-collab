@@ -12,6 +12,7 @@ export default function Navbar() {
         <ul>
           <CustomLink to="/recipes">Recipes</CustomLink>
           <CustomLink to="/about">About</CustomLink>
+          <CustomLink to="/login">Login</CustomLink>
         </ul>
       </div>
     </nav>
@@ -21,7 +22,6 @@ export default function Navbar() {
 interface CustomLinkProps {
   to: any;
   children: React.ReactNode;
-  // Add other props if needed
 }
 
 function CustomLink({ to, children, ...props }: CustomLinkProps) {

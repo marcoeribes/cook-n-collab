@@ -21,7 +21,6 @@ export default function LoginScreen() {
     } else if (data.user?.identities?.length === 0) {
       console.error("User already exists", data);
     } else {
-      setUser(data.user);
       console.log("User signed up:", data);
     }
   }
@@ -35,7 +34,6 @@ export default function LoginScreen() {
     if (error) {
       console.error("Error signing up:", error.message);
     } else {
-      setUser(data.user);
       console.log("User signed up:", data);
     }
   }
