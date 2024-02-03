@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../../../supabase/client";
+import { User } from "@supabase/supabase-js";
 
 export default function LoginScreen() {
   const [session, setSession] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSignUp, setIsSignUp] = useState(false);
+  const [newUsername, setNewUsername] = useState("");
+  const [user, setUser] = useState<User | null>(null);
+  const [username, setUsername] = useState("");
 
   async function signUpNewUser(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -34,14 +38,50 @@ export default function LoginScreen() {
     if (error) {
       console.error("Error signing up:", error.message);
     } else {
-      console.log("User signed up:", data);
+      console.log("User Logged In:", data);
     }
   }
 
   async function signOut() {
     const { error } = await supabase.auth.signOut();
     if (error) console.error("Error signing out:", error.message);
+    window.location.reload();
   }
+
+  async function changeUsername(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log("User:", user); // Debugging line
+    console.log("New Username:", newUsername); // Debugging line
+    const { error } = await supabase
+      .from("profiles")
+      .update({
+        username: newUsername,
+      })
+      .eq("id", user?.id);
+    if (error) {
+      console.error("Error changing username:", error.message);
+    } else {
+      console.log("Username changed:", newUsername);
+      setUsername(newUsername);
+      setNewUsername("");
+    }
+  }
+
+  useEffect(() => {
+    async function getProfile() {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select()
+        .eq("id", user?.id);
+      if (error) {
+        console.error("Error getting profile:", error.message);
+      } else {
+        console.log("Profile:", data);
+        setUsername(data[0].username);
+      }
+    }
+    getProfile();
+  });
 
   // Explain what's happening here
   useEffect(() => {
@@ -55,6 +95,17 @@ export default function LoginScreen() {
     });
 
     return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      console.log("user in login", user);
+      setUser(user);
+    }
+    fetchData();
   }, []);
 
   // eslint-disable-next-line prefer-const
@@ -91,10 +142,25 @@ export default function LoginScreen() {
     );
   } else {
     return (
-      <div>
-        <div>Logged in!</div>
-        <button onClick={signOut}>Sign out</button>
-      </div>
+      <>
+        <div>
+          <div>Logged in!</div>
+          <button onClick={signOut}>Sign out</button>
+        </div>
+        <form onSubmit={changeUsername}>
+          <label>
+            New Username:
+            <input
+              type="text"
+              value={newUsername}
+              onChange={(e) => setNewUsername(e.target.value)}
+              required
+            />
+          </label>
+          <input type="submit" value="Change Username" />
+        </form>
+        <p>Welcome {username}</p>
+      </>
     );
   }
 }

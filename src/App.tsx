@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 
 import "./App.css";
@@ -9,23 +8,7 @@ import RecipesScreen from "./pages/Recipes/RecipesScreen.tsx";
 import RecipeScreen from "./pages/Recipe/RecipeScreen.tsx";
 import LoginScreen from "./pages/Login/Login.tsx";
 
-import { supabase } from "../supabase/client.ts";
-import { User } from "@supabase/supabase-js";
-
 function App() {
-  const [user, setUser] = useState<User | null>(null); // Update the type of user state
-
-  useEffect(() => {
-    async function fetchData() {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      console.log("user", user);
-      setUser(user); // Needs Type
-    }
-    fetchData();
-  }, []);
-
   return (
     <>
       <Navbar />
