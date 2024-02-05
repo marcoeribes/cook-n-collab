@@ -6,7 +6,7 @@ type Country = {
   // include other properties if needed
 };
 
-export default function HomeScreen() {
+export default function CountryScreen() {
   const [countries, setCountries] = useState<Country[]>([]);
   const [newCountry, setNewCountry] = useState("");
   const [isAddCountry, setIsAddCountry] = useState(true);
