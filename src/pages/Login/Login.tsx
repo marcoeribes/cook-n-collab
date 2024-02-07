@@ -16,9 +16,10 @@ export default function LoginScreen() {
     const { data, error } = await supabase.auth.signUp({
       email: email,
       password: password,
-      options: {
+      /*options: {
         emailRedirectTo: "./home",
-      },
+      },*/
+      //email_confirm: false,
     });
     if (error) {
       console.error("Error signing up:", error.message);
@@ -26,6 +27,7 @@ export default function LoginScreen() {
       console.error("User already exists", data);
     } else {
       console.log("User signed up:", data);
+      createUsername(event);
     }
   }
 
@@ -46,6 +48,32 @@ export default function LoginScreen() {
     const { error } = await supabase.auth.signOut();
     if (error) console.error("Error signing out:", error.message);
     window.location.reload();
+  }
+
+  async function createUsername(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!user) {
+      console.error("User must be authenticated to create a username.");
+      return;
+    }
+
+    console.log("User:", user); // Debugging line
+    console.log("New Username:", newUsername); // Debugging line
+
+    const { data, error } = await supabase
+      .from("profile")
+      .insert([{ id: user?.id, username: newUsername }]);
+
+    if (error) {
+      console.error("Error creating username:", error.message);
+    } else {
+      console.log("Username created:", newUsername);
+      const username =
+        data?.user?.raw_user_meta_data?.username ?? "Default Name";
+      setUsername(newUsername);
+      setNewUsername("");
+    }
   }
 
   async function changeUsername(event: React.FormEvent<HTMLFormElement>) {
@@ -110,6 +138,7 @@ export default function LoginScreen() {
 
   // eslint-disable-next-line prefer-const
   let handleSubmit = isSignUp ? signUpNewUser : signInWithEmail;
+  let handleUsername = username ? changeUsername : createUsername;
 
   if (!session) {
     return (
@@ -147,7 +176,7 @@ export default function LoginScreen() {
           <div>Logged in!</div>
           <button onClick={signOut}>Sign out</button>
         </div>
-        <form onSubmit={changeUsername}>
+        <form onSubmit={handleUsername}>
           <label>
             New Username:
             <input
@@ -157,7 +186,10 @@ export default function LoginScreen() {
               required
             />
           </label>
-          <input type="submit" value="Change Username" />
+          <input
+            type="submit"
+            value={username ? "Change Username" : "Create Username"}
+          />
         </form>
         <p>Welcome {username}</p>
       </>
