@@ -53,7 +53,7 @@ export default function LoginScreen() {
     console.log("User:", user); // Debugging line
     console.log("New Username:", newUsername); // Debugging line
     const { error } = await supabase
-      .from("profiles")
+      .from("profile")
       .update({
         username: newUsername,
       })
@@ -70,14 +70,14 @@ export default function LoginScreen() {
   useEffect(() => {
     async function getProfile() {
       const { data, error } = await supabase
-        .from("profiles")
+        .from("profile")
         .select()
         .eq("id", user?.id);
       if (error) {
         console.error("Error getting profile:", error.message);
       } else {
         console.log("Profile:", data);
-        setUsername(data[0].username);
+        setUsername(data[0]?.username);
       }
     }
     getProfile();
