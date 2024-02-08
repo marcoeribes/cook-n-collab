@@ -5,7 +5,7 @@ import { supabase } from "../supabase/client";
 
 import "./App.css";
 import Navbar from "./components/navbar/Navbar.tsx";
-import AboutScreen from "./pages/AboutScreen.tsx";
+import AboutScreen from "./pages/graveyard/AvatarScreen.tsx";
 import HomeScreen from "./pages/Home/HomeScreen.tsx";
 import RecipesScreen from "./pages/Recipes/RecipesScreen.tsx";
 import RecipeScreen from "./pages/Recipe/RecipeScreen.tsx";

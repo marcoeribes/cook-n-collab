@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "../../supabase/client.ts";
+import { supabase } from "../../../supabase/client.ts";
 
 type Country = {
   name: string;

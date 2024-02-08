@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { supabase } from "../../supabase/client";
+import { supabase } from "../../../supabase/client";
 import { User } from "@supabase/supabase-js";
 import { v4 as uuidv4 } from "uuid";
-import Avatar from "../components/avatar/Avatar";
+import Avatar from "../../components/avatar/Avatar";
 
 export default function AboutScreen() {
   const [user, setUser] = useState<User | null>(null);
