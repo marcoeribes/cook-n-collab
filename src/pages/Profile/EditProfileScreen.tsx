@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { User, Session } from "@supabase/supabase-js";
-import { useNavigate } from "react-router-dom";
 
 import {
   getProfile,
@@ -20,25 +19,17 @@ export default function ProfileScreen({
   userProps,
   sessionProps,
 }: SessionProps) {
-  const navigate = useNavigate();
-
   const [isLoading, setIsLoading] = useState(true);
 
   const [user, setUser] = useState<User | null>(userProps);
   const [session, setSession] = useState<Session | null>(sessionProps);
-
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
-
   const [followers, setFollowers] = useState<string[]>([]);
   const [followees, setFollowees] = useState<string[]>([]);
 
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [avatarImage, setAvatarImage] = useState<string>("");
-
-  const navigateToEditProfile = () => {
-    navigate("/profile/edit");
-  };
 
   useEffect(() => {
     setSession(sessionProps);
@@ -96,13 +87,14 @@ export default function ProfileScreen({
         <p>Loading...</p>
       ) : (
         <>
-          <h1>Profile</h1>
+          <h1>Edit Profile</h1>
           <Avatar imageUrl={avatarUrl + avatarImage} />
           <p>Username: {username}</p>
           <p>Bio: {bio}</p>
           <p>Followers: {followers.length}</p>
           <p>Followees: {followees.length}</p>
-          <button onClick={navigateToEditProfile}>Edit Profile</button>
+          <button>Save</button>
+          <button>Cancel</button>
         </>
       )}
     </>
