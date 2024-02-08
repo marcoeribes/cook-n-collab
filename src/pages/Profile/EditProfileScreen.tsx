@@ -1,35 +1,55 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from "react";
 import { User, Session } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 
-import {
-  getProfile,
-  getFollowers,
-  getFollowees,
-} from "../../../supabase/profileFunctions";
+import { getProfile, updateProfile } from "../../../supabase/profileFunctions";
 import {
   fetchAvatarImage,
   fetchAvatarUrl,
 } from "../../../supabase/avatarFunctions";
 import Avatar from "../../components/avatar/Avatar";
 import SessionProps from "../../interfaces/auth.interface";
-import arraysEqual from "../../utils/arraysEqual";
 
 export default function ProfileScreen({
   userProps,
   sessionProps,
 }: SessionProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(userProps);
   const [session, setSession] = useState<Session | null>(sessionProps);
+
   const [username, setUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+
   const [bio, setBio] = useState("");
-  const [followers, setFollowers] = useState<string[]>([]);
-  const [followees, setFollowees] = useState<string[]>([]);
+  const [newBio, setNewBio] = useState("");
 
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [avatarImage, setAvatarImage] = useState<string>("");
+
+  const navigateToProfile = () => {
+    navigate("/profile");
+  };
+
+  const handleProfileUpdate = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    setIsLoading(true);
+    if (user && newUsername !== username) {
+      event.preventDefault();
+      await updateProfile(user, newUsername, undefined);
+      setUsername(newUsername);
+    }
+    if (user && newBio !== bio) {
+      event.preventDefault();
+      await updateProfile(user, undefined, newBio);
+      setBio(newBio);
+    }
+    navigateToProfile();
+  };
 
   useEffect(() => {
     setSession(sessionProps);
@@ -57,29 +77,11 @@ export default function ProfileScreen({
       getProfile(user).then((data) => {
         setUsername(data && data[0]?.username);
         setBio(data && data[0]?.bio);
+        setNewUsername(username);
+        setNewBio(bio);
       });
     }
   }, [username, bio, user]);
-
-  useEffect(() => {
-    if (user) {
-      getFollowers(user).then((data) => {
-        const newFollowers = data?.map((follower) => follower.follower_id);
-        if (newFollowers && !arraysEqual(newFollowers, followers))
-          setFollowers(newFollowers);
-      });
-    }
-  }, [followers, user]);
-
-  useEffect(() => {
-    if (user) {
-      getFollowees(user).then((data) => {
-        const newFollowees = data?.map((followee) => followee.followee_id);
-        if (newFollowees && !arraysEqual(newFollowees, followees))
-          setFollowees(newFollowees);
-      });
-    }
-  }, [followees, user]);
 
   return (
     <>
@@ -89,12 +91,29 @@ export default function ProfileScreen({
         <>
           <h1>Edit Profile</h1>
           <Avatar imageUrl={avatarUrl + avatarImage} />
-          <p>Username: {username}</p>
-          <p>Bio: {bio}</p>
-          <p>Followers: {followers.length}</p>
-          <p>Followees: {followees.length}</p>
-          <button>Save</button>
-          <button>Cancel</button>
+          <form onSubmit={handleProfileUpdate}>
+            <label>
+              New Username:
+              <input
+                type="text"
+                value={newUsername}
+                onChange={(e) => setNewUsername(e.target.value)}
+                required
+              />
+            </label>
+            <label>
+              New Bio:
+              <input
+                type="text"
+                value={newBio}
+                onChange={(e) => setNewBio(e.target.value)}
+                required
+              />
+            </label>
+            <br />
+            <input type="submit" value={"Save"} />
+            <button onClick={navigateToProfile}>Cancel</button>
+          </form>
         </>
       )}
     </>

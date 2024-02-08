@@ -40,6 +40,26 @@ export async function getFollowees(user: User) {
   }
 }
 
+export async function updateProfile(
+  user: User,
+  newUsername?: string,
+  newBio?: string
+) {
+  const { error } = await supabase
+    .from("profile")
+    .update({
+      username: newUsername,
+      bio: newBio,
+    })
+    .eq("id", user?.id);
+  if (error) {
+    console.error("Error changing username & bio:", error.message);
+  } else {
+    console.log("username updated:", newUsername);
+    console.log("bio updated:", newBio);
+  }
+}
+
 export async function getUsername(userId: string) {
   const { data, error } = await supabase
     .from("profile")
