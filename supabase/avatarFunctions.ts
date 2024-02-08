@@ -1,5 +1,6 @@
 import { supabase } from "../supabase/client";
 import { User } from "@supabase/supabase-js";
+import { v4 as uuidv4 } from "uuid";
 
 // Need URL to display avatar image
 export async function fetchAvatarImage(user: User) {
@@ -15,5 +16,40 @@ export async function fetchAvatarUrl(user: User) {
   if (data) {
     console.log("Avatar URL:", data.publicUrl);
     return data.publicUrl;
+  }
+}
+
+export async function uploadAvatar(
+  user: User,
+  event: React.ChangeEvent<HTMLInputElement>
+) {
+  if (!event.target.files || event.target.files.length === 0) {
+    return;
+  }
+
+  const file = event.target.files[0];
+  const filePath = user?.id + "/" + uuidv4().substring(0, 8) + ".jpg";
+
+  const { data, error } = await supabase.storage
+    .from("avatars")
+    .upload(filePath, file, { upsert: true });
+
+  if (error) {
+    console.error("Error uploading image: ", error);
+  } else {
+    console.log("Image uploaded successfully", data);
+    return data;
+  }
+}
+
+export async function deleteAvatar(user: User, avatarImage: string) {
+  const { data, error } = await supabase.storage
+    .from("avatars")
+    .remove([user?.id + "/" + avatarImage]);
+  if (error) {
+    console.error("Error deleting image: ", error);
+  } else {
+    console.log("Image deleted successfully", data);
+    return data;
   }
 }
