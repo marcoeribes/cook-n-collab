@@ -10,7 +10,7 @@ import HomeScreen from "./pages/Home/HomeScreen.tsx";
 import RecipesScreen from "./pages/Recipes/RecipesScreen.tsx";
 import RecipeScreen from "./pages/Recipe/RecipeScreen.tsx";
 import LoginScreen from "./pages/Login/Login.tsx";
-import ProfileScreen from "./pages/Profile/profile.tsx";
+import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);

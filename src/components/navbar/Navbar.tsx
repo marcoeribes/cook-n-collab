@@ -13,6 +13,7 @@ export default function Navbar() {
           <CustomLink to="/recipes">Recipes</CustomLink>
           <CustomLink to="/about">About</CustomLink>
           <CustomLink to="/login">Login</CustomLink>
+          <CustomLink to="/profile">Profile</CustomLink>
         </ul>
       </div>
     </nav>
