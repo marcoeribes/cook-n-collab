@@ -14,19 +14,6 @@ export async function getProfile(user: User) {
   }
 }
 
-export async function getUsername(user: User) {
-  const { data, error } = await supabase
-    .from("profile")
-    .select("username")
-    .eq("id", user?.id);
-  if (error) {
-    console.error("Error getting username:", error.message);
-  } else {
-    console.log("Username:", data);
-    return data;
-  }
-}
-
 export async function getFollowers(user: User) {
   const { data, error } = await supabase
     .from("follow_relationship")
@@ -49,6 +36,19 @@ export async function getFollowees(user: User) {
     console.error("Error getting followees:", error.message);
   } else {
     console.log("Followees:", data);
+    return data;
+  }
+}
+
+export async function getUsername(userId: string) {
+  const { data, error } = await supabase
+    .from("profile")
+    .select("username")
+    .eq("id", userId);
+  if (error) {
+    console.error("Error getting username:", error.message);
+  } else {
+    console.log("Username:", data);
     return data;
   }
 }
