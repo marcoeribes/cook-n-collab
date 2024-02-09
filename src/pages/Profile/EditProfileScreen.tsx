@@ -70,6 +70,12 @@ export default function ProfileScreen({
               });
             });
           });
+        } else if (numOfAvatars === 1) {
+          fetchAvatarImage(user).then((data) => {
+            fetchRecentAvatar(data).then(() => {
+              setIsLoadingAvatar(false);
+            });
+          });
         }
       });
     }

@@ -4,9 +4,15 @@ import { v4 as uuidv4 } from "uuid";
 
 // Need URL to display avatar image
 export async function fetchAvatarImage(user: User) {
-  const { data } = await supabase.storage.from("avatars").list(user?.id + "/");
-  console.log("avatarData", data);
-  return data;
+  const { data, error } = await supabase.storage
+    .from("avatars")
+    .list(user?.id + "/");
+  if (error) {
+    console.error("Error fetching avatar image:", error);
+  } else {
+    console.log("avatarData", data);
+    return data;
+  }
 }
 
 export async function fetchAvatarUrl(user: User) {
@@ -16,6 +22,16 @@ export async function fetchAvatarUrl(user: User) {
   if (data) {
     console.log("Avatar URL:", data.publicUrl);
     return data.publicUrl;
+  }
+}
+
+export async function fetchDefaultAvatarUrl() {
+  const { data } = await supabase.storage
+    .from("avatars")
+    .getPublicUrl("default-avatar.jpg");
+  if (data) {
+    console.log("Default Avatar URL:", data.publicUrl);
+    return data.publicUrl.toString();
   }
 }
 
