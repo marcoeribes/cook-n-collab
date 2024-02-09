@@ -9,7 +9,7 @@ import AboutScreen from "./pages/graveyard/AvatarScreen.tsx";
 import HomeScreen from "./pages/Home/HomeScreen.tsx";
 import RecipesScreen from "./pages/Recipes/RecipesScreen.tsx";
 import RecipeScreen from "./pages/Recipe/RecipeScreen.tsx";
-import LoginScreen from "./pages/Login/Login.tsx";
+import LoginScreen from "./pages/Login/LoginScreen.tsx";
 import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 import EditProfileScreen from "./pages/Profile/EditProfileScreen.tsx";
 
