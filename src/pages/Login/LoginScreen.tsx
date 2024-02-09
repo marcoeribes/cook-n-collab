@@ -16,7 +16,7 @@ export default function LoginScreen({
   userProps,
   sessionProps,
 }: LoginScreenProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [session, setSession] = useState(sessionProps);
   const [user, setUser] = useState<User | null>(userProps);
@@ -31,7 +31,12 @@ export default function LoginScreen({
 
   async function handleSignUp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const signUpSuccessful = await signUpNewUser(email, password, url);
+    const signUpSuccessful = await signUpNewUser(
+      email,
+      password,
+      username,
+      url
+    );
     if (signUpSuccessful) {
       console.log("VITE_SIGNIN_REDIRECT_URL", url);
       setSuccessfulSignUp(true);
@@ -54,10 +59,8 @@ export default function LoginScreen({
 
   useEffect(() => {
     if (user) {
-      setIsLoading(true);
       getProfile(user).then((data) => {
         setUsername(data && data[0]?.username);
-        setIsLoading(false);
       });
     }
   }, [user, username]);
@@ -82,6 +85,15 @@ export default function LoginScreen({
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </label>
+          <label>
+            Username:
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </label>

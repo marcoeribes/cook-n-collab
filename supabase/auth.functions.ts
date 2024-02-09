@@ -3,6 +3,7 @@ import { supabase } from "../supabase/client";
 export async function signUpNewUser(
   email: string,
   password: string,
+  username: string,
   url?: string
 ) {
   const { data, error } = await supabase.auth.signUp({
@@ -10,6 +11,9 @@ export async function signUpNewUser(
     password: password,
     options: {
       emailRedirectTo: url,
+      data: {
+        username: username,
+      },
     },
   });
   if (error) {
