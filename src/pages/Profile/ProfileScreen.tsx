@@ -8,10 +8,6 @@ import {
   getFollowers,
   getFollowees,
 } from "../../../supabase/profileFunctions";
-import {
-  fetchAvatarImage,
-  fetchAvatarUrl,
-} from "../../../supabase/avatarFunctions";
 import Avatar from "../../components/avatar/Avatar";
 import SessionProps from "../../interfaces/auth.interface";
 import arraysEqual from "../../utils/arraysEqual";
@@ -29,12 +25,10 @@ export default function ProfileScreen({
 
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
+  const [profileAvatarUrl, setProfileAvatarUrl] = useState<string>("");
 
   const [followers, setFollowers] = useState<string[]>([]);
   const [followees, setFollowees] = useState<string[]>([]);
-
-  const [avatarUrl, setAvatarUrl] = useState<string>("");
-  const [avatarImage, setAvatarImage] = useState<string>("");
 
   const navigateToEditProfile = () => {
     navigate("/profile/edit");
@@ -46,29 +40,19 @@ export default function ProfileScreen({
   }, [session, sessionProps, user, userProps]);
 
   useEffect(() => {
-    if (user)
-      fetchAvatarUrl(user).then((data) => {
-        if (data) setAvatarUrl(data);
-      });
-  }, [user, avatarUrl]);
-
-  useEffect(() => {
-    if (user) {
-      fetchAvatarImage(user).then((data) => {
-        if (data && data.length > 0) setAvatarImage(data[0]?.name);
-        setIsLoading(false);
-      });
-    }
-  }, [user, avatarImage]);
-
-  useEffect(() => {
     if (user) {
       getProfile(user).then((data) => {
         setUsername(data && data[0]?.username);
         setBio(data && data[0]?.bio);
+        setProfileAvatarUrl(data && data[0]?.avatar_url);
+        setIsLoading(false);
       });
     }
-  }, [username, bio, user]);
+  }, [user, username, bio]);
+
+  useEffect(() => {
+    user && getProfile;
+  });
 
   useEffect(() => {
     if (user) {
@@ -97,7 +81,7 @@ export default function ProfileScreen({
       ) : (
         <>
           <h1>Profile</h1>
-          <Avatar imageUrl={avatarUrl + avatarImage} />
+          <Avatar imageUrl={profileAvatarUrl} />
           <p>Username: {username}</p>
           <p>Bio: {bio}</p>
           <p>Followers: {followers.length}</p>

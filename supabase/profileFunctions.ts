@@ -22,7 +22,6 @@ export async function getFollowers(user: User) {
   if (error) {
     console.error("Error getting followers:", error.message);
   } else {
-    console.log("Followers:", data);
     return data;
   }
 }
@@ -35,7 +34,6 @@ export async function getFollowees(user: User) {
   if (error) {
     console.error("Error getting followees:", error.message);
   } else {
-    console.log("Followees:", data);
     return data;
   }
 }
@@ -43,13 +41,15 @@ export async function getFollowees(user: User) {
 export async function updateProfile(
   user: User,
   newUsername?: string,
-  newBio?: string
+  newBio?: string,
+  newAvatarUrl?: string
 ) {
   const { error } = await supabase
     .from("profile")
     .update({
       username: newUsername,
       bio: newBio,
+      avatar_url: newAvatarUrl,
     })
     .eq("id", user?.id);
   if (error) {

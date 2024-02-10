@@ -31,7 +31,7 @@ export async function fetchDefaultAvatarUrl() {
     .getPublicUrl("default-avatar.jpg");
   if (data) {
     console.log("Default Avatar URL:", data.publicUrl);
-    return data.publicUrl.toString();
+    return data.publicUrl;
   }
 }
 

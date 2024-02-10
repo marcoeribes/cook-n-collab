@@ -9,6 +9,7 @@ import {
   fetchAvatarUrl,
   uploadAvatar,
   deleteAvatar,
+  fetchDefaultAvatarUrl,
 } from "../../../supabase/avatarFunctions";
 import Avatar from "../../components/avatar/Avatar";
 import SessionProps from "../../interfaces/auth.interface";
@@ -33,7 +34,7 @@ export default function ProfileScreen({
 
   const [avatarUrl, setAvatarUrl] = useState<string>("");
   const [avatarImage, setAvatarImage] = useState<string>("");
-  const [numOfAvatars, setNumOfAvatars] = useState<number>(0);
+  const [profileAvatarUrl, setProfileAvatarUrl] = useState<string>("");
 
   const navigateToProfile = () => {
     navigate("/profile");
@@ -59,44 +60,42 @@ export default function ProfileScreen({
   async function handleUploadAvatar(
     event: React.ChangeEvent<HTMLInputElement>
   ) {
-    if (user) {
-      setIsLoadingAvatar(true);
-      uploadAvatar(user, event).then(() => {
-        if (numOfAvatars > 1 && user && avatarImage) {
-          deleteAvatar(user, avatarImage).then(() => {
-            fetchAvatarImage(user).then((data) => {
-              fetchRecentAvatar(data).then(() => {
-                setIsLoadingAvatar(false);
-              });
-            });
-          });
-        } else if (numOfAvatars === 1) {
-          fetchAvatarImage(user).then((data) => {
-            fetchRecentAvatar(data).then(() => {
-              setIsLoadingAvatar(false);
-            });
-          });
-        }
-      });
-    }
+    if (!user) return;
+
+    setIsLoadingAvatar(true);
+    const success = await uploadAvatar(user, event);
+    if (user && success) {
+      await deleteAvatar(user, avatarImage);
+      await updateProfileAvatar();
+      setIsLoadingAvatar(false);
+    } else setIsLoadingAvatar(false);
   }
 
   async function handleDeleteAvatar() {
-    if (numOfAvatars > 1 && user && avatarImage) {
-      deleteAvatar(user, avatarImage).then(() => {
-        fetchAvatarImage(user).then((data) => {
-          fetchRecentAvatar(data);
-        });
-      });
+    if (user && avatarImage) {
+      await deleteAvatar(user, avatarImage);
+      await updateProfileAvatar();
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async function fetchRecentAvatar(data: any) {
-    if (data && data.length > 0) {
-      setAvatarImage(data[0]?.name);
-      setNumOfAvatars(data.length);
+  async function updateProfileAvatar() {
+    if (!user) return;
+
+    const location = await fetchAvatarUrl(user);
+    const avatarUrl = location ? location : "";
+    setAvatarUrl(avatarUrl);
+
+    const data = await fetchAvatarImage(user);
+    const avatarName = data ? data[0]?.name : "";
+    setAvatarImage(avatarName);
+
+    if (avatarName) {
+      setProfileAvatarUrl(avatarUrl + avatarName);
+    } else {
+      const defaultUrl = await fetchDefaultAvatarUrl();
+      defaultUrl && setProfileAvatarUrl(defaultUrl);
     }
+    await updateProfile(user, undefined, undefined, profileAvatarUrl);
   }
 
   useEffect(() => {
@@ -107,17 +106,17 @@ export default function ProfileScreen({
   useEffect(() => {
     if (user)
       fetchAvatarUrl(user).then((data) => {
-        if (data) setAvatarUrl(data);
+        data && setAvatarUrl(data);
       });
   }, [user, avatarUrl]);
 
   useEffect(() => {
     if (user) {
-      fetchAvatarImage(user).then((data) => {
-        fetchRecentAvatar(data);
+      fetchAvatarImage(user).then(() => {
         setIsLoading(false);
-        setIsLoadingAvatar(false); // Questionable
+        setIsLoadingAvatar(false);
       });
+      updateProfileAvatar();
     }
   }, [user, avatarImage]);
 
@@ -126,11 +125,16 @@ export default function ProfileScreen({
       getProfile(user).then((data) => {
         setUsername(data && data[0]?.username);
         setBio(data && data[0]?.bio);
+        setProfileAvatarUrl(data && data[0]?.avatar_url);
+
         setNewUsername(username);
         setNewBio(bio);
+
+        setIsLoading(false);
+        setIsLoadingAvatar(false);
       });
     }
-  }, [username, bio, user]);
+  }, [user, username, bio]);
 
   return (
     <>
@@ -139,7 +143,7 @@ export default function ProfileScreen({
       ) : (
         <>
           <h1>Edit Profile</h1>
-          <Avatar imageUrl={avatarUrl + avatarImage} />
+          <Avatar imageUrl={profileAvatarUrl} />
           {isLoadingAvatar ? null : (
             <div>
               <input
