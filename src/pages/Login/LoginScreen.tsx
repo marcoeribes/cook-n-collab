@@ -88,15 +88,17 @@ export default function LoginScreen({
               required
             />
           </label>
-          <label>
-            Username:
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </label>
+          {isSignUp ? (
+            <label>
+              Username:
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+              />
+            </label>
+          ) : null}
           <label>
             Password:
             <input

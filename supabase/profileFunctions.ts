@@ -14,6 +14,19 @@ export async function getProfile(user: User) {
   }
 }
 
+export async function getProfileById(userId: string) {
+  const { data, error } = await supabase
+    .from("profile")
+    .select()
+    .eq("id", userId);
+  if (error) {
+    console.error("Error getting profile:", error.message);
+  } else {
+    console.log("Profile in profileFunctions:", data);
+    return data;
+  }
+}
+
 export async function getFollowers(user: User) {
   const { data, error } = await supabase
     .from("follow_relationship")

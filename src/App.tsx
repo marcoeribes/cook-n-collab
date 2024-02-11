@@ -12,6 +12,7 @@ import RecipeScreen from "./pages/Recipe/RecipeScreen.tsx";
 import LoginScreen from "./pages/Login/LoginScreen.tsx";
 import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 import EditProfileScreen from "./pages/Profile/EditProfileScreen.tsx";
+import FollowersScreen from "./pages/graveyard/FollowersScreen.tsx";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -73,6 +74,15 @@ function App() {
             path="/profile/edit"
             element={
               <EditProfileScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
+          <Route
+            path="/followers"
+            element={
+              <FollowersScreen
                 userProps={user as User}
                 sessionProps={session as Session}
               />
