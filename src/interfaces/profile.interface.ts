@@ -1,6 +1,6 @@
 export default interface Profile {
   id?: string;
-  username?: string;
+  username: string;
   bio?: string;
-  avatarUrl?: string;
+  avatarUrl: string;
 }

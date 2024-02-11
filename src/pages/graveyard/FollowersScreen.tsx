@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 import SessionProps from "../../interfaces/auth.interface";
 import {
   getFollowers,
-  getProfile,
   getProfileById,
 } from "../../../supabase/profileFunctions";
-import arraysEqual from "../../utils/arraysEqual";
 import Profile from "../../interfaces/profile.interface";
+import Avatar from "../../components/avatar/Avatar";
 
 export default function FollowersScreen({
   userProps,
@@ -49,11 +48,29 @@ export default function FollowersScreen({
   }, [followers]);
 
   return (
-    <div>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <h1>Followers Screen</h1>
       <p>Followers</p>
       {followerProfiles.map((profile, index) => (
-        <p key={index}>{profile.username}</p>
+        <div
+          style={{
+            justifyContent: "center",
+            alignContent: "center",
+            backgroundColor: "green",
+            width: 100,
+            margin: 10,
+          }}
+        >
+          <p key={index}>{profile.username}</p>
+          <Avatar imageUrl={profile.avatarUrl} size={50} />
+        </div>
       ))}
     </div>
   );

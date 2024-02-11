@@ -143,7 +143,7 @@ export default function ProfileScreen({
       ) : (
         <>
           <h1>Edit Profile</h1>
-          <Avatar imageUrl={profileAvatarUrl} />
+          <Avatar imageUrl={profileAvatarUrl} size={300} />
           {isLoadingAvatar ? null : (
             <div>
               <input

@@ -81,7 +81,7 @@ export default function ProfileScreen({
       ) : (
         <>
           <h1>Profile</h1>
-          <Avatar imageUrl={profileAvatarUrl} />
+          <Avatar imageUrl={profileAvatarUrl} size={300} />
           <p>Username: {username}</p>
           <p>Bio: {bio}</p>
           <p>Followers: {followers.length}</p>

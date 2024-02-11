@@ -1,9 +1,9 @@
-const Avatar = ({ imageUrl }: { imageUrl: string }) => {
+const Avatar = ({ imageUrl, size }: { imageUrl: string; size: number }) => {
   return (
     <img
       src={imageUrl}
       alt="avatar"
-      style={{ borderRadius: "50%", width: "300px", height: "300px" }}
+      style={{ borderRadius: "50%", width: `${size}px`, height: `${size}px` }}
     />
   );
 };
