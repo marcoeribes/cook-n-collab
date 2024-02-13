@@ -13,6 +13,7 @@ import LoginScreen from "./pages/Login/LoginScreen.tsx";
 import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 import EditProfileScreen from "./pages/Profile/EditProfileScreen.tsx";
 import FollowersScreen from "./pages/graveyard/FollowersScreen.tsx";
+import FollowerProfileScreen from "./pages/Profile/FollowerProfileScreen.tsx";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -88,6 +89,8 @@ function App() {
               />
             }
           />
+          <Route path={"/profile/:id"} element={<FollowerProfileScreen />} />
+          <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </div>
     </>

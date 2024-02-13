@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import SessionProps from "../../interfaces/auth.interface";
 import {
   getFollowers,
@@ -11,6 +13,8 @@ export default function FollowersScreen({
   userProps,
   sessionProps,
 }: SessionProps) {
+  const navigate = useNavigate();
+
   const user = userProps;
   const session = sessionProps;
   const [followers, setFollowers] = useState<string[]>([]);
@@ -35,6 +39,7 @@ export default function FollowersScreen({
         .then((profiles) => {
           console.log("profiles", profiles);
           const listOfFollowers = profiles.flat().map((userObj) => ({
+            id: userObj.id,
             username: userObj.username,
             avatarUrl: userObj.avatar_url,
           }));
@@ -59,18 +64,23 @@ export default function FollowersScreen({
       <h1>Followers Screen</h1>
       <p>Followers</p>
       {followerProfiles.map((profile, index) => (
-        <div
+        <button
+          key={profile.id || index}
+          onClick={() =>
+            navigate(`/profile/${profile.username}`, {
+              state: { followerProfiles: profile },
+            })
+          }
           style={{
             justifyContent: "center",
             alignContent: "center",
-            backgroundColor: "green",
             width: 100,
             margin: 10,
           }}
         >
           <p key={index}>{profile.username}</p>
           <Avatar imageUrl={profile.avatarUrl} size={50} />
-        </div>
+        </button>
       ))}
     </div>
   );
