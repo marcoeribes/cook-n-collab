@@ -34,6 +34,10 @@ export default function ProfileScreen({
     navigate("/profile/edit");
   };
 
+  const navigateToFollowers = () => {
+    navigate("/followers");
+  };
+
   useEffect(() => {
     setSession(sessionProps);
     setUser(userProps);
@@ -84,7 +88,9 @@ export default function ProfileScreen({
           <Avatar imageUrl={profileAvatarUrl} size={300} />
           <p>Username: {username}</p>
           <p>Bio: {bio}</p>
-          <p>Followers: {followers.length}</p>
+          <button onClick={navigateToFollowers}>
+            Followers: {followers.length}
+          </button>
           <p>Followees: {followees.length}</p>
           <button onClick={navigateToEditProfile}>Edit Profile</button>
         </>
