@@ -52,11 +52,35 @@ export async function getFollowers(user: User) {
   }
 }
 
+export async function getFollowersById(id: string) {
+  const { data, error } = await supabase
+    .from("follow_relationship")
+    .select("follower_id")
+    .eq("followee_id", id);
+  if (error) {
+    console.error("Error getting followers:", error.message);
+  } else {
+    return data;
+  }
+}
+
 export async function getFollowees(user: User) {
   const { data, error } = await supabase
     .from("follow_relationship")
     .select("followee_id")
     .eq("follower_id", user?.id);
+  if (error) {
+    console.error("Error getting followees:", error.message);
+  } else {
+    return data;
+  }
+}
+
+export async function getFolloweesById(id: string) {
+  const { data, error } = await supabase
+    .from("follow_relationship")
+    .select("followee_id")
+    .eq("follower_id", id);
   if (error) {
     console.error("Error getting followees:", error.message);
   } else {
