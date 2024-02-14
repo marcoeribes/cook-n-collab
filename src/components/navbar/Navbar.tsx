@@ -16,8 +16,13 @@ export default function Navbar({ profile }: ProfileProps) {
       <div>
         <ul>
           <CustomLink to="/recipes">Recipes</CustomLink>
-          <CustomLink to="/login">Login</CustomLink>
-          <CustomLink to={`${profile?.username}`}>Profile</CustomLink>
+          {profile ? (
+            <>
+              <CustomLink to={`${profile?.username}`}>Profile</CustomLink>
+            </>
+          ) : (
+            <CustomLink to="/login">Login</CustomLink>
+          )}
         </ul>
       </div>
     </nav>

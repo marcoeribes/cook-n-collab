@@ -3,14 +3,17 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 
 import {
+  deleteFollow,
   getFolloweesById,
   getFollowersById,
   getProfileByUsername,
+  insertFollow,
 } from "../../../supabase/profileFunctions";
 import Avatar from "../../components/avatar/Avatar";
 import { Session, User } from "@supabase/supabase-js";
 import SessionProps from "../../interfaces/auth.interface";
 import arraysEqual from "../../utils/arraysEqual";
+import { signOut } from "../../../supabase/auth.functions";
 
 export default function FollowerProfileScreen({
   userProps,
@@ -32,6 +35,8 @@ export default function FollowerProfileScreen({
   const [followers, setFollowers] = useState<string[]>([]);
   const [followees, setFollowees] = useState<string[]>([]);
 
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+
   const goBack = () => {
     navigate(-1);
   };
@@ -47,6 +52,34 @@ export default function FollowerProfileScreen({
   const navigateToFollowees = () => {
     navigate("followees");
   };
+
+  async function handleSignOut() {
+    signOut()
+      .then(() => {
+        console.log("User Logged Out");
+        navigate("/");
+      })
+      .then(() => {
+        window.location.reload();
+      });
+  }
+
+  async function handleFollow() {
+    console.log("Followed");
+    if (isFollowing && user?.id && id) {
+      await deleteFollow(user.id, id);
+    } else if (!isFollowing && user?.id && id) {
+      await insertFollow(user.id, id);
+    }
+    if (id) {
+      getFollowersById(id).then((data) => {
+        const newFollowers = data?.map((follower) => follower.follower_id);
+        if (newFollowers && !arraysEqual(newFollowers, followers)) {
+          setFollowers(newFollowers);
+        }
+      });
+    }
+  }
 
   useEffect(() => {
     setSession(sessionProps);
@@ -71,9 +104,14 @@ export default function FollowerProfileScreen({
         const newFollowers = data?.map((follower) => follower.follower_id);
         if (newFollowers && !arraysEqual(newFollowers, followers))
           setFollowers(newFollowers);
+        if (user?.id && followers.includes(user.id)) {
+          setIsFollowing(true);
+        } else {
+          setIsFollowing(false);
+        }
       });
     }
-  }, [followers, id]);
+  }, [isFollowing, followers, id]);
 
   useEffect(() => {
     if (id) {
@@ -108,9 +146,23 @@ export default function FollowerProfileScreen({
           <br />
           <br />
           {id === user?.id ? (
-            <button onClick={navigateToEditProfile}>Edit Profile</button>
+            <>
+              <button onClick={navigateToEditProfile}>Edit Profile</button>
+              <br />
+              <br />
+              <button onClick={handleSignOut}>Log Out</button>
+            </>
           ) : (
-            <button onClick={goBack}>Go Back</button>
+            <>
+              {isFollowing ? (
+                <button onClick={handleFollow}>Unfollow</button>
+              ) : (
+                <button onClick={handleFollow}>Follow</button>
+              )}
+              <br />
+              <br />
+              <button onClick={goBack}>Go Back</button>
+            </>
           )}
         </>
       )}

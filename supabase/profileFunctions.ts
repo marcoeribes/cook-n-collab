@@ -110,6 +110,30 @@ export async function updateProfile(
   }
 }
 
+export async function insertFollow(follower_id: string, followee_id: string) {
+  const { data, error } = await supabase
+    .from("follow_relationship")
+    .insert([{ follower_id: follower_id, followee_id: followee_id }]);
+  if (error) {
+    console.error("Error inserting follow relationship:", error.message);
+  } else {
+    return data;
+  }
+}
+
+export async function deleteFollow(follower_id: string, followee_id: string) {
+  const { data, error } = await supabase
+    .from("follow_relationship")
+    .delete()
+    .eq("follower_id", follower_id)
+    .eq("followee_id", followee_id);
+  if (error) {
+    console.error("Error deleting follow relationship:", error.message);
+  } else {
+    return data;
+  }
+}
+
 export async function getUsername(userId: string) {
   const { data, error } = await supabase
     .from("profile")

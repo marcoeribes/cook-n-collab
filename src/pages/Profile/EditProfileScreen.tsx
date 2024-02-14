@@ -54,7 +54,7 @@ export default function ProfileScreen({
       await updateProfile(user, undefined, newBio);
       setBio(newBio);
     }
-    navigateToProfile();
+    setIsLoading(false);
   };
 
   async function handleUploadAvatar(
