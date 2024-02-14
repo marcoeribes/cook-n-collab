@@ -37,7 +37,7 @@ export default function ProfileScreen({
   const [profileAvatarUrl, setProfileAvatarUrl] = useState<string>("");
 
   const navigateToProfile = () => {
-    navigate("/profile");
+    navigate(`/${username}`);
   };
 
   const handleProfileUpdate = async (

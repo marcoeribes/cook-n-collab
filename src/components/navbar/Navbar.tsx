@@ -1,8 +1,13 @@
+import Profile from "../../interfaces/profile.interface";
 import "./Navbar.css";
 
 import { Link, useMatch, useResolvedPath } from "react-router-dom";
 
-export default function Navbar() {
+interface ProfileProps {
+  profile: Profile | null; // replace `Profile` with the actual type of your profile
+}
+
+export default function Navbar({ profile }: ProfileProps) {
   return (
     <nav className="nav">
       <Link to="/" className="site-title">
@@ -12,7 +17,7 @@ export default function Navbar() {
         <ul>
           <CustomLink to="/recipes">Recipes</CustomLink>
           <CustomLink to="/login">Login</CustomLink>
-          <CustomLink to="/profile">Profile</CustomLink>
+          <CustomLink to={`${profile?.username}`}>Profile</CustomLink>
         </ul>
       </div>
     </nav>

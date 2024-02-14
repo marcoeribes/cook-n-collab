@@ -10,14 +10,16 @@ import HomeScreen from "./pages/Home/HomeScreen.tsx";
 import RecipesScreen from "./pages/Recipes/RecipesScreen.tsx";
 import RecipeScreen from "./pages/Recipe/RecipeScreen.tsx";
 import LoginScreen from "./pages/Login/LoginScreen.tsx";
-import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 import EditProfileScreen from "./pages/Profile/EditProfileScreen.tsx";
 import FollowersScreen from "./pages/graveyard/FollowersScreen.tsx";
-import FollowerProfileScreen from "./pages/Profile/FollowerProfileScreen.tsx";
+import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
+import Profile from "./interfaces/profile.interface.ts";
+import { getProfile } from "../supabase/profileFunctions.ts";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -44,11 +46,23 @@ function App() {
     fetchUser();
   }, []);
 
+  useEffect(() => {
+    if (user) {
+      getProfile(user).then((data) => {
+        data && setProfile(data[0]);
+        console.log("profile in app", profile);
+      });
+    }
+  }, [user]);
+
   return (
     <>
-      <Navbar />
+      <Navbar profile={profile} />
       <div className="container">
         <Routes>
+          <Route path="/*" element={<h1>Not Found</h1>} />
+          <Route path="/profile" element={<h1>Not Accessible</h1>} />
+
           <Route path="/" element={<HomeScreen />} />
           <Route path="/recipes" element={<RecipesScreen />} />
           <Route path="/recipe/:id" element={<RecipeScreen />} />
@@ -63,16 +77,18 @@ function App() {
             }
           />
           <Route
-            path="/profile"
+            path=":param"
             element={
               <ProfileScreen
                 userProps={user as User}
                 sessionProps={session as Session}
               />
             }
-          />
+          ></Route>
+          <Route path=":param/followers" element={<FollowersScreen />} />
+          <Route path=":param/followees" element={<FollowersScreen />} />
           <Route
-            path="/profile/edit"
+            path="profile/edit"
             element={
               <EditProfileScreen
                 userProps={user as User}
@@ -80,17 +96,6 @@ function App() {
               />
             }
           />
-          <Route
-            path="/followers"
-            element={
-              <FollowersScreen
-                userProps={user as User}
-                sessionProps={session as Session}
-              />
-            }
-          />
-          <Route path={"/profile/:id"} element={<FollowerProfileScreen />} />
-          <Route path="*" element={<h1>Not Found</h1>} />
         </Routes>
       </div>
     </>
