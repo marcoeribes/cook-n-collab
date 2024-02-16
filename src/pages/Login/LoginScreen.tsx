@@ -29,6 +29,8 @@ export default function LoginScreen({
   const [successfulSignUp, setSuccessfulSignUp] = useState(false);
   const url = "http://localhost:5173/profile/edit"; // might need to remove later
 
+  const [passwordError, setPasswordError] = useState("");
+
   async function handleSignUp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const signUpSuccessful = await signUpNewUser(
@@ -104,9 +106,19 @@ export default function LoginScreen({
             <input
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (e.target.value.length < 8) {
+                  setPasswordError("Password must be at least 8 characters");
+                } else {
+                  setPasswordError("");
+                }
+              }}
               required
             />
+            {passwordError && (
+              <div style={{ color: "red" }}>{passwordError}</div>
+            )}
           </label>
           <input type="submit" value={isSignUp ? "Sign Up" : "Login"} />
           <button onClick={() => setIsSignUp(!isSignUp)}>
