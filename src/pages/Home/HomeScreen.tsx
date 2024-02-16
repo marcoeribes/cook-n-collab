@@ -1,6 +1,7 @@
 export default function HomeScreen() {
   return (
     <div>
+      <img src="/homepage.webp" alt="Home Page" />
       <header>
         <div style={{ width: "80%", margin: "auto", overflow: "hidden" }}>
           <div id="branding" style={{ float: "left" }}>

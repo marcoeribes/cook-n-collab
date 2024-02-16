@@ -15,6 +15,7 @@ import FollowersScreen from "./pages/graveyard/FollowersScreen.tsx";
 import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 import Profile from "./interfaces/profile.interface.ts";
 import { getProfile } from "../supabase/profileFunctions.ts";
+import Footer from "./components/footer/Footer.tsx";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -98,6 +99,7 @@ function App() {
           />
         </Routes>
       </div>
+      <Footer />
     </>
   );
 }

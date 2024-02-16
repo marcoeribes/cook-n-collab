@@ -1,0 +1,41 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.site-title {
+  font-size: 2rem;
+}
+
+.footer {
+  height: 160px;
+
+  background-color: #ff9a4d;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  padding-top: 1rem;
+  font-size: 1em;
+}
+
+.icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4rem;
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+}
+
+.link {
+  color: white;
+}
