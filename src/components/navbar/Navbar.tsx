@@ -1,7 +1,7 @@
+import { Link, useMatch, useResolvedPath } from "react-router-dom";
+
 import Profile from "../../interfaces/profile.interface";
 import "./Navbar.css";
-
-import { Link, useMatch, useResolvedPath } from "react-router-dom";
 
 interface ProfileProps {
   profile: Profile | null; // replace `Profile` with the actual type of your profile
@@ -10,27 +10,30 @@ interface ProfileProps {
 export default function Navbar({ profile }: ProfileProps) {
   return (
     <nav className="nav">
-      <Link to="/" className="site-title">
-        Cook 'n' Collab
+      <Link to="/" className="nav-home">
+        <img
+          src="/icons/cookncollab-logo2.png"
+          alt="logo"
+          className="nav-site-icon"
+        />
+        <h1 className="nav-site-title">Cook 'n' Collab</h1>
       </Link>
-      <div>
-        <ul>
-          <CustomLink to="/recipes">Recipes</CustomLink>
-          {profile ? (
-            <>
-              <CustomLink to={`${profile?.username}`}>Profile</CustomLink>
-            </>
-          ) : (
-            <CustomLink to="/login">Login</CustomLink>
-          )}
-        </ul>
-      </div>
+      <ul className="tabs">
+        <CustomLink to="/recipes">Recipes</CustomLink>
+        {profile ? (
+          <>
+            <CustomLink to={`${profile?.username}`}>Profile</CustomLink>
+          </>
+        ) : (
+          <CustomLink to="/login">Login</CustomLink>
+        )}
+      </ul>
     </nav>
   );
 }
 
 interface CustomLinkProps {
-  to: any;
+  to: string;
   children: React.ReactNode;
 }
 
