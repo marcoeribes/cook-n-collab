@@ -1,0 +1,111 @@
+@import url("https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&display=swap");
+
+.content {
+  width: 80%;
+  margin: auto;
+  overflow: hidden;
+}
+
+.home-title {
+  font-family: "Fuzzy Bubbles", sans-serif;
+  font-weight: 700;
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.fade-image {
+  border-top: 4px solid black;
+  position: relative;
+  overflow: hidden;
+  width: "90%";
+  margin: "auto";
+  overflow: "hidden";
+}
+
+.fade-image::before,
+.fade-image::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+}
+
+.fade-image::before {
+  top: 0;
+  background: linear-gradient(to bottom, #ff9a4d, transparent);
+  height: 0; /* Adjust this to control the height of the fade */
+}
+
+.fade-image::after {
+  bottom: 0;
+  background: linear-gradient(to top, #fff3e0, transparent);
+  height: 50%; /* Adjust this to control the height of the fade */
+}
+
+/* Media query for screens smaller than 600px */
+@media (max-width: 1100px) {
+  .fade-image::after {
+    height: 40%; /* Adjust this to control the height of the fade on smaller screens */
+  }
+
+  .content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 10px;
+    font-size: 0.8em; /* Reduce the font size */
+  }
+
+  .home-title {
+    justify-content: block;
+    font-family: "Fuzzy Bubbles", sans-serif;
+    font-weight: 700;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .content img {
+    max-width: 100%; /* Make images responsive */
+    height: auto;
+  }
+
+  .content p,
+  .content div {
+    padding: 5px; /* Adjust the padding */
+    margin: 5px; /* Adjust the margins */
+  }
+}
+
+/* Media query for screens smaller than 600px */
+@media (max-width: 600px) {
+  .fade-image::after {
+    height: 30%; /* Adjust this to control the height of the fade on smaller screens */
+  }
+
+  .content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 10px;
+    font-size: 0.8em; /* Reduce the font size */
+  }
+
+  .home-title {
+    font-family: "Fuzzy Bubbles", sans-serif;
+    font-weight: 400;
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .content img {
+    max-width: 100%; /* Make images responsive */
+    height: auto;
+  }
+
+  .content p,
+  .content div {
+    padding: 5px; /* Adjust the padding */
+    margin: 5px; /* Adjust the margins */
+  }
+}

@@ -1,11 +1,13 @@
 /* global.css */
 @import url("https://fonts.googleapis.com/css2?family=Jua&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2&display=swap");
 
 body {
   margin: 0;
   padding: 0;
-  background-color: #e0ecf8;
-  font-family: "Jua", sans-serif;
+  background-color: #fff3e0;
+  font-family: "Baloo 2", sans-serif;
 }
 
 h1,
