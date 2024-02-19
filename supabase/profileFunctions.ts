@@ -5,7 +5,7 @@ export async function getProfile(user: User) {
   const { data, error } = await supabase
     .from("profile")
     .select()
-    .eq("id", user?.id);
+    .eq("profile_id", user?.id);
   if (error) {
     console.error("Error getting profile:", error.message);
   } else {
@@ -18,7 +18,7 @@ export async function getProfileById(userId: string) {
   const { data, error } = await supabase
     .from("profile")
     .select()
-    .eq("id", userId);
+    .eq("profile_id", userId);
   if (error) {
     console.error("Error getting profile:", error.message);
   } else {
@@ -101,7 +101,7 @@ export async function updateProfile(
       bio: newBio,
       avatar_url: newAvatarUrl,
     })
-    .eq("id", user?.id);
+    .eq("profile_id", user?.id);
   if (error) {
     console.error("Error changing username & bio:", error.message);
   } else {
@@ -138,7 +138,7 @@ export async function getUsername(userId: string) {
   const { data, error } = await supabase
     .from("profile")
     .select("username")
-    .eq("id", userId);
+    .eq("profile_id", userId);
   if (error) {
     console.error("Error getting username:", error.message);
   } else {

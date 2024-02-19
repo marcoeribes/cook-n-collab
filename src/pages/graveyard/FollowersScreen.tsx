@@ -28,7 +28,7 @@ export default function FollowersScreen() {
   useEffect(() => {
     if (param) {
       getProfileByUsername(param).then((data) => {
-        setId(data && data[0]?.id);
+        setId(data && data[0]?.profile_id);
         setUsername(data && data[0]?.username);
         setAvatarUrl(data && data[0]?.avatar_url);
         setSuffix(location.pathname.slice(-9));
