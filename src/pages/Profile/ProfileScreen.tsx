@@ -14,6 +14,8 @@ import { Session, User } from "@supabase/supabase-js";
 import SessionProps from "../../interfaces/auth.interface";
 import arraysEqual from "../../utils/arraysEqual";
 import { signOut } from "../../../supabase/auth.functions";
+import Button from "../../components/button/Button";
+import "./ProfleScreen.css";
 
 export default function FollowerProfileScreen({
   userProps,
@@ -89,7 +91,7 @@ export default function FollowerProfileScreen({
   useEffect(() => {
     if (param) {
       getProfileByUsername(param).then((data) => {
-        setId(data && data[0]?.id);
+        setId(data && data[0]?.profile_id);
         setUsername(data && data[0]?.username);
         setBio(data && data[0]?.bio);
         setAvatarUrl(data && data[0]?.avatar_url);
@@ -124,7 +126,7 @@ export default function FollowerProfileScreen({
   }, [followees, id]);
 
   return (
-    <>
+    <div className="profile-page">
       {isLoading ? (
         <p>Loading...</p>
       ) : id == null ? (
@@ -132,40 +134,99 @@ export default function FollowerProfileScreen({
       ) : (
         <>
           <h1>Profile</h1>
-          <Avatar imageUrl={avatarUrl} size={300} />
-          <p>Username: {username}</p>
-          <p>Bio: {bio}</p>
-          <button onClick={navigateToFollowers}>
-            Followers: {followers.length}
-          </button>
-          <br />
-          <br />
-          <button onClick={navigateToFollowees}>
-            Following: {followees.length}
-          </button>
-          <br />
-          <br />
-          {id === user?.id ? (
-            <>
-              <button onClick={navigateToEditProfile}>Edit Profile</button>
-              <br />
-              <br />
-              <button onClick={handleSignOut}>Log Out</button>
-            </>
-          ) : (
-            <>
-              {isFollowing ? (
-                <button onClick={handleFollow}>Unfollow</button>
-              ) : (
-                <button onClick={handleFollow}>Follow</button>
-              )}
-              <br />
-              <br />
-              <button onClick={goBack}>Go Back</button>
-            </>
-          )}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              gap: "50px",
+              backgroundColor: "green",
+            }}
+          >
+            <Avatar imageUrl={avatarUrl} size={300} />
+            <div
+              style={{
+                backgroundColor: "blue",
+                alignItems: "center",
+                justifyContent: "left",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  gap: "2rem",
+                  backgroundColor: "orange",
+                  justifyContent: "left",
+                }}
+              >
+                <h2
+                  className="profile-username"
+                  style={{ justifyContent: "left" }}
+                >
+                  {username}
+                </h2>
+                {id === user?.id ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "right",
+                      alignItems: "center",
+                      gap: "1rem",
+                    }}
+                  >
+                    <Button
+                      text="Edit Profile"
+                      onClick={navigateToEditProfile}
+                      style="button"
+                    />
+                    <Button
+                      text="Log Out"
+                      onClick={handleSignOut}
+                      style="button"
+                    />
+                  </div>
+                ) : (
+                  <div
+                    style={{ display: "flex", justifyContent: "space-around" }}
+                  >
+                    {isFollowing ? (
+                      <button onClick={handleFollow}>Unfollow</button>
+                    ) : (
+                      <button onClick={handleFollow}>Follow</button>
+                    )}
+                    <br />
+                    <br />
+                    <button onClick={goBack}>Go Back</button>
+                  </div>
+                )}
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "left",
+                  backgroundColor: "red",
+                  gap: "2rem",
+                }}
+              >
+                <h4 onClick={navigateToFollowers} style={{ cursor: "pointer" }}>
+                  {followers.length} Followers
+                </h4>
+                <h3 onClick={navigateToFollowees} style={{ cursor: "pointer" }}>
+                  {followees.length} Following
+                </h3>
+              </div>
+              <p
+                style={{
+                  display: "flex",
+                  justifyContent: "left",
+                  backgroundColor: "yellow",
+                }}
+              >
+                Bio: {bio}
+              </p>
+            </div>
+          </div>
         </>
       )}
-    </>
+    </div>
   );
 }
