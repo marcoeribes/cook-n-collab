@@ -13,6 +13,8 @@ import LoginScreen from "./pages/Login/LoginScreen.tsx";
 import EditProfileScreen from "./pages/Profile/EditProfileScreen.tsx";
 import FollowersScreen from "./pages/graveyard/FollowersScreen.tsx";
 import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
+import EditRecipeScreen from "./pages/Recipe/EditRecipeScreen.tsx";
+
 import Profile from "./interfaces/profile.interface.ts";
 import { getProfile } from "../supabase/profileFunctions.ts";
 import Footer from "./components/footer/Footer.tsx";
@@ -68,7 +70,21 @@ function App() {
           <Route path="/recipes" element={<RecipesScreen />} />
           <Route
             path="/:usernameParam/:recipeParam"
-            element={<RecipeScreen />}
+            element={
+              <RecipeScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
+          <Route
+            path="/:usernameParam/:recipeParam/edit"
+            element={
+              <EditRecipeScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
           />
           <Route path="/about" element={<AboutScreen />} />
           <Route
