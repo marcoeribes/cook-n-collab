@@ -67,7 +67,7 @@ function App() {
           <Route path="/" element={<HomeScreen />} />
           <Route path="/recipes" element={<RecipesScreen />} />
           <Route
-            path="/recipe/:usernameParam/:recipeParam"
+            path="/:usernameParam/:recipeParam"
             element={<RecipeScreen />}
           />
           <Route path="/about" element={<AboutScreen />} />

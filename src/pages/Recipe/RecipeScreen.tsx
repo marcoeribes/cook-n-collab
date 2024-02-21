@@ -23,10 +23,11 @@ export default function RecipeScreen() {
 
   useEffect(() => {
     if (usernameParam) {
-      getProfileByUsername(usernameParam).then((data) => {
+      getProfileByUsername(usernameParam).then((data: any) => {
         setUserId(data && data[0]?.profile_id);
         setUsername(data && data[0]?.username);
         setAvatarUrl(data && data[0]?.avatar_url);
+        console.log("WHAT", data);
       });
     }
   }, [usernameParam]);
