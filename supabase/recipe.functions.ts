@@ -29,3 +29,16 @@ export async function getRecipeByUserIdAndRecipeTitle(
     return data;
   }
 }
+
+export async function getDirectionsByRecipeId(recipeId: string) {
+  const { data, error } = await supabase
+    .from("recipe_directions")
+    .select()
+    .eq("recipe_id", recipeId);
+  if (error) {
+    console.error("Error getting directions:", error.message);
+  } else {
+    console.log("directions in functions:", data);
+    return data;
+  }
+}
