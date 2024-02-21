@@ -66,7 +66,10 @@ function App() {
 
           <Route path="/" element={<HomeScreen />} />
           <Route path="/recipes" element={<RecipesScreen />} />
-          <Route path="/recipe/:id" element={<RecipeScreen />} />
+          <Route
+            path="/recipe/:usernameParam/:recipeParam"
+            element={<RecipeScreen />}
+          />
           <Route path="/about" element={<AboutScreen />} />
           <Route
             path="/login"
@@ -78,7 +81,7 @@ function App() {
             }
           />
           <Route
-            path=":param"
+            path=":usernameParam"
             element={
               <ProfileScreen
                 userProps={user as User}
