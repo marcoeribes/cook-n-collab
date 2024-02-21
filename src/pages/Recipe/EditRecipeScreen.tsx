@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { getProfileByUsername } from "../../../supabase/profileFunctions";
 import {
   getDirectionsByRecipeId,
   getRecipeByUserIdAndRecipeTitle,
+  updateRecipe,
 } from "../../../supabase/recipe.functions";
 import SessionProps from "../../interfaces/auth.interface";
 import { Session, User } from "@supabase/supabase-js";
@@ -13,6 +14,7 @@ export default function EditRecipeScreen({
   userProps,
   sessionProps,
 }: SessionProps) {
+  const navigate = useNavigate();
   const { usernameParam, recipeParam } = useParams();
 
   const [user, setUser] = useState<User | null>(userProps);
@@ -21,11 +23,41 @@ export default function EditRecipeScreen({
   const [userId, setUserId] = useState<string | undefined>("");
 
   const [recipeId, setRecipeId] = useState<string>("");
+
   const [title, setTitle] = useState("");
+  const [newTitle, setNewTitle] = useState("");
+
   const [description, setDescription] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+
   const [imageUrl, setImageUrl] = useState("");
 
   const [directions, setDirections] = useState<any[]>([]);
+
+  const navigateToNewTitleRecipe = () => {
+    navigate(`/${usernameParam}/${newTitle}/edit`);
+  };
+
+  const handleRecipeInfoUpdate = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    if (
+      user &&
+      user?.id === userId &&
+      (title !== newTitle || description !== newDescription)
+    ) {
+      event.preventDefault();
+      const response = await updateRecipe(
+        user,
+        recipeId,
+        newTitle,
+        newDescription
+      );
+      if (response) {
+        navigateToNewTitleRecipe();
+      }
+    }
+  };
 
   useEffect(() => {
     setSession(sessionProps);
@@ -48,9 +80,12 @@ export default function EditRecipeScreen({
         setTitle(data && data[0]?.title);
         setDescription(data && data[0]?.description);
         setImageUrl(data && data[0]?.image_url);
+
+        setNewTitle(title);
+        setNewDescription(description);
       });
     }
-  }, [userId, recipeParam]);
+  }, [userId, recipeParam, title, description]);
 
   useEffect(() => {
     if (recipeId) {
@@ -65,13 +100,27 @@ export default function EditRecipeScreen({
       {user?.id === userId ? (
         <>
           <h1>Edit Recipe</h1>
-          <div>
-            <h4>Change Recipe Title</h4>
-            <input value={title} />
-          </div>
+          <form onSubmit={handleRecipeInfoUpdate}>
+            <label>Change Recipe Title</label>
+            <input
+              type="text"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e.target.value)}
+              required
+            />
+            <br />
+            <label>Edit Description</label>
+            <input
+              type="text"
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              required
+            />
+            <br />
+            <input type="submit" value={"Save"} />
+          </form>
           <img src={imageUrl} alt="recipe" width="120px" height="auto" />
-          <h4>Edit Description</h4>
-          <input value={description} />
+
           {directions
             .sort((a, b) => a.step_number - b.step_number)
             .map((direction) => (

@@ -1,3 +1,4 @@
+import { User } from "@supabase/supabase-js";
 import { supabase } from "../supabase/client";
 
 export async function getAllRecipesByUserId(userId: string) {
@@ -27,6 +28,31 @@ export async function getRecipeByUserIdAndRecipeTitle(
   } else {
     console.log("recipe in functions:", data);
     return data;
+  }
+}
+
+export async function updateRecipe(
+  user: User,
+  recipeId: string,
+  newTitle?: string,
+  newDescription?: string
+) {
+  const { error } = await supabase
+    .from("recipe")
+    .update({
+      title: newTitle,
+      description: newDescription,
+    })
+    .eq("author_id", user?.id)
+    .eq("recipe_id", recipeId);
+
+  if (error) {
+    console.error("Error changing username & bio:", error.message);
+    return false;
+  } else {
+    console.log("username updated:", newTitle);
+    console.log("bio updated:", newDescription);
+    return true;
   }
 }
 
