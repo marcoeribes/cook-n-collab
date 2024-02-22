@@ -29,7 +29,7 @@ export default function RecipeScreen({
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const [directions, setDirections] = useState<any[]>([]);
+  const [directions, setDirections] = useState<[]>([]);
 
   const navigateToEditRecipe = () => {
     navigate(`/${username}/${recipeParam}/edit`);
@@ -56,12 +56,10 @@ export default function RecipeScreen({
 
   useEffect(() => {
     if (usernameParam) {
-      getProfileByUsername(usernameParam).then((data: any) => {
+      getProfileByUsername(usernameParam).then((data) => {
         setUserId(data && data[0]?.profile_id);
         setUsername(data && data[0]?.username);
         setAvatarUrl(data && data[0]?.avatar_url);
-
-        console.log("WHAT", user);
       });
     }
   }, [usernameParam]);

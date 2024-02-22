@@ -9,6 +9,13 @@ import {
 } from "../../../supabase/recipe.functions";
 import SessionProps from "../../interfaces/auth.interface";
 import { Session, User } from "@supabase/supabase-js";
+import {
+  deleteRecipeImage,
+  fetchDefaultRecipeImageUrl,
+  fetchRecipeImage,
+  fetchRecipeImageUrl,
+  uploadRecipeImage,
+} from "../../../supabase/recipe-image.functions";
 
 export default function EditRecipeScreen({
   userProps,
@@ -31,6 +38,11 @@ export default function EditRecipeScreen({
   const [newDescription, setNewDescription] = useState("");
 
   const [imageUrl, setImageUrl] = useState("");
+
+  /* From Storage Bucket */
+  const [recipeImage, setRecipeImage] = useState("");
+  const [recipeImageUrl, setRecipeImageUrl] = useState("");
+  /* From Storage Bucket */
 
   const [directions, setDirections] = useState<any[]>([]);
 
@@ -60,10 +72,51 @@ export default function EditRecipeScreen({
     }
   };
 
+  async function handleUploadImage(event: React.ChangeEvent<HTMLInputElement>) {
+    if (!user || !recipeId) return;
+
+    if (recipeImage) await deleteRecipeImage(user, recipeId, recipeImage);
+
+    const result = await uploadRecipeImage(user, recipeId, event);
+    if (result) {
+      await updateRecipeImage(result.imageName);
+    }
+  }
+
+  async function updateRecipeImage(imageName: string) {
+    if (!user || !recipeId) return;
+
+    setRecipeImage(imageName);
+
+    if (imageName) {
+      setImageUrl(`${recipeImageUrl}${imageName}`);
+      const response = await updateRecipe(
+        user,
+        recipeId,
+        undefined,
+        undefined,
+        `${recipeImageUrl}${imageName}`
+      );
+      if (response) {
+        const data = await getRecipeByUserIdAndRecipeTitle(user?.id, title);
+        console.log("NEW RECIPE INFORMATION", data);
+      }
+    } else {
+      const defaultUrl = await fetchDefaultRecipeImageUrl();
+      setImageUrl(defaultUrl as string);
+      await updateRecipe(
+        user,
+        recipeId,
+        undefined,
+        undefined,
+        defaultUrl as string
+      );
+    }
+  }
+
   useEffect(() => {
     setSession(sessionProps);
     setUser(userProps);
-    console.log("user", user);
   }, [session, sessionProps, user, userProps]);
 
   useEffect(() => {
@@ -75,18 +128,32 @@ export default function EditRecipeScreen({
   }, [usernameParam]);
 
   useEffect(() => {
+    if (user && recipeId) {
+      Promise.all([
+        fetchRecipeImageUrl(user, recipeId),
+        fetchRecipeImage(user, recipeId),
+      ]).then(([imageUrlData, imageData]) => {
+        imageUrlData && setRecipeImageUrl(imageUrlData);
+        imageData && setRecipeImage(imageData[0]?.name);
+        imageUrlData &&
+          imageData &&
+          setImageUrl(`${imageUrlData}${imageData[0]?.name}`);
+      });
+    }
+  }, [user, recipeId]);
+
+  useEffect(() => {
     if (userId && recipeParam) {
       getRecipeByUserIdAndRecipeTitle(userId, recipeParam).then((data) => {
         setRecipeId(data && data[0]?.recipe_id);
         setTitle(data && data[0]?.title);
         setDescription(data && data[0]?.description);
         setImageUrl(data && data[0]?.image_url);
-
         setNewTitle(title);
         setNewDescription(description);
       });
     }
-  }, [userId, recipeParam, title, description]);
+  }, [userId, recipeParam, title, description, imageUrl]);
 
   useEffect(() => {
     if (recipeId) {
@@ -120,6 +187,12 @@ export default function EditRecipeScreen({
             <input type="submit" value={"Save"} />
           </form>
           <img src={imageUrl} alt="recipe" width="120px" height="auto" />
+          <input
+            type="file"
+            onChange={(e) => {
+              handleUploadImage(e);
+            }}
+          />
 
           {directions
             .sort((a, b) => a.step_number - b.step_number)

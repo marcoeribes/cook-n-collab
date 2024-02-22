@@ -44,7 +44,8 @@ export async function uploadRecipeImage(
   }
 
   const file = event.target.files[0];
-  const filePath = `${user?.id}/${recipeId}/${uuidv4().substring(0, 8)}.jpg`;
+  const imageName = `${uuidv4().substring(0, 8)}.jpg`;
+  const filePath = `${user?.id}/${recipeId}/${imageName}`;
 
   const { data, error } = await supabase.storage
     .from("recipes")
@@ -54,7 +55,7 @@ export async function uploadRecipeImage(
     console.error("Error uploading image: ", error);
   } else {
     console.log("Image uploaded successfully", data);
-    return data;
+    return { data, imageName };
   }
 }
 
