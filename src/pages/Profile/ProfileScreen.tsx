@@ -258,7 +258,10 @@ export default function FollowerProfileScreen({
           </>
           <>
             <h1>Posts</h1>
-            <button onClick={navigateToAddRecipe}>Add Recipe</button>
+
+            {id === user?.id ? (
+              <button onClick={navigateToAddRecipe}>Add Recipe</button>
+            ) : null}
             <div
               style={{
                 display: "grid",

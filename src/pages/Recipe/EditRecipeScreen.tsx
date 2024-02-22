@@ -41,12 +41,13 @@ export default function EditRecipeScreen({
   const handleRecipeInfoUpdate = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
+    event.preventDefault();
+
     if (
       user &&
       user?.id === userId &&
       (title !== newTitle || description !== newDescription)
     ) {
-      event.preventDefault();
       const response = await updateRecipe(
         user,
         recipeId,
@@ -114,7 +115,6 @@ export default function EditRecipeScreen({
               type="text"
               value={newDescription}
               onChange={(e) => setNewDescription(e.target.value)}
-              required
             />
             <br />
             <input type="submit" value={"Save"} />

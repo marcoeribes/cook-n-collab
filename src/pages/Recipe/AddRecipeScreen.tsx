@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { getProfile } from "../../../supabase/profileFunctions";
 import { addRecipe } from "../../../supabase/recipe.functions";
@@ -19,12 +19,11 @@ export default function AddRecipeScreen({
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [imageUrl, setImageUrl] = useState(
-    "https://pfrmlsmgjrdyiccuhyyi.supabase.co/storage/v1/object/public/recipes/default-recipe2.jpg"
-  );
+  const recipeImageUrl =
+    "https://pfrmlsmgjrdyiccuhyyi.supabase.co/storage/v1/object/public/recipes/default-recipe2.jpg";
 
   const navigateToNewRecipe = () => {
-    navigate(`/${username}/${title}`);
+    navigate(`/${username}/${title}/edit`);
   };
 
   const navigateToProfile = () => {
@@ -35,7 +34,12 @@ export default function AddRecipeScreen({
     if (user && title) {
       event.preventDefault();
       console.log("title", title, "& description", description);
-      const response = await addRecipe(user, title, description, imageUrl);
+      const response = await addRecipe(
+        user,
+        title,
+        description,
+        recipeImageUrl
+      );
       if (response) {
         navigateToNewRecipe();
       }
@@ -75,14 +79,10 @@ export default function AddRecipeScreen({
           onChange={(e) => setDescription(e.target.value)}
         />
         <br />
-        <br />
+
         <input type="submit" value="Save" />
+        <button onClick={navigateToProfile}>Cancel</button>
       </form>
-
-      <img src={imageUrl} alt="recipe" width="120px" height="auto" />
-
-      <br />
-      <button onClick={navigateToProfile}>Cancel</button>
     </>
   );
 }
