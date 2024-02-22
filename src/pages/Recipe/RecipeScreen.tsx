@@ -4,6 +4,7 @@ import { Session, User } from "@supabase/supabase-js";
 
 import { getProfileByUsername } from "../../../supabase/profileFunctions";
 import {
+  deleteRecipe,
   getDirectionsByRecipeId,
   getRecipeByUserIdAndRecipeTitle,
 } from "../../../supabase/recipe.functions";
@@ -29,10 +30,22 @@ export default function RecipeScreen({
   const [imageUrl, setImageUrl] = useState("");
 
   const [directions, setDirections] = useState<any[]>([]);
-  const [tags, setTags] = useState<any[]>([]);
 
   const navigateToEditRecipe = () => {
     navigate(`/${username}/${recipeParam}/edit`);
+  };
+
+  const navigateToProfile = () => {
+    navigate(`/${username}`);
+  };
+
+  const handleDeleteRecipe = async () => {
+    if (user && recipeId) {
+      const response = await deleteRecipe(user, recipeId);
+      if (response) {
+        navigateToProfile();
+      }
+    }
   };
 
   useEffect(() => {
@@ -96,6 +109,9 @@ export default function RecipeScreen({
             <b>{direction.step_number}</b> {direction.direction_text}
           </p>
         ))}
+      {user?.id === userId && (
+        <button onClick={handleDeleteRecipe}>Delete Recipe</button>
+      )}{" "}
     </>
   );
 }

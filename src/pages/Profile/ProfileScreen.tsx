@@ -51,6 +51,10 @@ export default function FollowerProfileScreen({
     navigate("/profile/edit");
   };
 
+  const navigateToAddRecipe = () => {
+    navigate("/add-recipe");
+  };
+
   const navigateToFollowers = () => {
     navigate("followers");
   };
@@ -254,6 +258,7 @@ export default function FollowerProfileScreen({
           </>
           <>
             <h1>Posts</h1>
+            <button onClick={navigateToAddRecipe}>Add Recipe</button>
             <div
               style={{
                 display: "grid",

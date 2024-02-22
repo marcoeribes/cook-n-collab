@@ -31,6 +31,43 @@ export async function getRecipeByUserIdAndRecipeTitle(
   }
 }
 
+export async function addRecipe(
+  user: User,
+  title: string,
+  description?: string,
+  imageUrl?: string
+) {
+  const { data, error } = await supabase.from("recipe").insert([
+    {
+      author_id: user?.id,
+      title: title,
+      description: description,
+      image_url: imageUrl,
+      created_at: new Date(),
+    },
+  ]);
+  if (error) {
+    console.error("Error inserting recipe:", error.message);
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export async function deleteRecipe(user: User, recipeId: string) {
+  const { error } = await supabase
+    .from("recipe")
+    .delete()
+    .eq("author_id", user?.id)
+    .eq("recipe_id", recipeId);
+  if (error) {
+    console.error("Error deleting recipe:", error.message);
+    return false;
+  } else {
+    return true;
+  }
+}
+
 export async function updateRecipe(
   user: User,
   recipeId: string,

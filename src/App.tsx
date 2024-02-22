@@ -18,6 +18,7 @@ import EditRecipeScreen from "./pages/Recipe/EditRecipeScreen.tsx";
 import Profile from "./interfaces/profile.interface.ts";
 import { getProfile } from "../supabase/profileFunctions.ts";
 import Footer from "./components/footer/Footer.tsx";
+import AddRecipeScreen from "./pages/Recipe/AddRecipeScreen.tsx";
 
 function App() {
   const [user, setUser] = useState<User | null>(null);
@@ -81,6 +82,15 @@ function App() {
             path="/:usernameParam/:recipeParam/edit"
             element={
               <EditRecipeScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
+          <Route
+            path="/add-recipe"
+            element={
+              <AddRecipeScreen
                 userProps={user as User}
                 sessionProps={session as Session}
               />
