@@ -1,7 +1,6 @@
 import RecipeCard from "../../components/RecipeCard";
 import "./Recipes.css";
 import { Link } from "react-router-dom";
-import fakeData from "../../../dummy data/recipeData.json";
 
 import { useState } from "react";
 
@@ -25,7 +24,7 @@ export default function RecipesScreen() {
           alignItems: "center",
         }}
       >
-        {fakeData.slice(0, itemsToShow).map((recipe, index) => (
+        {/*fakeData.slice(0, itemsToShow).map((recipe, index) => (
           <Link to={`/recipe/${recipe.id}`} key={index}>
             <RecipeCard
               key={index}
@@ -34,7 +33,7 @@ export default function RecipesScreen() {
               subheader={recipe.subheader}
             />
           </Link>
-        ))}
+        ))*/}
       </div>
 
       {itemsToShow < fakeData.length ? (
