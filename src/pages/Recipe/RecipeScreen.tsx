@@ -9,6 +9,8 @@ import {
   getRecipeByUserIdAndRecipeTitle,
 } from "../../../supabase/recipe.functions";
 import SessionProps from "../../interfaces/auth.interface";
+import Button from "../../components/button/Button";
+import "./RecipeScreen.css";
 
 export default function RecipeScreen({
   userProps,
@@ -84,32 +86,45 @@ export default function RecipeScreen({
   }, [recipeId]);
 
   return (
-    <>
-      <h1>Recipe</h1>
-      <h2>{title}</h2>
-      <Link to={`/${username}`}>
-        <h3>
-          By {username}
-          <br />
-          <img src={avatarUrl} alt="avatar" height="50px" width="50px" />
-        </h3>
+    <section style={{ justifyContent: "center" }}>
+      <h2 className="recipe-title">{title}</h2>
+      <Link to={`/${username}`} className="recipe-author-link">
+        <h3 className={"recipe-author-text"}>By {username}</h3>
+        <img src={avatarUrl} alt="avatar" className={"recipe-author-avatar"} />
       </Link>
-      <br />
+      <img src={imageUrl} alt="recipe" className="recipe-image" />
+      <p className="recipe-description">{description}</p>
+      <div className="recipe-info-container">
+        {directions
+          .sort(
+            (a: { step_number: number }, b: { step_number: number }) =>
+              a.step_number - b.step_number
+          )
+          .map((direction: { step_number: number; direction_text: string }) => (
+            <div className="recipe-info-list">
+              <p
+                className="recipe-info-directions-text"
+                key={direction.step_number}
+              >
+                <b>{direction.step_number}</b> {direction.direction_text}
+              </p>
+            </div>
+          ))}
+      </div>
       {user?.id === userId && (
-        <button onClick={navigateToEditRecipe}>Edit Recipe</button>
+        <div className="recipe-user-buttons">
+          <Button
+            onClick={navigateToEditRecipe}
+            text="Edit Recipe"
+            style="button primary-button"
+          />
+          <Button
+            onClick={handleDeleteRecipe}
+            text="Delete Recipe"
+            style="button secondary-button"
+          />
+        </div>
       )}{" "}
-      <img src={imageUrl} alt="recipe" width="120px" height="auto" />
-      <p>{description}</p>
-      {directions
-        .sort((a, b) => a.step_number - b.step_number)
-        .map((direction) => (
-          <p key={direction.step_number}>
-            <b>{direction.step_number}</b> {direction.direction_text}
-          </p>
-        ))}
-      {user?.id === userId && (
-        <button onClick={handleDeleteRecipe}>Delete Recipe</button>
-      )}{" "}
-    </>
+    </section>
   );
 }
