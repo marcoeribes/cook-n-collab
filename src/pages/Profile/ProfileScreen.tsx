@@ -109,7 +109,7 @@ export default function FollowerProfileScreen({
         setIsLoading(false);
       });
     }
-  }, [usernameParam, id, username, bio, avatarUrl, user?.id]);
+  }, [usernameParam, id, username, bio, avatarUrl]);
 
   useEffect(() => {
     if (id) {
@@ -154,46 +154,15 @@ export default function FollowerProfileScreen({
       ) : (
         <>
           <>
-            <h1>Profile</h1>
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                gap: "50px",
-                backgroundColor: "green",
-              }}
-            >
-              <Avatar imageUrl={avatarUrl} size={300} />
-              <div
-                style={{
-                  backgroundColor: "blue",
-                  alignItems: "center",
-                  justifyContent: "left",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "2rem",
-                    backgroundColor: "orange",
-                    justifyContent: "left",
-                  }}
-                >
-                  <h2
-                    className="profile-username"
-                    style={{ justifyContent: "left" }}
-                  >
-                    {username}
-                  </h2>
+            <section className="profile-info">
+              <div className="profile-avatar">
+                <Avatar imageUrl={avatarUrl} size={160} />
+              </div>
+              <div>
+                <div className="profile-title">
+                  <p className="profile-username">{username}</p>
                   {id === user?.id ? (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "right",
-                        alignItems: "center",
-                        gap: "1rem",
-                      }}
-                    >
+                    <div className="profile-buttons">
                       <Button
                         text="Edit Profile"
                         onClick={navigateToEditProfile}
@@ -206,56 +175,46 @@ export default function FollowerProfileScreen({
                       />
                     </div>
                   ) : (
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-around",
-                      }}
-                    >
+                    <div className="profile-buttons">
                       {isFollowing ? (
-                        <button onClick={handleFollow}>Unfollow</button>
+                        <Button
+                          text="Unfollow"
+                          onClick={handleFollow}
+                          style="button"
+                        />
                       ) : (
-                        <button onClick={handleFollow}>Follow</button>
+                        <Button
+                          text="Follow"
+                          onClick={handleFollow}
+                          style="button"
+                        />
                       )}
-                      <br />
-                      <br />
-                      <button onClick={goBack}>Go Back</button>
+                      <Button text="Go Back" onClick={goBack} style="button" />
                     </div>
                   )}
                 </div>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "left",
-                    backgroundColor: "red",
-                    gap: "2rem",
-                  }}
-                >
+                <div className="profile-stats">
+                  <h4 className="profile-stats-item">
+                    <b>{recipes.length}</b> posts
+                  </h4>
                   <h4
                     onClick={navigateToFollowers}
-                    style={{ cursor: "pointer" }}
+                    className="profile-stats-item"
                   >
-                    {followers.length} Followers
+                    <b>{followers.length}</b> followers
                   </h4>
-                  <h3
+                  <h4
                     onClick={navigateToFollowees}
-                    style={{ cursor: "pointer" }}
+                    className="profile-stats-item"
                   >
-                    {followees.length} Following
-                  </h3>
+                    <b>{followees.length}</b> following
+                  </h4>
                 </div>
-                <p
-                  style={{
-                    display: "flex",
-                    justifyContent: "left",
-                    backgroundColor: "yellow",
-                  }}
-                >
-                  Bio: {bio}
-                </p>
+                <p className="profile-bio">{bio}</p>
               </div>
-            </div>
+            </section>
           </>
+          <hr />
           <>
             <h1>Posts</h1>
 
@@ -272,7 +231,7 @@ export default function FollowerProfileScreen({
                 alignItems: "center",
               }}
             >
-              {recipes.slice(0, 3).map((recipe, index) => (
+              {recipes.map((recipe, index) => (
                 <Link to={`/${username}/${recipe.title}`} key={index}>
                   <RecipeCard
                     key={recipe.recipe_id}

@@ -1,3 +1,9 @@
 .container {
   text-align: center;
 }
+
+main {
+  /* footer height = 150px */
+  /* navbar height = 80px */
+  min-height: calc(100vh - 251px);
+}

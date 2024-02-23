@@ -62,7 +62,7 @@ function App() {
   return (
     <>
       <Navbar profile={profile} />
-      <div className="container">
+      <main className="container">
         <Routes>
           <Route path="/*" element={<h1>Not Found</h1>} />
           <Route path="/profile" element={<h1>Not Accessible</h1>} />
@@ -127,7 +127,7 @@ function App() {
             }
           />
         </Routes>
-      </div>
+      </main>
       <Footer />
     </>
   );

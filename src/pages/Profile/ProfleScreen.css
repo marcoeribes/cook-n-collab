@@ -1,7 +1,66 @@
-.profile-page {
-  height: 100vh;
+.profile-info {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 80px;
+  margin-top: 40px;
+}
+
+.profile-avatar {
+  display: flex;
+  width: 180px;
+  height: 180px;
+  justify-content: center;
+  align-items: center;
+}
+
+.profile-title {
+  display: flex;
+  gap: 24px;
 }
 
 .profile-username {
-  font-size: 25px;
+  font-size: 20px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.profile-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.profile-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 24px;
+  margin-bottom: 20px;
+}
+
+.profile-stats-item {
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.profile-bio {
+  font-size: 16px;
+  width: 320px;
+  max-height: 200px;
+  word-wrap: break-word;
+  overflow: hidden;
+  margin: 0;
+  text-align: left;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #777;
+  margin: 50px auto;
+  width: 700px;
+  color: #333;
+  overflow: visible;
+  text-align: center;
+  height: 1px;
 }
