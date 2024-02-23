@@ -166,48 +166,84 @@ export default function EditRecipeScreen({
   return (
     <>
       {user?.id === userId ? (
-        <>
-          <h1>Edit Recipe</h1>
-          <form onSubmit={handleRecipeInfoUpdate}>
-            <label>Change Recipe Title</label>
-            <input
-              type="text"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              required
-            />
-            <br />
-            <label>Edit Description</label>
-            <input
-              type="text"
-              value={newDescription}
-              onChange={(e) => setNewDescription(e.target.value)}
-            />
-            <br />
-            <input type="submit" value={"Save"} />
-          </form>
-          <img src={imageUrl} alt="recipe" width="120px" height="auto" />
-          <input
-            type="file"
-            onChange={(e) => {
-              handleUploadImage(e);
-            }}
-          />
+        <section style={{}}>
+          <h2 className="recipe-title">Edit Recipe</h2>
+          <div className="center-items">
+            <form
+              onSubmit={handleRecipeInfoUpdate}
+              className="edit-recipe-form"
+            >
+              <label>Change Recipe Title</label>
+              <input
+                type="text"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                className="text-input"
+                style={{ marginBottom: "10px" }}
+                required
+              />
 
-          {directions
-            .sort((a, b) => a.step_number - b.step_number)
-            .map((direction) => (
-              <>
-                <p key={direction.step_number}>
-                  {direction.step_number}
+              <label>Edit Description</label>
+              <input
+                type="text"
+                value={newDescription}
+                className="text-input" // Can be Global
+                onChange={(e) => setNewDescription(e.target.value)}
+                style={{ marginBottom: "10px" }}
+              />
+              <input
+                type="submit"
+                value={"Save"}
+                className="button tertiary-button"
+                style={{ margin: "10px 0px 40px" }}
+              />
+            </form>
+          </div>
+          <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
+            <img src={imageUrl} alt="recipe" width="300px" height="auto" />
+          </label>
+          <div className="center-items">
+            <input
+              id="file-upload"
+              type="file"
+              onChange={(e) => {
+                handleUploadImage(e);
+              }}
+            />
+            <div
+              className="button tertiary-button"
+              style={{
+                paddingTop: 4,
+                paddingBottom: 4,
+                width: "82px",
+              }}
+            >
+              <label htmlFor="file-upload">Upload</label>
+            </div>
+          </div>
+
+          <div className="recipe-info-container">
+            {directions
+              .sort((a, b) => a.step_number - b.step_number)
+              .map((direction) => (
+                <div
+                  style={{
+                    display: "flex",
+                    width: "400px",
+                    gap: "10px",
+                    margin: "10px",
+                  }}
+                >
+                  <p key={direction.step_number}>{direction.step_number}</p>
                   <textarea
                     value={direction.direction_text}
                     style={{ width: "100%", height: "auto" }}
+                    className="text-input"
                   />{" "}
-                </p>
-              </>
-            ))}
-        </>
+                </div>
+              ))}
+          </div>
+        </section>
       ) : (
         <p>Access unavailable</p>
       )}

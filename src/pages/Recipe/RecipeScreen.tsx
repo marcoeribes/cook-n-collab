@@ -86,7 +86,7 @@ export default function RecipeScreen({
   }, [recipeId]);
 
   return (
-    <section style={{ justifyContent: "center" }}>
+    <section>
       <h2 className="recipe-title">{title}</h2>
       <Link to={`/${username}`} className="recipe-author-link">
         <h3 className={"recipe-author-text"}>By {username}</h3>
