@@ -16,7 +16,7 @@ import arraysEqual from "../../utils/arraysEqual";
 import { signOut } from "../../../supabase/auth.functions";
 import Button from "../../components/button/Button";
 import "./ProfleScreen.css";
-import RecipeCard from "../../components/RecipeCard";
+import RecipeCard from "../../components/recipeCard/RecipeCard";
 import { getAllRecipesByUserId } from "../../../supabase/recipe.functions";
 
 export default function FollowerProfileScreen({
@@ -153,86 +153,79 @@ export default function FollowerProfileScreen({
         <h1>No user found</h1>
       ) : (
         <>
-          <>
-            <section className="profile-info">
-              <div className="profile-avatar">
-                <Avatar imageUrl={avatarUrl} size={160} />
-              </div>
-              <div>
-                <div className="profile-title">
-                  <p className="profile-username">{username}</p>
-                  {id === user?.id ? (
-                    <div className="profile-buttons">
+          <section className="profile-info">
+            <div className="profile-avatar">
+              <Avatar imageUrl={avatarUrl} size={160} />
+            </div>
+            <div>
+              <div className="profile-title">
+                <p className="profile-username">{username}</p>
+                {id === user?.id ? (
+                  <div className="profile-buttons">
+                    <Button
+                      text="Edit Profile"
+                      onClick={navigateToEditProfile}
+                      style="button"
+                    />
+                    <Button
+                      text="Log Out"
+                      onClick={handleSignOut}
+                      style="button"
+                    />
+                  </div>
+                ) : (
+                  <div className="profile-buttons">
+                    {isFollowing ? (
                       <Button
-                        text="Edit Profile"
-                        onClick={navigateToEditProfile}
+                        text="Unfollow"
+                        onClick={handleFollow}
                         style="button"
                       />
+                    ) : (
                       <Button
-                        text="Log Out"
-                        onClick={handleSignOut}
+                        text="Follow"
+                        onClick={handleFollow}
                         style="button"
                       />
-                    </div>
-                  ) : (
-                    <div className="profile-buttons">
-                      {isFollowing ? (
-                        <Button
-                          text="Unfollow"
-                          onClick={handleFollow}
-                          style="button"
-                        />
-                      ) : (
-                        <Button
-                          text="Follow"
-                          onClick={handleFollow}
-                          style="button"
-                        />
-                      )}
-                      <Button text="Go Back" onClick={goBack} style="button" />
-                    </div>
-                  )}
-                </div>
-                <div className="profile-stats">
-                  <h4 className="profile-stats-item">
-                    <b>{recipes.length}</b> posts
-                  </h4>
-                  <h4
-                    onClick={navigateToFollowers}
-                    className="profile-stats-item"
-                  >
-                    <b>{followers.length}</b> followers
-                  </h4>
-                  <h4
-                    onClick={navigateToFollowees}
-                    className="profile-stats-item"
-                  >
-                    <b>{followees.length}</b> following
-                  </h4>
-                </div>
-                <p className="profile-bio">{bio}</p>
+                    )}
+                    <Button text="Go Back" onClick={goBack} style="button" />
+                  </div>
+                )}
               </div>
-            </section>
-          </>
-          <hr />
-          <>
-            <h1>Posts</h1>
+              <div className="profile-stats">
+                <h4 className="profile-stats-item">
+                  <b>{recipes.length}</b> posts
+                </h4>
+                <h4
+                  onClick={navigateToFollowers}
+                  className="profile-stats-item"
+                >
+                  <b>{followers.length}</b> followers
+                </h4>
+                <h4
+                  onClick={navigateToFollowees}
+                  className="profile-stats-item"
+                >
+                  <b>{followees.length}</b> following
+                </h4>
+              </div>
+              <p className="profile-bio">{bio}</p>
+            </div>
+          </section>
+          <h2 className="recipe-heading">Recipes</h2>
 
-            {id === user?.id ? (
+          <hr />
+          <section style={{ display: "flex", justifyContent: "center" }}>
+            {/*id === user?.id ? (
               <button onClick={navigateToAddRecipe}>Add Recipe</button>
-            ) : null}
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
-                gap: "10px",
-                backgroundColor: "blue",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
-              {recipes.map((recipe, index) => (
-                <Link to={`/${username}/${recipe.title}`} key={index}>
+            ) : null*/}
+            <div className="recipe-grid">
+              {recipes.map((recipe) => (
+                <Link
+                  to={`/${username}/${recipe.title}`}
+                  key={recipe.created_at}
+                  style={{ textDecoration: "none" }}
+                >
                   <RecipeCard
                     key={recipe.recipe_id}
                     imageUrl={recipe.image_url}
@@ -242,7 +235,7 @@ export default function FollowerProfileScreen({
                 </Link>
               ))}
             </div>
-          </>
+          </section>
         </>
       )}
     </div>

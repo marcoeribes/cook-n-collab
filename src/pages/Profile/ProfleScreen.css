@@ -58,9 +58,27 @@ hr {
   border: none;
   border-top: 1px solid #777;
   margin: 50px auto;
+  margin-top: 0; /* Might Update */
   width: 700px;
   color: #333;
   overflow: visible;
   text-align: center;
   height: 1px;
+}
+
+.recipe-heading {
+  font-size: 24px;
+  font-weight: 400;
+  margin: 0;
+  margin: 0;
+  margin-top: 50px; /* Might Update */
+}
+
+.recipe-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  column-gap: 10px;
+  row-gap: 10px;
+  max-width: 880px;
+  margin: 0 15px 30px;
 }
