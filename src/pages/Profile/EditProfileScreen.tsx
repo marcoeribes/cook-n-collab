@@ -13,6 +13,7 @@ import {
 } from "../../../supabase/avatarFunctions";
 import Avatar from "../../components/avatar/Avatar";
 import SessionProps from "../../interfaces/auth.interface";
+import Button from "../../components/button/Button";
 
 export default function ProfileScreen({
   userProps,
@@ -143,45 +144,77 @@ export default function ProfileScreen({
       ) : (
         <>
           <h1>Edit Profile</h1>
-          <Avatar imageUrl={profileAvatarUrl} size={300} />
-          {isLoadingAvatar ? null : (
+
+          <section className="profile-info">
             <div>
-              <input
-                type="file"
-                onChange={(e) => {
-                  handleUploadAvatar(e);
-                }}
-              />
-              <button onClick={handleDeleteAvatar}>Delete Avatar</button>
+              <Avatar imageUrl={profileAvatarUrl} size={160} />
+              {isLoadingAvatar ? null : (
+                <div className="upload-avatar-buttons">
+                  <input
+                    id="file-upload"
+                    type="file"
+                    onChange={(e) => {
+                      handleUploadAvatar(e);
+                    }}
+                  />
+                  <div
+                    className="button tertiary-button"
+                    style={{ paddingTop: 4, paddingBottom: 4 }}
+                  >
+                    <label htmlFor="file-upload">Upload</label>
+                  </div>
+                  <Button
+                    text="Delete"
+                    onClick={handleDeleteAvatar}
+                    style="button secondary-button"
+                  />
+                </div>
+              )}
             </div>
-          )}
-          <br />
-          <form onSubmit={handleProfileUpdate}>
-            <label>
-              New Username:
-              <input
-                type="text"
-                value={newUsername}
-                onChange={(e) => setNewUsername(e.target.value)}
-                required
-              />
-            </label>
-            <br />
-            <br />
-            <label>
-              New Bio:
-              <input
-                type="text"
-                value={newBio}
-                onChange={(e) => setNewBio(e.target.value)}
-                required
-              />
-            </label>
-            <br />
-            <br />
-            <input type="submit" value={"Save"} />
-            <button onClick={navigateToProfile}>Cancel</button>
-          </form>
+
+            <div className="edit-profile-input-section">
+              <form
+                onSubmit={handleProfileUpdate}
+                className="edit-profile-form"
+              >
+                <label>
+                  New Username:
+                  <input
+                    type="text"
+                    value={newUsername}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                    className="text-input"
+                    required
+                  />
+                </label>
+                <label>
+                  New Bio:
+                  <textarea
+                    value={newBio}
+                    onChange={(e) => setNewBio(e.target.value)}
+                    className="text-input"
+                    style={{
+                      resize: "vertical",
+                      width: "100%",
+                      minHeight: 96,
+                    }}
+                    required
+                  />
+                </label>
+                <input
+                  type="submit"
+                  value={"Save"}
+                  className="button tertiary-button"
+                  style={{ marginRight: 20, marginTop: 10 }}
+                />
+                <Button
+                  text="Cancel"
+                  onClick={navigateToProfile}
+                  style="button secondary-button"
+                />
+              </form>
+            </div>
+          </section>
         </>
       )}
     </>

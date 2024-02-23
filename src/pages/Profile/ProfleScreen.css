@@ -1,3 +1,5 @@
+/* Profile Screen */
+
 .profile-info {
   display: flex;
   justify-content: center;
@@ -42,6 +44,11 @@
   font-size: 18px;
   font-weight: 400;
   margin: 0;
+  color: #333;
+}
+
+.profile-stats-item:hover {
+  color: #148dff; /* bluer color on hover */
 }
 
 .profile-bio {
@@ -81,4 +88,72 @@ hr {
   row-gap: 10px;
   max-width: 880px;
   margin: 0 15px 30px;
+}
+
+/* Edit Profile Screen */
+
+input[type="file"] {
+  display: none;
+}
+
+.upload-avatar-buttons {
+  display: flex;
+  gap: 20px;
+}
+
+.edit-profile-input-section {
+  width: 280px;
+  padding: 0;
+  align-items: center;
+  display: flex;
+}
+
+.edit-profile-form {
+  text-align: left;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.text-input {
+  padding: 6px 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #24292e;
+  /* vertical-align: middle; */
+  background-color: #fafbfc;
+  /* background-repeat: no-repeat; */
+  /* background-position: right 8px center; */
+  border: 2px solid #e1e4e8;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.text-input:focus {
+  border-color: #0366d6;
+}
+
+/* Media Queries */
+
+@media screen and (max-width: 768px) {
+  .recipe-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .profile-info {
+    gap: 30px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile-title {
+    flex-direction: column;
+    text-align: left;
+  }
+
+  .profile-bio {
+    width: auto;
+  }
 }

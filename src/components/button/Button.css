@@ -1,27 +1,36 @@
 .button {
-  /* button background */
-  background-color: #3897f0;
+  /* shared button styles */
   border: none;
   border-radius: 8px;
   padding: 8px 16px;
   cursor: pointer;
-
-  /* text */
   color: white;
   font-size: 16px;
   font-weight: bold;
 }
 
-.secondary-button {
-  /* button background */
-  background-color: #3897f0;
-  border: none;
-  border-radius: 8px;
-  padding: 8px 16px;
-  cursor: pointer;
+.primary-button {
+  background-color: #1b6990;
+}
 
-  /* text */
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
+.primary-button:hover {
+  background-color: #154f6b;
+}
+
+.secondary-button {
+  background-color: #ff634d;
+}
+
+.secondary-button:hover {
+  background-color: #cc5141;
+}
+
+.tertiary-button,
+.quaternary-button {
+  background-color: #11bb99;
+}
+
+.tertiary-button:hover,
+.quaternary-button:hover {
+  background-color: #0a9078;
 }

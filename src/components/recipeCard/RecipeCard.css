@@ -1,0 +1,25 @@
+.recipe-card {
+  box-sizing: border-box;
+  padding: 0px;
+  /* border: 1px solid #777; */
+}
+.recipe-card:hover {
+  filter: brightness(80%);
+}
+
+.recipe-card-image {
+  width: 100%;
+  height: auto;
+}
+
+.recipe-card-title {
+  margin: 0;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: lighter;
+  border: 1px solid #777;
+}
+.recipe-card-title:hover {
+  color: #148dff;
+}

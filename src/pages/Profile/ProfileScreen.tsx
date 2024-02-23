@@ -165,30 +165,34 @@ export default function FollowerProfileScreen({
                     <Button
                       text="Edit Profile"
                       onClick={navigateToEditProfile}
-                      style="button"
+                      style="button tertiary-button"
                     />
                     <Button
                       text="Log Out"
                       onClick={handleSignOut}
-                      style="button"
+                      style="button secondary-button"
                     />
                   </div>
                 ) : (
-                  <div className="profile-buttons">
+                  <div className="button profile-buttons">
                     {isFollowing ? (
                       <Button
                         text="Unfollow"
                         onClick={handleFollow}
-                        style="button"
+                        style="button secondary-button"
                       />
                     ) : (
                       <Button
                         text="Follow"
                         onClick={handleFollow}
-                        style="button"
+                        style="button tertiary-button"
                       />
                     )}
-                    <Button text="Go Back" onClick={goBack} style="button" />
+                    <Button
+                      text="Go Back"
+                      onClick={goBack}
+                      style="button secondary-button"
+                    />
                   </div>
                 )}
               </div>
