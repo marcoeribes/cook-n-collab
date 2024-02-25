@@ -16,7 +16,10 @@ import {
   fetchRecipeImageUrl,
   uploadRecipeImage,
 } from "../../../supabase/recipe-image.functions";
-import { updateDirections } from "../../../supabase/directions.functions";
+import {
+  addDirections,
+  updateDirections,
+} from "../../../supabase/directions.functions";
 import Direction from "../../interfaces/direction.interface";
 
 export default function EditRecipeScreen({
@@ -47,7 +50,11 @@ export default function EditRecipeScreen({
   /* From Storage Bucket */
 
   const [directions, setDirections] = useState<Direction[]>([]);
-  const [newDirections, setNewDirections] = useState<string[]>([]);
+  const [updatedDirections, setUpdatedDirections] = useState<string[]>([]); // Array of Updated Directions
+
+  const [newDirectionsArray, setNewDirectionsArray] = useState<Direction[]>([]);
+
+  const [textareaCount, setTextareaCount] = useState(1);
 
   const navigateToNewTitleRecipe = () => {
     navigate(`/${usernameParam}/${newTitle}/edit`);
@@ -117,24 +124,37 @@ export default function EditRecipeScreen({
     }
   }
 
-  const handleDirectionsUpdate = async (
-    event: React.FormEvent<HTMLFormElement>
-  ) => {
-    event.preventDefault();
+  async function handleDirectionsUpdate() {
     if (user?.id === userId && recipeId) {
-      console.log("DIRECTIONS", directions);
-      console.log("NEW DIRECTIONS", newDirections);
-      newDirections.map(async (newDirectionText, index) => {
-        if (newDirectionText !== directions[index].direction_text) {
-          await updateDirections(
-            (index + 1).toString(),
+      updatedDirections.map(async (updatedDirectionText, index) => {
+        if (updatedDirectionText !== directions[index].direction_text) {
+          await updateDirections(recipeId, index + 1, updatedDirectionText);
+        }
+      });
+    }
+  }
+
+  async function handleAddDirections() {
+    if (user?.id === userId && recipeId) {
+      const newStepNumber = directions.length + 1;
+      newDirectionsArray.map(async (newDirectionText, index) => {
+        if (newDirectionText != undefined) {
+          await addDirections(
             recipeId,
-            newDirectionText
+            newStepNumber,
+            newDirectionsArray[index].direction_text
           );
         }
       });
     }
-  };
+  }
+
+  async function handleSaveDirections(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    console.log(newDirectionsArray);
+    await handleDirectionsUpdate();
+    await handleAddDirections();
+  }
 
   useEffect(() => {
     setSession(sessionProps);
@@ -182,7 +202,7 @@ export default function EditRecipeScreen({
       getDirectionsByRecipeId(recipeId).then((data) => {
         data && setDirections(data);
         data?.map((directionText) => {
-          setNewDirections((prevDirections) => [
+          setUpdatedDirections((prevDirections) => [
             ...prevDirections,
             directionText.direction_text,
           ]);
@@ -252,26 +272,21 @@ export default function EditRecipeScreen({
 
           {/* Recipe Info Stuff */}
           <div className="recipe-info-container">
-            <form onSubmit={handleDirectionsUpdate}>
+            <form onSubmit={handleSaveDirections}>
               {directions
                 .sort((a, b) => a.step_number - b.step_number)
                 .map((direction) => (
                   <div
-                    style={{
-                      display: "flex",
-                      width: "400px",
-                      gap: "10px",
-                      margin: "10px",
-                    }}
+                    className="edit-direction-container"
                     key={direction.step_number}
                   >
                     <p>{direction.step_number}</p>
                     <textarea
-                      value={newDirections[direction.step_number - 1]}
+                      value={updatedDirections[direction.step_number - 1]}
                       style={{ width: "100%", height: "auto" }}
                       className="text-input"
                       onChange={(event) => {
-                        setNewDirections((prevDirections) =>
+                        setUpdatedDirections((prevDirections) =>
                           prevDirections.map((dir, index) =>
                             index === direction.step_number - 1
                               ? event.target.value
@@ -282,11 +297,41 @@ export default function EditRecipeScreen({
                     />
                   </div>
                 ))}
-              <img src="/public/icons/add-ellipse.svg" alt="add" width="30px" />
+
+              {Array.from({ length: textareaCount }, (_, index) => (
+                <div className="edit-direction-container" key={index + 1}>
+                  <p>{index + 1}</p>
+                  <textarea
+                    value={newDirectionsArray[index]?.direction_text}
+                    style={{ width: "100%", height: "auto" }}
+                    className="text-input"
+                    onChange={(event) => {
+                      setNewDirectionsArray((prevDirections: Direction[]) => {
+                        const newDirections = [...prevDirections];
+                        newDirections[index] = {
+                          step_number: index + 1,
+                          direction_text: event.target.value,
+                        } as Direction;
+                        return newDirections;
+                      });
+                    }}
+                  />
+                </div>
+              ))}
+              <img
+                src="/public/icons/add-ellipse.svg"
+                alt="add"
+                width="30px"
+                onClick={() => {
+                  if (newDirectionsArray[textareaCount - 1]?.direction_text) {
+                    setTextareaCount(textareaCount + 1);
+                  }
+                }}
+              />
               <br />
               <input
                 type="submit"
-                value={"Save"}
+                value="Save"
                 className="button tertiary-button"
                 style={{ margin: "10px 0px 40px" }}
               />

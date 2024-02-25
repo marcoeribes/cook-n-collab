@@ -1,8 +1,8 @@
 import { supabase } from "../supabase/client";
 
 export async function updateDirections(
-  stepNumber: string,
   recipeId: string,
+  stepNumber: number,
   directionText: string
 ) {
   const { error } = await supabase
@@ -15,6 +15,27 @@ export async function updateDirections(
 
   if (error) {
     console.error("Error changing username & bio:", error.message);
+    return false;
+  } else {
+    return true;
+  }
+}
+
+export async function addDirections(
+  recipeId: string,
+  stepNumber: number,
+  directionText: string
+) {
+  const { error } = await supabase.from("recipe_directions").insert([
+    {
+      recipe_id: recipeId,
+      step_number: stepNumber,
+      direction_text: directionText,
+    },
+  ]);
+
+  if (error) {
+    console.error("Error adding directions:", error.message);
     return false;
   } else {
     return true;
