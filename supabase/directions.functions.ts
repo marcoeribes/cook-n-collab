@@ -35,7 +35,7 @@ export async function addDirections(
   ]);
 
   if (error) {
-    console.error("Error adding directions:", error.message);
+    console.error("Error adding directions:", error.message, error.details);
     return false;
   } else {
     return true;

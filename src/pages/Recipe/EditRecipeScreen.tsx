@@ -50,11 +50,11 @@ export default function EditRecipeScreen({
   /* From Storage Bucket */
 
   const [directions, setDirections] = useState<Direction[]>([]);
-  const [updatedDirections, setUpdatedDirections] = useState<string[]>([]); // Array of Updated Directions
+  const [updatedDirections, setUpdatedDirections] = useState<Direction[]>([]); // Array of Updated Directions
 
   const [newDirectionsArray, setNewDirectionsArray] = useState<Direction[]>([]);
 
-  const [textareaCount, setTextareaCount] = useState(1);
+  const [textareaCount, setTextareaCount] = useState(0);
 
   const navigateToNewTitleRecipe = () => {
     navigate(`/${usernameParam}/${newTitle}/edit`);
@@ -126,34 +126,40 @@ export default function EditRecipeScreen({
 
   async function handleDirectionsUpdate() {
     if (user?.id === userId && recipeId) {
-      updatedDirections.map(async (updatedDirectionText, index) => {
-        if (updatedDirectionText !== directions[index].direction_text) {
-          await updateDirections(recipeId, index + 1, updatedDirectionText);
-        }
-      });
-    }
-  }
+      updatedDirections.map(async (updatedDirection, index) => {
+        if (
+          updatedDirection.direction_text !== directions[index].direction_text
+        ) {
+          console.log("Updating", updatedDirection);
 
-  async function handleAddDirections() {
-    if (user?.id === userId && recipeId) {
-      const newStepNumber = directions.length + 1;
-      newDirectionsArray.map(async (newDirectionText, index) => {
-        if (newDirectionText != undefined) {
-          await addDirections(
+          await updateDirections(
             recipeId,
-            newStepNumber,
-            newDirectionsArray[index].direction_text
+            index + 1,
+            updatedDirection.direction_text
           );
         }
       });
     }
   }
 
+  async function handleDirectionsAdd() {
+    if (user?.id === userId && recipeId) {
+      newDirectionsArray.map(async (newDirection, index) => {
+        console.log("Adding", newDirection);
+        await addDirections(
+          recipeId,
+          newDirectionsArray[index].step_number,
+          newDirectionsArray[index].direction_text
+        );
+      });
+    }
+  }
+
   async function handleSaveDirections(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    console.log(newDirectionsArray);
+    await setUpdatedDirections([...updatedDirections, ...newDirectionsArray]);
+    await handleDirectionsAdd();
     await handleDirectionsUpdate();
-    await handleAddDirections();
   }
 
   useEffect(() => {
@@ -201,15 +207,23 @@ export default function EditRecipeScreen({
     if (recipeId) {
       getDirectionsByRecipeId(recipeId).then((data) => {
         data && setDirections(data);
-        data?.map((directionText) => {
-          setUpdatedDirections((prevDirections) => [
-            ...prevDirections,
-            directionText.direction_text,
-          ]);
-        });
+        data
+          ?.sort((a, b) => a.step_number - b.step_number)
+          .map((direction) => {
+            setUpdatedDirections((prevDirections) => [
+              ...prevDirections,
+              direction,
+            ]);
+          });
       });
     }
   }, [recipeId]);
+
+  useEffect(() => {
+    console.log("Directions", directions);
+    console.log("Updated Directions", updatedDirections);
+    console.log("New Directions", newDirectionsArray);
+  });
 
   return (
     <>
@@ -275,23 +289,28 @@ export default function EditRecipeScreen({
             <form onSubmit={handleSaveDirections}>
               {directions
                 .sort((a, b) => a.step_number - b.step_number)
-                .map((direction) => (
+                .map((direction, index) => (
                   <div
                     className="edit-direction-container"
                     key={direction.step_number}
                   >
                     <p>{direction.step_number}</p>
                     <textarea
-                      value={updatedDirections[direction.step_number - 1]}
+                      key={direction.step_number}
+                      value={
+                        updatedDirections[direction.step_number - 1]
+                          .direction_text
+                      }
                       className="text-input"
                       onChange={(event) => {
-                        setUpdatedDirections((prevDirections) =>
-                          prevDirections.map((dir, index) =>
-                            index === direction.step_number - 1
-                              ? event.target.value
-                              : dir
-                          )
-                        );
+                        setUpdatedDirections((prevDirections: Direction[]) => {
+                          const updatedDirections = [...prevDirections];
+                          updatedDirections[index] = {
+                            step_number: index + 1,
+                            direction_text: event.target.value,
+                          } as Direction;
+                          return updatedDirections;
+                        });
                       }}
                     />
                     <img
@@ -318,11 +337,31 @@ export default function EditRecipeScreen({
                       setNewDirectionsArray((prevDirections: Direction[]) => {
                         const newDirections = [...prevDirections];
                         newDirections[index] = {
-                          step_number: index + 1,
+                          step_number: directions.length + index + 1,
                           direction_text: event.target.value,
                         } as Direction;
                         return newDirections;
                       });
+                    }}
+                  />
+                  <img
+                    src="/public/icons/remove.svg"
+                    alt="delete"
+                    width="20px"
+                    style={{
+                      position: "absolute",
+                      top: "0px",
+                      right: "-3px",
+                    }}
+                    onClick={() => {
+                      const newDirections = newDirectionsArray
+                        .filter((direction, i) => i !== index)
+                        .map((direction, i) => ({
+                          ...direction,
+                          step_number: directions.length + i + 1,
+                        }));
+                      setNewDirectionsArray(newDirections);
+                      setTextareaCount(textareaCount - 1);
                     }}
                   />
                 </div>
@@ -332,7 +371,10 @@ export default function EditRecipeScreen({
                 alt="add"
                 width="30px"
                 onClick={() => {
-                  if (newDirectionsArray[textareaCount - 1]?.direction_text) {
+                  if (
+                    newDirectionsArray[textareaCount - 1]?.direction_text ||
+                    textareaCount === 0
+                  ) {
                     setTextareaCount(textareaCount + 1);
                   }
                 }}
