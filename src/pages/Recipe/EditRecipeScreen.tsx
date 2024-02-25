@@ -17,6 +17,7 @@ import {
   uploadRecipeImage,
 } from "../../../supabase/recipe-image.functions";
 import { updateDirections } from "../../../supabase/directions.functions";
+import Direction from "../../interfaces/direction.interface";
 
 export default function EditRecipeScreen({
   userProps,
@@ -45,8 +46,8 @@ export default function EditRecipeScreen({
   const [recipeImageUrl, setRecipeImageUrl] = useState("");
   /* From Storage Bucket */
 
-  const [directions, setDirections] = useState<any[]>([]);
-  const [newDirections, setNewDirections] = useState<any[]>([]);
+  const [directions, setDirections] = useState<Direction[]>([]);
+  const [newDirections, setNewDirections] = useState<string[]>([]);
 
   const navigateToNewTitleRecipe = () => {
     navigate(`/${usernameParam}/${newTitle}/edit`);
