@@ -283,7 +283,6 @@ export default function EditRecipeScreen({
                     <p>{direction.step_number}</p>
                     <textarea
                       value={updatedDirections[direction.step_number - 1]}
-                      style={{ width: "100%", height: "auto" }}
                       className="text-input"
                       onChange={(event) => {
                         setUpdatedDirections((prevDirections) =>
@@ -295,12 +294,22 @@ export default function EditRecipeScreen({
                         );
                       }}
                     />
+                    <img
+                      src="/public/icons/remove.svg"
+                      alt="delete"
+                      width="20px"
+                      style={{
+                        position: "absolute",
+                        top: "0px",
+                        right: "-3px",
+                      }}
+                    />
                   </div>
                 ))}
 
               {Array.from({ length: textareaCount }, (_, index) => (
                 <div className="edit-direction-container" key={index + 1}>
-                  <p>{index + 1}</p>
+                  <p>{directions.length + index + 1}</p>
                   <textarea
                     value={newDirectionsArray[index]?.direction_text}
                     style={{ width: "100%", height: "auto" }}

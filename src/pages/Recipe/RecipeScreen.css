@@ -73,6 +73,7 @@
 }
 
 .edit-direction-container {
+  position: relative;
   display: flex;
   width: 400px;
   gap: 10px;
@@ -80,7 +81,6 @@
 }
 
 .text-input {
-  padding: 6px 8px;
   font-size: 14px;
   line-height: 20px;
   color: #24292e;
@@ -93,7 +93,12 @@
   outline: none;
   box-sizing: border-box;
   width: 100%;
+  min-height: 38px;
+  height: "auto";
+  resize: vertical;
   transition: border-color 0.15s ease-in-out;
+  padding-right: 12px !important;
+  overflow: hidden;
 }
 
 .text-input:focus {
