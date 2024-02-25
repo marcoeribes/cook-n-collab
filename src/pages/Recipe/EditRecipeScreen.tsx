@@ -16,6 +16,7 @@ import {
   fetchRecipeImageUrl,
   uploadRecipeImage,
 } from "../../../supabase/recipe-image.functions";
+import { updateDirections } from "../../../supabase/directions.functions";
 
 export default function EditRecipeScreen({
   userProps,
@@ -45,6 +46,7 @@ export default function EditRecipeScreen({
   /* From Storage Bucket */
 
   const [directions, setDirections] = useState<any[]>([]);
+  const [newDirections, setNewDirections] = useState<any[]>([]);
 
   const navigateToNewTitleRecipe = () => {
     navigate(`/${usernameParam}/${newTitle}/edit`);
@@ -114,6 +116,25 @@ export default function EditRecipeScreen({
     }
   }
 
+  const handleDirectionsUpdate = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
+    event.preventDefault();
+    if (user?.id === userId && recipeId) {
+      console.log("DIRECTIONS", directions);
+      console.log("NEW DIRECTIONS", newDirections);
+      newDirections.map(async (newDirectionText, index) => {
+        if (newDirectionText !== directions[index].direction_text) {
+          await updateDirections(
+            (index + 1).toString(),
+            recipeId,
+            newDirectionText
+          );
+        }
+      });
+    }
+  };
+
   useEffect(() => {
     setSession(sessionProps);
     setUser(userProps);
@@ -159,6 +180,12 @@ export default function EditRecipeScreen({
     if (recipeId) {
       getDirectionsByRecipeId(recipeId).then((data) => {
         data && setDirections(data);
+        data?.map((directionText) => {
+          setNewDirections((prevDirections) => [
+            ...prevDirections,
+            directionText.direction_text,
+          ]);
+        });
       });
     }
   }, [recipeId]);
@@ -222,26 +249,47 @@ export default function EditRecipeScreen({
             </div>
           </div>
 
+          {/* Recipe Info Stuff */}
           <div className="recipe-info-container">
-            {directions
-              .sort((a, b) => a.step_number - b.step_number)
-              .map((direction) => (
-                <div
-                  style={{
-                    display: "flex",
-                    width: "400px",
-                    gap: "10px",
-                    margin: "10px",
-                  }}
-                >
-                  <p key={direction.step_number}>{direction.step_number}</p>
-                  <textarea
-                    value={direction.direction_text}
-                    style={{ width: "100%", height: "auto" }}
-                    className="text-input"
-                  />{" "}
-                </div>
-              ))}
+            <form onSubmit={handleDirectionsUpdate}>
+              {directions
+                .sort((a, b) => a.step_number - b.step_number)
+                .map((direction) => (
+                  <div
+                    style={{
+                      display: "flex",
+                      width: "400px",
+                      gap: "10px",
+                      margin: "10px",
+                    }}
+                    key={direction.step_number}
+                  >
+                    <p>{direction.step_number}</p>
+                    <textarea
+                      value={newDirections[direction.step_number - 1]}
+                      style={{ width: "100%", height: "auto" }}
+                      className="text-input"
+                      onChange={(event) => {
+                        setNewDirections((prevDirections) =>
+                          prevDirections.map((dir, index) =>
+                            index === direction.step_number - 1
+                              ? event.target.value
+                              : dir
+                          )
+                        );
+                      }}
+                    />
+                  </div>
+                ))}
+              <img src="/public/icons/add-ellipse.svg" alt="add" width="30px" />
+              <br />
+              <input
+                type="submit"
+                value={"Save"}
+                className="button tertiary-button"
+                style={{ margin: "10px 0px 40px" }}
+              />
+            </form>
           </div>
         </section>
       ) : (
