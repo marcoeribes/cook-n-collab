@@ -18,6 +18,7 @@ import {
 } from "../../../supabase/recipe-image.functions";
 import {
   addDirections,
+  deleteDirections,
   updateDirections,
 } from "../../../supabase/directions.functions";
 import Direction from "../../interfaces/direction.interface";
@@ -53,6 +54,9 @@ export default function EditRecipeScreen({
   const [updatedDirections, setUpdatedDirections] = useState<Direction[]>([]); // Array of Updated Directions
 
   const [newDirectionsArray, setNewDirectionsArray] = useState<Direction[]>([]);
+  const [deletedDirectionsArray, setDeletedDirectionsArray] = useState<
+    Direction[]
+  >([]);
 
   const [textareaCount, setTextareaCount] = useState(0);
 
@@ -109,7 +113,6 @@ export default function EditRecipeScreen({
       );
       if (response) {
         const data = await getRecipeByUserIdAndRecipeTitle(user?.id, title);
-        console.log("NEW RECIPE INFORMATION", data);
       }
     } else {
       const defaultUrl = await fetchDefaultRecipeImageUrl();
@@ -125,19 +128,21 @@ export default function EditRecipeScreen({
   }
 
   async function handleDirectionsUpdate() {
+    /*updatedDirections.map(async (updatedDirection, index) => {
+      updatedDirection.step_number = index + 1;
+      setUpdatedDirections((prevDirections) => [
+        ...prevDirections,
+        updatedDirection,
+      ]);
+    });*/
+
     if (user?.id === userId && recipeId) {
       updatedDirections.map(async (updatedDirection, index) => {
-        if (
-          updatedDirection.direction_text !== directions[index].direction_text
-        ) {
-          console.log("Updating", updatedDirection);
-
-          await updateDirections(
-            recipeId,
-            index + 1,
-            updatedDirection.direction_text
-          );
-        }
+        await updateDirections(
+          recipeId,
+          index + 1,
+          updatedDirection.direction_text
+        );
       });
     }
   }
@@ -145,7 +150,6 @@ export default function EditRecipeScreen({
   async function handleDirectionsAdd() {
     if (user?.id === userId && recipeId) {
       newDirectionsArray.map(async (newDirection, index) => {
-        console.log("Adding", newDirection);
         await addDirections(
           recipeId,
           newDirectionsArray[index].step_number,
@@ -155,9 +159,21 @@ export default function EditRecipeScreen({
     }
   }
 
+  async function handleDirectionsDelete() {
+    if (user?.id === userId && recipeId) {
+      deletedDirectionsArray.map(async (deletedDirection, index) => {
+        await deleteDirections(
+          recipeId,
+          deletedDirectionsArray[index].direction_id!
+        );
+      });
+    }
+  }
+
   async function handleSaveDirections(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    await setUpdatedDirections([...updatedDirections, ...newDirectionsArray]);
+    await handleDirectionsDelete();
+    //await setUpdatedDirections([...updatedDirections, ...newDirectionsArray]);
     await handleDirectionsAdd();
     await handleDirectionsUpdate();
   }
@@ -223,6 +239,7 @@ export default function EditRecipeScreen({
     console.log("Directions", directions);
     console.log("Updated Directions", updatedDirections);
     console.log("New Directions", newDirectionsArray);
+    console.log("Deleted Directions", deletedDirectionsArray);
   });
 
   return (
@@ -287,7 +304,7 @@ export default function EditRecipeScreen({
           {/* Recipe Info Stuff */}
           <div className="recipe-info-container">
             <form onSubmit={handleSaveDirections}>
-              {directions
+              {updatedDirections
                 .sort((a, b) => a.step_number - b.step_number)
                 .map((direction, index) => (
                   <div
@@ -297,10 +314,7 @@ export default function EditRecipeScreen({
                     <p>{direction.step_number}</p>
                     <textarea
                       key={direction.step_number}
-                      value={
-                        updatedDirections[direction.step_number - 1]
-                          .direction_text
-                      }
+                      value={direction.direction_text}
                       className="text-input"
                       onChange={(event) => {
                         setUpdatedDirections((prevDirections: Direction[]) => {
@@ -322,13 +336,32 @@ export default function EditRecipeScreen({
                         top: "0px",
                         right: "-3px",
                       }}
+                      onClick={() => {
+                        const reUpdatedDirections = updatedDirections
+                          .filter((direction, i) => {
+                            if (i === index) {
+                              setDeletedDirectionsArray((prevDirections) => [
+                                ...prevDirections,
+                                direction,
+                              ]);
+                              return false;
+                            } else {
+                              return true;
+                            }
+                          })
+                          .map((direction, i) => ({
+                            ...direction,
+                            step_number: i + 1,
+                          }));
+                        setUpdatedDirections(reUpdatedDirections);
+                      }}
                     />
                   </div>
                 ))}
 
               {Array.from({ length: textareaCount }, (_, index) => (
                 <div className="edit-direction-container" key={index + 1}>
-                  <p>{directions.length + index + 1}</p>
+                  <p>{updatedDirections.length + index + 1}</p>
                   <textarea
                     value={newDirectionsArray[index]?.direction_text}
                     style={{ width: "100%", height: "auto" }}
@@ -337,7 +370,7 @@ export default function EditRecipeScreen({
                       setNewDirectionsArray((prevDirections: Direction[]) => {
                         const newDirections = [...prevDirections];
                         newDirections[index] = {
-                          step_number: directions.length + index + 1,
+                          step_number: updatedDirections.length + index + 1,
                           direction_text: event.target.value,
                         } as Direction;
                         return newDirections;
@@ -358,7 +391,7 @@ export default function EditRecipeScreen({
                         .filter((direction, i) => i !== index)
                         .map((direction, i) => ({
                           ...direction,
-                          step_number: directions.length + i + 1,
+                          step_number: updatedDirections.length + i + 1,
                         }));
                       setNewDirectionsArray(newDirections);
                       setTextareaCount(textareaCount - 1);
