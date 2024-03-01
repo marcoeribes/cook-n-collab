@@ -91,6 +91,19 @@ export async function updateRecipe(
   }
 }
 
+export async function getIngredientsByrecipeId(recipeId: string) {
+  const { data, error } = await supabase
+    .from("recipe_ingredient")
+    .select()
+    .eq("recipe_id", recipeId);
+  if (error) {
+    console.error("Error getting ingredients:", error.message);
+  } else {
+    console.log("ingredients in functions:", data);
+    return data;
+  }
+}
+
 export async function getDirectionsByRecipeId(recipeId: string) {
   const { data, error } = await supabase
     .from("recipe_directions")
