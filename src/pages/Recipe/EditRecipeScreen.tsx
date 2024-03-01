@@ -128,54 +128,52 @@ export default function EditRecipeScreen({
   }
 
   async function handleDirectionsUpdate() {
-    /*updatedDirections.map(async (updatedDirection, index) => {
-      updatedDirection.step_number = index + 1;
-      setUpdatedDirections((prevDirections) => [
-        ...prevDirections,
-        updatedDirection,
-      ]);
-    });*/
-
     if (user?.id === userId && recipeId) {
-      updatedDirections.map(async (updatedDirection, index) => {
-        await updateDirections(
-          recipeId,
-          index + 1,
-          updatedDirection.direction_text
-        );
-      });
+      await Promise.all(
+        updatedDirections.map(async (updatedDirection, index) => {
+          console.log("Updated Direction", updatedDirection);
+          return updateDirections(
+            updatedDirection.direction_id!,
+            recipeId,
+            index + 1,
+            updatedDirection.direction_text
+          );
+        })
+      );
     }
   }
 
   async function handleDirectionsAdd() {
     if (user?.id === userId && recipeId) {
-      newDirectionsArray.map(async (newDirection, index) => {
-        await addDirections(
-          recipeId,
-          newDirectionsArray[index].step_number,
-          newDirectionsArray[index].direction_text
-        );
-      });
+      await Promise.all(
+        newDirectionsArray.map(async (newDirection, index) => {
+          return addDirections(
+            recipeId,
+            updatedDirections.length + index + 1,
+            newDirection.direction_text
+          );
+        })
+      );
     }
   }
 
   async function handleDirectionsDelete() {
     if (user?.id === userId && recipeId) {
-      deletedDirectionsArray.map(async (deletedDirection, index) => {
-        await deleteDirections(
-          recipeId,
-          deletedDirectionsArray[index].direction_id!
-        );
-      });
+      await Promise.all(
+        deletedDirectionsArray.map(async (deletedDirection) => {
+          return deleteDirections(recipeId, deletedDirection.direction_id!);
+        })
+      );
     }
   }
 
   async function handleSaveDirections(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     await handleDirectionsDelete();
-    //await setUpdatedDirections([...updatedDirections, ...newDirectionsArray]);
-    await handleDirectionsAdd();
     await handleDirectionsUpdate();
+    await handleDirectionsAdd();
+    setNewDirectionsArray([]);
+    setDeletedDirectionsArray([]);
   }
 
   useEffect(() => {
@@ -320,6 +318,7 @@ export default function EditRecipeScreen({
                         setUpdatedDirections((prevDirections: Direction[]) => {
                           const updatedDirections = [...prevDirections];
                           updatedDirections[index] = {
+                            ...direction,
                             step_number: index + 1,
                             direction_text: event.target.value,
                           } as Direction;

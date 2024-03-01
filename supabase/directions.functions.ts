@@ -1,6 +1,7 @@
 import { supabase } from "../supabase/client";
 
 export async function updateDirections(
+  directionId: number,
   recipeId: string,
   stepNumber: number,
   directionText: string
@@ -11,11 +12,11 @@ export async function updateDirections(
       direction_text: directionText,
       step_number: stepNumber,
     })
-    .eq("step_number", stepNumber)
+    .eq("direction_id", directionId)
     .eq("recipe_id", recipeId);
 
   if (error) {
-    console.error("Error changing username & bio:", error.message);
+    console.error("Error updating direction", error.message, error.details);
     return false;
   } else {
     console.log("Updated direction!", stepNumber, directionText);
