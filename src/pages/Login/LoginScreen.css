@@ -1,0 +1,60 @@
+@import url("https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&display=swap");
+
+.screen {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  background-color: #fff; /* white background */
+  border: 1px solid #000; /* 1px border */
+  border-radius: 5px; /* small radius */
+  box-sizing: border-box; /* include border and padding in the box's total width and height */
+  padding: 10px; /* space between the content and the border */
+  display: flex;
+  flex-direction: column;
+  width: 360px;
+  padding: 30px 60px;
+}
+
+.box-title {
+  font-family: "Fuzzy Bubbles", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.link {
+  cursor: pointer;
+}
+
+.link-primary-color {
+  color: "#1b6990";
+  cursor: pointer;
+}
+
+.label {
+  margin: 10px 0;
+}
+
+.text-input {
+  padding: 6px 8px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #24292e;
+  /* vertical-align: middle; */
+  background-color: #fafbfc;
+  /* background-repeat: no-repeat; */
+  /* background-position: right 8px center; */
+  border: 2px solid #e1e4e8;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.text-input:focus {
+  border-color: #0366d6;
+}
