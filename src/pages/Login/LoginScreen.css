@@ -58,3 +58,13 @@
 .text-input:focus {
   border-color: #0366d6;
 }
+
+@media screen and (max-width: 480px) {
+  .box {
+    border: none;
+  }
+
+  .screen {
+    background-color: #fff;
+  }
+}
