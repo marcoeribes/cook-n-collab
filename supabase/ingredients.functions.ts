@@ -36,3 +36,19 @@ export async function addIngredient(recipeId: number, ingredientText: string) {
     return true;
   }
 }
+
+export async function deleteIngredient(recipeId: number, ingredientId: number) {
+  const { error } = await supabase
+    .from("recipe_ingredient")
+    .delete()
+    .eq("recipe_id", recipeId)
+    .eq("ingredient_id", ingredientId);
+
+  if (error) {
+    console.error("Error deleting directions:", error.message, error.details);
+    return false;
+  } else {
+    console.log("Successfully deleted direction!", ingredientId);
+    return true;
+  }
+}

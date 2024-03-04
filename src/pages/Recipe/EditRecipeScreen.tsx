@@ -24,6 +24,7 @@ import {
 } from "../../../supabase/directions.functions";
 import {
   addIngredient,
+  deleteIngredient,
   updateIngredients,
 } from "../../../supabase/ingredients.functions";
 import Direction from "../../interfaces/direction.interface";
@@ -73,6 +74,9 @@ export default function EditRecipeScreen({
   const [newIngredientInputCount, setNewIngredientInputCount] = useState(0);
 
   const [textareaCount, setTextareaCount] = useState(0);
+
+  const [saveIngredientsClicked, setSaveIngredientsClicked] = useState(false);
+  const [saveDirectionsClicked, setSaveDirectionsClicked] = useState(false);
 
   const navigateToNewTitleRecipe = () => {
     navigate(`/${usernameParam}/${newTitle}/edit`);
@@ -141,14 +145,6 @@ export default function EditRecipeScreen({
     }
   }
 
-  async function handleSaveIngredients(
-    event: React.FormEvent<HTMLFormElement>
-  ) {
-    event.preventDefault();
-    await handleIngredientsUpdate();
-    await handleIngredientsAdd();
-  }
-
   async function handleIngredientsUpdate() {
     await Promise.all(
       ingredientsList.map(async (ingredient) => {
@@ -167,6 +163,32 @@ export default function EditRecipeScreen({
         return addIngredient(Number(recipeId), newIngredient.ingredient_text);
       })
     );
+  }
+
+  async function handleIngredientsDelete() {
+    await Promise.all(
+      deletedIngredientsList.map(async (deletedIngredient) => {
+        return deleteIngredient(
+          Number(recipeId),
+          deletedIngredient.ingredient_id
+        );
+      })
+    );
+  }
+
+  async function handleSaveIngredients(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    setSaveIngredientsClicked(true);
+    await handleIngredientsDelete();
+    await handleIngredientsUpdate();
+    await handleIngredientsAdd();
+    setIngredientsList([...ingredientsList, ...newIngredientsList]);
+    setDeletedIngredientsList([]);
+    setNewIngredientsList([]);
+    setNewIngredientInputCount(0);
+    setSaveIngredientsClicked(false);
   }
 
   async function handleDirectionsUpdate() {
@@ -205,11 +227,14 @@ export default function EditRecipeScreen({
 
   async function handleSaveDirections(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setSaveDirectionsClicked(true);
     await handleDirectionsDelete();
     await handleDirectionsUpdate();
     await handleDirectionsAdd();
-    setNewDirectionsArray([]);
     setDeletedDirectionsArray([]);
+    setNewDirectionsArray([]);
+    setTextareaCount(0);
+    setSaveDirectionsClicked(false);
   }
 
   useEffect(() => {
@@ -254,20 +279,20 @@ export default function EditRecipeScreen({
   }, [userId, recipeParam, title, description, imageUrl]);
 
   useEffect(() => {
-    console.log("New Ingredients", newIngredientsList);
-    console.log("New Ingredients Count", newIngredientInputCount);
-  });
+    if (recipeId) {
+      getIngredientsByrecipeId(recipeId).then((data) => {
+        data && setIngredientsList(data);
+      });
+    }
+  }, [recipeId, saveIngredientsClicked]);
 
   useEffect(() => {
     if (recipeId) {
       getDirectionsByRecipeId(recipeId).then((data) => {
         data && setUpdatedDirections(data);
       });
-      getIngredientsByrecipeId(recipeId).then((data) => {
-        data && setIngredientsList(data);
-      });
     }
-  }, [recipeId]);
+  }, [recipeId, saveDirectionsClicked]);
 
   return (
     <>
@@ -360,6 +385,22 @@ export default function EditRecipeScreen({
                         position: "absolute",
                         top: "0px",
                         right: "-3px",
+                      }}
+                      onClick={() => {
+                        const reUpdatedIngredients = ingredientsList.filter(
+                          (ingredient: Ingredient, i: number) => {
+                            if (i === index) {
+                              setDeletedIngredientsList((prevIngredients) => [
+                                ...prevIngredients,
+                                ingredient,
+                              ]);
+                              return false;
+                            } else {
+                              return true;
+                            }
+                          }
+                        );
+                        setIngredientsList(reUpdatedIngredients);
                       }}
                     />
                   </div>
