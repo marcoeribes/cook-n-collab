@@ -20,3 +20,19 @@ export async function updateIngredients(
     return true;
   }
 }
+
+export async function addIngredient(recipeId: number, ingredientText: string) {
+  const { error } = await supabase.from("recipe_ingredient").insert([
+    {
+      recipe_id: recipeId,
+      ingredient_text: ingredientText,
+    },
+  ]);
+
+  if (error) {
+    console.error("Error adding directions:", error.message, error.details);
+    return false;
+  } else {
+    return true;
+  }
+}
