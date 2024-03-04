@@ -6,11 +6,14 @@ import { getProfileByUsername } from "../../../supabase/profileFunctions";
 import {
   deleteRecipe,
   getDirectionsByRecipeId,
+  getIngredientsByrecipeId,
   getRecipeByUserIdAndRecipeTitle,
 } from "../../../supabase/recipe.functions";
 import SessionProps from "../../interfaces/auth.interface";
 import Button from "../../components/button/Button";
 import "./RecipeScreen.css";
+import Direction from "../../interfaces/direction.interface";
+import Ingredient from "../../interfaces/ingredient.interface";
 
 export default function RecipeScreen({
   userProps,
@@ -31,7 +34,8 @@ export default function RecipeScreen({
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
 
-  const [directions, setDirections] = useState<[]>([]);
+  const [ingredients, setIngredients] = useState<Ingredient[]>([]); // [ { ingredient_id: string, ingredient_text: string }
+  const [directions, setDirections] = useState<Direction[]>([]);
 
   const navigateToEditRecipe = () => {
     navigate(`/${username}/${recipeParam}/edit`);
@@ -79,8 +83,11 @@ export default function RecipeScreen({
 
   useEffect(() => {
     if (recipeId) {
-      getDirectionsByRecipeId(recipeId).then((data) => {
-        data && setDirections(data);
+      getIngredientsByrecipeId(recipeId).then((ingredientsData) => {
+        ingredientsData && setIngredients(ingredientsData); // [ { ingredient_id: string, ingredient_text: string }
+      });
+      getDirectionsByRecipeId(recipeId).then((directionsData) => {
+        directionsData && setDirections(directionsData); // [ { step_number: number, direction_text: string }
       });
     }
   }, [recipeId]);
@@ -95,6 +102,15 @@ export default function RecipeScreen({
       <img src={imageUrl} alt="recipe" className="recipe-image" />
       <p className="recipe-description">{description}</p>
       <div className="recipe-info-container">
+        <h3>Ingredients</h3>
+        {ingredients.map((ingredient: { ingredient_text: string }, index) => (
+          <div className="recipe-info-list">
+            <p className="recipe-info-text" key={index}>
+              {ingredient.ingredient_text}
+            </p>
+          </div>
+        ))}
+        <h3>Directions</h3>
         {directions
           .sort(
             (a: { step_number: number }, b: { step_number: number }) =>
@@ -102,10 +118,7 @@ export default function RecipeScreen({
           )
           .map((direction: { step_number: number; direction_text: string }) => (
             <div className="recipe-info-list">
-              <p
-                className="recipe-info-directions-text"
-                key={direction.step_number}
-              >
+              <p className="recipe-info-text" key={direction.step_number}>
                 <b>{direction.step_number}</b> {direction.direction_text}
               </p>
             </div>

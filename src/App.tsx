@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { User, Session } from "@supabase/supabase-js";
 import { supabase } from "../supabase/client";
@@ -21,6 +21,9 @@ import Footer from "./components/footer/Footer.tsx";
 import AddRecipeScreen from "./pages/Recipe/AddRecipeScreen.tsx";
 
 function App() {
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -61,7 +64,7 @@ function App() {
 
   return (
     <>
-      <Navbar profile={profile} />
+      {currentPath !== "/login" && <Navbar profile={profile} />}
       <main className="container">
         <Routes>
           <Route path="/*" element={<h1>Not Found</h1>} />
@@ -128,7 +131,7 @@ function App() {
           />
         </Routes>
       </main>
-      <Footer />
+      {currentPath !== "/login" && <Footer />}
     </>
   );
 }

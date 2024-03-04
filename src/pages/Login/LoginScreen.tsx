@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { User, Session } from "@supabase/supabase-js";
+import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../../supabase/profileFunctions";
 import {
   logInWithEmail,
   signUpNewUser,
   signOut,
 } from "../../../supabase/auth.functions";
+import "./LoginScreen.css";
 
 interface LoginScreenProps {
   userProps: User;
@@ -16,6 +18,8 @@ export default function LoginScreen({
   userProps,
   sessionProps,
 }: LoginScreenProps) {
+  const navigate = useNavigate();
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [session, setSession] = useState(sessionProps);
@@ -79,33 +83,44 @@ export default function LoginScreen({
     return <div>Check Email</div>;
   } else if (!session) {
     return (
-      <>
-        <form onSubmit={handleSubmit}>
-          <label>
+      <div className="screen">
+        <form onSubmit={handleSubmit} className="box">
+          <h2
+            className="box-title"
+            onClick={() => {
+              navigate("/");
+            }}
+          >
+            Cook 'n' Collab
+          </h2>
+          <label className="label">
             Email:
             <input
               type="email"
               value={email}
+              className="text-input"
               onChange={(e) => setEmail(e.target.value)}
               required
             />
           </label>
           {isSignUp ? (
-            <label>
+            <label className="label">
               Username:
               <input
                 type="text"
                 value={username}
+                className="text-input"
                 onChange={(e) => setUsername(e.target.value)}
                 required
               />
             </label>
           ) : null}
-          <label>
+          <label className="label">
             Password:
             <input
               type="password"
               value={password}
+              className="text-input"
               onChange={(e) => {
                 setPassword(e.target.value);
                 if (e.target.value.length < 8) {
@@ -120,12 +135,41 @@ export default function LoginScreen({
               <div style={{ color: "red" }}>{passwordError}</div>
             )}
           </label>
-          <input type="submit" value={isSignUp ? "Sign Up" : "Login"} />
-          <button onClick={() => setIsSignUp(!isSignUp)}>
-            Switch to {isSignUp ? "Login" : "Sign Up"}
-          </button>
+          {!isSignUp && (
+            <p style={{ color: "#1b6990", cursor: "pointer" }}>
+              Forgot Password?
+            </p>
+          )}
+
+          <input
+            type="submit"
+            className="button tertiary-button"
+            value={isSignUp ? "Sign Up" : "Login"}
+            style={{ marginTop: 40 }}
+          />
+          {isSignUp ? (
+            <p>
+              Have an account?{" "}
+              <a
+                style={{ color: "#1b6990", cursor: "pointer" }}
+                onClick={() => setIsSignUp(!isSignUp)}
+              >
+                Login
+              </a>
+            </p>
+          ) : (
+            <p>
+              Don't have an account?{" "}
+              <a
+                style={{ color: "#1b6990", cursor: "pointer" }}
+                onClick={() => setIsSignUp(!isSignUp)}
+              >
+                Sign Up
+              </a>
+            </p>
+          )}
         </form>
-      </>
+      </div>
     );
   } else if (isLoading) {
     return <div>Loading...</div>;
