@@ -35,25 +35,27 @@ export default function LoginScreen({
 
   const [passwordError, setPasswordError] = useState("");
 
+  const [authError, setAuthError] = useState("");
+
   async function handleSignUp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const signUpSuccessful = await signUpNewUser(
-      email,
-      password,
-      username,
-      url
-    );
-    if (signUpSuccessful) {
+    const response = await signUpNewUser(email, password, username, url);
+
+    if (response.success === true) {
       console.log("VITE_SIGNIN_REDIRECT_URL", url);
       setSuccessfulSignUp(true);
-    } else console.log("Sign up failed");
+    } else if (response.fail === false) setAuthError(response.error);
   }
 
   async function handleLogIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const loginSuccessful = await logInWithEmail(email, password);
-    if (loginSuccessful) window.location.reload();
-    else console.log("Login failed");
+    validationCheck();
+    const response = await logInWithEmail(email, password);
+    console.log(response);
+    if (response.success === true) {
+      navigate("/");
+      window.location.reload();
+    } else if (response.fail === false) setAuthError(response.error);
   }
 
   async function handleSignOut() {
@@ -96,11 +98,10 @@ export default function LoginScreen({
           <label className="label">
             Email:
             <input
-              type="email"
+              type="text"
               value={email}
               className="text-input"
               onChange={(e) => setEmail(e.target.value)}
-              required
             />
           </label>
           {isSignUp ? (
@@ -111,7 +112,6 @@ export default function LoginScreen({
                 value={username}
                 className="text-input"
                 onChange={(e) => setUsername(e.target.value)}
-                required
               />
             </label>
           ) : null}
@@ -123,13 +123,7 @@ export default function LoginScreen({
               className="text-input"
               onChange={(e) => {
                 setPassword(e.target.value);
-                if (e.target.value.length < 8) {
-                  setPasswordError("Password must be at least 8 characters");
-                } else {
-                  setPasswordError("");
-                }
               }}
-              required
             />
             {passwordError && (
               <div style={{ color: "red" }}>{passwordError}</div>
@@ -168,6 +162,7 @@ export default function LoginScreen({
               </a>
             </p>
           )}
+          {<div style={{ color: "red" }}>{authError}</div>}
         </form>
       </div>
     );

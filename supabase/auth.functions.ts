@@ -17,12 +17,11 @@ export async function signUpNewUser(
     },
   });
   if (error) {
-    console.error("Error signing up:", error.message);
+    return { fail: false, error: error.message };
   } else if (data.user?.identities?.length === 0) {
-    console.error("User already exists", data);
+    return { fail: false, error: "User already exists" };
   } else {
-    console.log("User signed up:", data);
-    return data;
+    return { success: true, data };
   }
 }
 
@@ -32,11 +31,9 @@ export async function logInWithEmail(email: string, password: string) {
     password: password,
   });
   if (error) {
-    console.error("Error signing up:", error.message);
-    return false;
+    return { fail: false, error: error.message };
   } else {
-    console.log("User Logged In:", data);
-    return true;
+    return { success: true, data };
   }
 }
 
