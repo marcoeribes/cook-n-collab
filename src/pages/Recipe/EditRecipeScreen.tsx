@@ -22,7 +22,10 @@ import {
   deleteDirections,
   updateDirections,
 } from "../../../supabase/directions.functions";
-import { updateIngredients } from "../../../supabase/ingredients.functions";
+import {
+  addIngredient,
+  updateIngredients,
+} from "../../../supabase/ingredients.functions";
 import Direction from "../../interfaces/direction.interface";
 import Ingredient from "../../interfaces/ingredient.interface";
 
@@ -60,9 +63,15 @@ export default function EditRecipeScreen({
   >([]);
 
   const [ingredientsList, setIngredientsList] = useState<Ingredient[]>([]); // Array of Ingredients
-  //const [newIngredientsArray, setNewIngredientsArray] = useState<string[]>([]);
+  const [newIngredientsList, setNewIngredientsList] = useState<Ingredient[]>(
+    []
+  );
+  const [deletedIngredientsList, setDeletedIngredientsList] = useState<
+    Ingredient[]
+  >([]);
 
-  const [ingredientInputCount, setIngredientInputCount] = useState(0);
+  const [newIngredientInputCount, setNewIngredientInputCount] = useState(0);
+
   const [textareaCount, setTextareaCount] = useState(0);
 
   const navigateToNewTitleRecipe = () => {
@@ -137,6 +146,7 @@ export default function EditRecipeScreen({
   ) {
     event.preventDefault();
     await handleIngredientsUpdate();
+    await handleIngredientsAdd();
   }
 
   async function handleIngredientsUpdate() {
@@ -147,6 +157,14 @@ export default function EditRecipeScreen({
           Number(recipeId),
           ingredient.ingredient_text
         );
+      })
+    );
+  }
+
+  async function handleIngredientsAdd() {
+    await Promise.all(
+      newIngredientsList.map(async (newIngredient) => {
+        return addIngredient(Number(recipeId), newIngredient.ingredient_text);
       })
     );
   }
@@ -236,6 +254,11 @@ export default function EditRecipeScreen({
   }, [userId, recipeParam, title, description, imageUrl]);
 
   useEffect(() => {
+    console.log("New Ingredients", newIngredientsList);
+    console.log("New Ingredients Count", newIngredientInputCount);
+  });
+
+  useEffect(() => {
     if (recipeId) {
       getDirectionsByRecipeId(recipeId).then((data) => {
         data && setUpdatedDirections(data);
@@ -309,21 +332,51 @@ export default function EditRecipeScreen({
           <div className="recipe-info-container">
             <h2>Igredients</h2>
             <form onSubmit={handleSaveIngredients}>
-              {ingredientsList.map((ingredient, index) => (
-                <div className="edit-ingredient-container" key={index}>
+              {ingredientsList
+                .sort((a, b) => a.ingredient_id - b.ingredient_id)
+                .map((ingredient, index) => (
+                  <div className="edit-ingredient-container" key={index}>
+                    <input
+                      value={ingredient.ingredient_text}
+                      type="text"
+                      className="text-input"
+                      style={{ paddingRight: 18 }}
+                      onChange={(event) => {
+                        setIngredientsList((prevIngredients: Ingredient[]) => {
+                          const updatedIngredients = [...prevIngredients];
+                          updatedIngredients[index] = {
+                            ...ingredient,
+                            ingredient_text: event.target.value,
+                          } as Ingredient;
+                          return updatedIngredients;
+                        });
+                      }}
+                    />
+                    <img
+                      src="/public/icons/remove.svg"
+                      alt="delete"
+                      width="20px"
+                      style={{
+                        position: "absolute",
+                        top: "0px",
+                        right: "-3px",
+                      }}
+                    />
+                  </div>
+                ))}
+
+              {Array.from({ length: newIngredientInputCount }, (_, index) => (
+                <div className="edit-ingredient-container" key={index + 1}>
                   <input
-                    value={ingredient.ingredient_text}
-                    type="text"
+                    value={newIngredientsList[index]?.ingredient_text || ""}
                     className="text-input"
-                    style={{ paddingRight: 18 }}
                     onChange={(event) => {
-                      setIngredientsList((prevIngredients: Ingredient[]) => {
-                        const updatedIngredients = [...prevIngredients];
-                        updatedIngredients[index] = {
-                          ...ingredient,
+                      setNewIngredientsList((prevIngredients: Ingredient[]) => {
+                        const newIngredients = [...prevIngredients];
+                        newIngredients[index] = {
                           ingredient_text: event.target.value,
                         } as Ingredient;
-                        return updatedIngredients;
+                        return newIngredients;
                       });
                     }}
                   />
@@ -336,14 +389,31 @@ export default function EditRecipeScreen({
                       top: "0px",
                       right: "-3px",
                     }}
+                    onClick={() => {
+                      const newIngredients = newIngredientsList.filter(
+                        (_, i) => i !== index
+                      );
+                      setNewIngredientsList(newIngredients);
+                      setNewIngredientInputCount(newIngredientInputCount - 1);
+                    }}
                   />
                 </div>
               ))}
+
               <img
                 src="/public/icons/add-ellipse.svg"
                 alt="add"
                 width="30px"
-                onClick={() => {}}
+                onClick={() => {
+                  if (
+                    newIngredientsList[newIngredientInputCount - 1]
+                      ?.ingredient_text ||
+                    newIngredientsList.length === newIngredientInputCount
+                  ) {
+                    console.log("Adding Ingredient", newIngredientInputCount);
+                    setNewIngredientInputCount(newIngredientInputCount + 1);
+                  }
+                }}
               />
               <br />
               <input
