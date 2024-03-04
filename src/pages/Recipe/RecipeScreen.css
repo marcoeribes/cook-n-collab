@@ -72,6 +72,36 @@
   text-align: initial;
 }
 
+.text-input {
+  padding: 6px 8px;
+
+  font-size: 14px;
+  line-height: 12px;
+  color: #24292e;
+  /* vertical-align: middle; */
+  background-color: #fafbfc;
+  /* background-repeat: no-repeat; */
+  /* background-position: right 8px center; */
+  border: 2px solid #e1e4e8;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  width: 100%;
+  transition: border-color 0.15s ease-in-out;
+}
+
+.text-input:focus {
+  border-color: #0366d6;
+}
+
+.edit-ingredient-container {
+  position: relative;
+  display: flex;
+  width: 300px;
+  gap: 10px;
+  margin: 10px;
+}
+
 .edit-direction-container {
   position: relative;
   display: flex;
@@ -80,7 +110,7 @@
   margin: 10px;
 }
 
-.text-input {
+.textarea-input {
   font-size: 14px;
   line-height: 20px;
   color: #24292e;
@@ -101,7 +131,7 @@
   overflow: hidden;
 }
 
-.text-input:focus {
+.textarea-input:focus {
   border-color: #0366d6;
 }
 

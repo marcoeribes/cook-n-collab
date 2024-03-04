@@ -50,7 +50,6 @@ export default function EditRecipeScreen({
   const [recipeImageUrl, setRecipeImageUrl] = useState("");
   /* From Storage Bucket */
 
-  const [directions, setDirections] = useState<Direction[]>([]);
   const [updatedDirections, setUpdatedDirections] = useState<Direction[]>([]); // Array of Updated Directions
 
   const [newDirectionsArray, setNewDirectionsArray] = useState<Direction[]>([]);
@@ -58,6 +57,9 @@ export default function EditRecipeScreen({
     Direction[]
   >([]);
 
+  const [newIngredientsArray, setNewIngredientsArray] = useState<string[]>([]);
+
+  const [ingredientInputCount, setIngredientInputCount] = useState(0);
   const [textareaCount, setTextareaCount] = useState(0);
 
   const navigateToNewTitleRecipe = () => {
@@ -128,43 +130,37 @@ export default function EditRecipeScreen({
   }
 
   async function handleDirectionsUpdate() {
-    if (user?.id === userId && recipeId) {
-      await Promise.all(
-        updatedDirections.map(async (updatedDirection, index) => {
-          console.log("Updated Direction", updatedDirection);
-          return updateDirections(
-            updatedDirection.direction_id!,
-            recipeId,
-            index + 1,
-            updatedDirection.direction_text
-          );
-        })
-      );
-    }
+    await Promise.all(
+      updatedDirections.map(async (updatedDirection, index) => {
+        console.log("Updated Direction", updatedDirection);
+        return updateDirections(
+          updatedDirection.direction_id!,
+          recipeId,
+          index + 1,
+          updatedDirection.direction_text
+        );
+      })
+    );
   }
 
   async function handleDirectionsAdd() {
-    if (user?.id === userId && recipeId) {
-      await Promise.all(
-        newDirectionsArray.map(async (newDirection, index) => {
-          return addDirections(
-            recipeId,
-            updatedDirections.length + index + 1,
-            newDirection.direction_text
-          );
-        })
-      );
-    }
+    await Promise.all(
+      newDirectionsArray.map(async (newDirection, index) => {
+        return addDirections(
+          recipeId,
+          updatedDirections.length + index + 1,
+          newDirection.direction_text
+        );
+      })
+    );
   }
 
   async function handleDirectionsDelete() {
-    if (user?.id === userId && recipeId) {
-      await Promise.all(
-        deletedDirectionsArray.map(async (deletedDirection) => {
-          return deleteDirections(recipeId, deletedDirection.direction_id!);
-        })
-      );
-    }
+    await Promise.all(
+      deletedDirectionsArray.map(async (deletedDirection) => {
+        return deleteDirections(recipeId, deletedDirection.direction_id!);
+      })
+    );
   }
 
   async function handleSaveDirections(event: React.FormEvent<HTMLFormElement>) {
@@ -220,21 +216,13 @@ export default function EditRecipeScreen({
   useEffect(() => {
     if (recipeId) {
       getDirectionsByRecipeId(recipeId).then((data) => {
-        data && setDirections(data);
-        data
-          ?.sort((a, b) => a.step_number - b.step_number)
-          .map((direction) => {
-            setUpdatedDirections((prevDirections) => [
-              ...prevDirections,
-              direction,
-            ]);
-          });
+        data && setUpdatedDirections(data);
       });
     }
   }, [recipeId]);
 
   useEffect(() => {
-    console.log("Directions", directions);
+    //console.log("Directions", directions);
     console.log("Updated Directions", updatedDirections);
     console.log("New Directions", newDirectionsArray);
     console.log("Deleted Directions", deletedDirectionsArray);
@@ -301,6 +289,34 @@ export default function EditRecipeScreen({
 
           {/* Recipe Info Stuff */}
           <div className="recipe-info-container">
+            <h2>Igredients</h2>
+            <form>
+              <div className="edit-ingredient-container">
+                <input
+                  type="text"
+                  className="text-input"
+                  style={{ paddingRight: 18 }}
+                />
+                <img
+                  src="/public/icons/remove.svg"
+                  alt="delete"
+                  width="20px"
+                  style={{
+                    position: "absolute",
+                    top: "0px",
+                    right: "-3px",
+                  }}
+                />
+              </div>
+              <img
+                src="/public/icons/add-ellipse.svg"
+                alt="add"
+                width="30px"
+                onClick={() => {}}
+              />
+            </form>
+
+            <h2>Directions</h2>
             <form onSubmit={handleSaveDirections}>
               {updatedDirections
                 .sort((a, b) => a.step_number - b.step_number)
