@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getProfileByUsername } from "../../../supabase/profileFunctions";
 import {
   getDirectionsByRecipeId,
+  getIngredientsByrecipeId,
   getRecipeByUserIdAndRecipeTitle,
   updateRecipe,
 } from "../../../supabase/recipe.functions";
@@ -21,7 +22,9 @@ import {
   deleteDirections,
   updateDirections,
 } from "../../../supabase/directions.functions";
+import { updateIngredients } from "../../../supabase/ingredients.functions";
 import Direction from "../../interfaces/direction.interface";
+import Ingredient from "../../interfaces/ingredient.interface";
 
 export default function EditRecipeScreen({
   userProps,
@@ -51,13 +54,13 @@ export default function EditRecipeScreen({
   /* From Storage Bucket */
 
   const [updatedDirections, setUpdatedDirections] = useState<Direction[]>([]); // Array of Updated Directions
-
   const [newDirectionsArray, setNewDirectionsArray] = useState<Direction[]>([]);
   const [deletedDirectionsArray, setDeletedDirectionsArray] = useState<
     Direction[]
   >([]);
 
-  const [newIngredientsArray, setNewIngredientsArray] = useState<string[]>([]);
+  const [ingredientsList, setIngredientsList] = useState<Ingredient[]>([]); // Array of Ingredients
+  //const [newIngredientsArray, setNewIngredientsArray] = useState<string[]>([]);
 
   const [ingredientInputCount, setIngredientInputCount] = useState(0);
   const [textareaCount, setTextareaCount] = useState(0);
@@ -127,6 +130,25 @@ export default function EditRecipeScreen({
         defaultUrl as string
       );
     }
+  }
+
+  async function handleSaveIngredients(
+    event: React.FormEvent<HTMLFormElement>
+  ) {
+    event.preventDefault();
+    await handleIngredientsUpdate();
+  }
+
+  async function handleIngredientsUpdate() {
+    await Promise.all(
+      ingredientsList.map(async (ingredient) => {
+        return updateIngredients(
+          ingredient.ingredient_id,
+          Number(recipeId),
+          ingredient.ingredient_text
+        );
+      })
+    );
   }
 
   async function handleDirectionsUpdate() {
@@ -218,15 +240,11 @@ export default function EditRecipeScreen({
       getDirectionsByRecipeId(recipeId).then((data) => {
         data && setUpdatedDirections(data);
       });
+      getIngredientsByrecipeId(recipeId).then((data) => {
+        data && setIngredientsList(data);
+      });
     }
   }, [recipeId]);
-
-  useEffect(() => {
-    //console.log("Directions", directions);
-    console.log("Updated Directions", updatedDirections);
-    console.log("New Directions", newDirectionsArray);
-    console.log("Deleted Directions", deletedDirectionsArray);
-  });
 
   return (
     <>
@@ -290,29 +308,49 @@ export default function EditRecipeScreen({
           {/* Recipe Info Stuff */}
           <div className="recipe-info-container">
             <h2>Igredients</h2>
-            <form>
-              <div className="edit-ingredient-container">
-                <input
-                  type="text"
-                  className="text-input"
-                  style={{ paddingRight: 18 }}
-                />
-                <img
-                  src="/public/icons/remove.svg"
-                  alt="delete"
-                  width="20px"
-                  style={{
-                    position: "absolute",
-                    top: "0px",
-                    right: "-3px",
-                  }}
-                />
-              </div>
+            <form onSubmit={handleSaveIngredients}>
+              {ingredientsList.map((ingredient, index) => (
+                <div className="edit-ingredient-container" key={index}>
+                  <input
+                    value={ingredient.ingredient_text}
+                    type="text"
+                    className="text-input"
+                    style={{ paddingRight: 18 }}
+                    onChange={(event) => {
+                      setIngredientsList((prevIngredients: Ingredient[]) => {
+                        const updatedIngredients = [...prevIngredients];
+                        updatedIngredients[index] = {
+                          ...ingredient,
+                          ingredient_text: event.target.value,
+                        } as Ingredient;
+                        return updatedIngredients;
+                      });
+                    }}
+                  />
+                  <img
+                    src="/public/icons/remove.svg"
+                    alt="delete"
+                    width="20px"
+                    style={{
+                      position: "absolute",
+                      top: "0px",
+                      right: "-3px",
+                    }}
+                  />
+                </div>
+              ))}
               <img
                 src="/public/icons/add-ellipse.svg"
                 alt="add"
                 width="30px"
                 onClick={() => {}}
+              />
+              <br />
+              <input
+                type="submit"
+                value="Save Ingredients"
+                className="button tertiary-button"
+                style={{ margin: "10px 0px 40px" }}
               />
             </form>
 
