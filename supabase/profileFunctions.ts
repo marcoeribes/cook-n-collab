@@ -88,6 +88,22 @@ export async function getFolloweesById(id: string) {
   }
 }
 
+export async function getFollowRelationship(
+  follower_id: string,
+  followee_id: string
+) {
+  const { data, error } = await supabase
+    .from("follow_relationship")
+    .select()
+    .eq("follower_id", follower_id)
+    .eq("followee_id", followee_id);
+  if (error) {
+    console.error("Error getting follow relationship:", error.message);
+  } else {
+    return data;
+  }
+}
+
 export async function updateProfile(
   user: User,
   newUsername?: string,

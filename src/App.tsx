@@ -11,7 +11,7 @@ import RecipesScreen from "./pages/Recipes/RecipesScreen.tsx";
 import RecipeScreen from "./pages/Recipe/RecipeScreen.tsx";
 import LoginScreen from "./pages/Login/LoginScreen.tsx";
 import EditProfileScreen from "./pages/Profile/EditProfileScreen.tsx";
-import FollowersScreen from "./pages/graveyard/FollowersScreen.tsx";
+import FollowersScreen from "./pages/Followers/FollowersScreen.tsx";
 import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 import EditRecipeScreen from "./pages/Recipe/EditRecipeScreen.tsx";
 
@@ -118,8 +118,24 @@ function App() {
               />
             }
           ></Route>
-          <Route path=":param/followers" element={<FollowersScreen />} />
-          <Route path=":param/followees" element={<FollowersScreen />} />
+          <Route
+            path=":param/followers"
+            element={
+              <FollowersScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
+          <Route
+            path=":param/followees"
+            element={
+              <FollowersScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
           <Route
             path="profile/edit"
             element={
