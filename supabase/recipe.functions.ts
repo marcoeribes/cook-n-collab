@@ -1,6 +1,15 @@
 import { User } from "@supabase/supabase-js";
 import { supabase } from "../supabase/client";
 
+export async function getAllRecipes() {
+  const { data, error } = await supabase.from("recipe").select();
+  if (error) {
+    console.error("Error getting recipes:", error.message);
+  } else {
+    return data;
+  }
+}
+
 export async function getAllRecipesByUserId(userId: string) {
   const { data, error } = await supabase
     .from("recipe")

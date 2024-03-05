@@ -49,7 +49,6 @@ export default function LoginScreen({
 
   async function handleLogIn(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    validationCheck();
     const response = await logInWithEmail(email, password);
     console.log(response);
     if (response.success === true) {
