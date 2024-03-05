@@ -130,7 +130,7 @@ export default function EditRecipeScreen({
         `${recipeImageUrl}${imageName}`
       );
       if (response) {
-        const data = await getRecipeByUserIdAndRecipeTitle(user?.id, title);
+        await getRecipeByUserIdAndRecipeTitle(user?.id, title);
       }
     } else {
       const defaultUrl = await fetchDefaultRecipeImageUrl();
@@ -502,7 +502,7 @@ export default function EditRecipeScreen({
                       }}
                       onClick={() => {
                         const reUpdatedDirections = updatedDirections
-                          .filter((direction, i) => {
+                          .filter((_, i) => {
                             if (i === index) {
                               setDeletedDirectionsArray((prevDirections) => [
                                 ...prevDirections,
@@ -552,7 +552,7 @@ export default function EditRecipeScreen({
                     }}
                     onClick={() => {
                       const newDirections = newDirectionsArray
-                        .filter((direction, i) => i !== index)
+                        .filter((_, i) => i !== index)
                         .map((direction, i) => ({
                           ...direction,
                           step_number: updatedDirections.length + i + 1,

@@ -20,8 +20,6 @@ export default function LoginScreen({
 }: LoginScreenProps) {
   const navigate = useNavigate();
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const [session, setSession] = useState(sessionProps);
   const [user, setUser] = useState<User | null>(userProps);
 
@@ -33,7 +31,7 @@ export default function LoginScreen({
   const [successfulSignUp, setSuccessfulSignUp] = useState(false);
   const url = "http://localhost:5173/profile/edit"; // might need to remove later
 
-  const [passwordError, setPasswordError] = useState("");
+  //const [passwordError, setPasswordError] = useState("");
 
   const [authError, setAuthError] = useState("");
 
@@ -124,9 +122,9 @@ export default function LoginScreen({
                 setPassword(e.target.value);
               }}
             />
-            {passwordError && (
+            {/*passwordError && (
               <div style={{ color: "red" }}>{passwordError}</div>
-            )}
+            )*/}
           </label>
           {!isSignUp && (
             <p style={{ color: "#1b6990", cursor: "pointer" }}>
@@ -165,8 +163,6 @@ export default function LoginScreen({
         </form>
       </div>
     );
-  } else if (isLoading) {
-    return <div>Loading...</div>;
   } else {
     return (
       <>

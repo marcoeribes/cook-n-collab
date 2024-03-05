@@ -11,12 +11,10 @@ import {
   insertFollow,
 } from "../../../supabase/profileFunctions";
 import Profile from "../../interfaces/profile.interface";
-import Avatar from "../../components/avatar/Avatar";
 import FollowerCard from "../../components/followerCard/FollowerCard";
 import Button from "../../components/button/Button";
 import SessionProps from "../../interfaces/auth.interface";
 import { Session, User } from "@supabase/supabase-js";
-import arraysEqual from "../../utils/arraysEqual";
 
 export default function FollowersScreen({
   userProps,
@@ -26,10 +24,8 @@ export default function FollowersScreen({
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [user, setUser] = useState<User | null>(userProps);
-  const [session, setSession] = useState<Session | null>(sessionProps);
-
-  const [isLoading, setIsLoading] = useState(true);
+  const user = userProps as User;
+  const session = sessionProps as Session;
 
   const [id, setId] = useState<string>("");
   const [username, setUsername] = useState<string>("");
@@ -59,14 +55,6 @@ export default function FollowersScreen({
         return newArray;
       });
     }
-    /*if (id) {
-      getFollowersById(id).then((data) => {
-        const newFollowers = data?.map((follower) => follower.follower_id);
-        if (newFollowers && !arraysEqual(newFollowers, follows)) {
-          setFollows(newFollowers);
-        }
-      });
-    }*/
   }
 
   useEffect(() => {
@@ -76,7 +64,6 @@ export default function FollowersScreen({
         setUsername(data && data[0]?.username);
         setAvatarUrl(data && data[0]?.avatar_url);
         setSuffix(location.pathname.slice(-9));
-        setIsLoading(false);
       });
     }
   }, [location, param, id, username, avatarUrl]);
@@ -109,7 +96,6 @@ export default function FollowersScreen({
             avatarUrl: userObj.avatar_url,
           }));
           setFollowProfiles(listOfFollows);
-          setIsLoading(false);
         }
       );
     }
@@ -127,6 +113,12 @@ export default function FollowersScreen({
       });
     }
   }, [follows, id]);
+
+  useEffect(() => {
+    if (user && session) {
+      console.log("OK");
+    }
+  }, [user, session]);
 
   return (
     <section

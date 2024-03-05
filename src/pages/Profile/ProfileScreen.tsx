@@ -168,6 +168,11 @@ export default function FollowerProfileScreen({
                       style="button tertiary-button"
                     />
                     <Button
+                      text="Add Recipe"
+                      onClick={navigateToAddRecipe}
+                      style="button primary-button"
+                    />
+                    <Button
                       text="Log Out"
                       onClick={handleSignOut}
                       style="button secondary-button"
