@@ -64,3 +64,9 @@ body {
   background-color: #ffb95c;
   height: 100%;
 }
+
+@media screen and (max-width: 768px) {
+  .nav-site-title {
+    display: none;
+  }
+}
