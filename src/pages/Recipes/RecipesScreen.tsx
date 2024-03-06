@@ -36,20 +36,27 @@ export default function RecipesScreen() {
       <hr />
       <section style={{ display: "flex", justifyContent: "center" }}>
         <div className="recipe-grid">
-          {recipes.slice(0, displayCount).map((recipe) => (
-            <div
-              key={recipe.created_at}
-              style={{ textDecoration: "none" }}
-              onClick={() => generateUrl(recipe)}
-            >
-              <RecipeCard
-                key={recipe.recipe_id}
-                imageUrl={recipe.image_url}
-                title={recipe.title}
-                subheader={recipe.subheader}
-              />
-            </div>
-          ))}
+          {recipes
+            .slice(0, displayCount)
+            .sort(
+              (a, b) =>
+                new Date(b.created_at).getTime() -
+                new Date(a.created_at).getTime()
+            )
+            .map((recipe) => (
+              <div
+                key={recipe.created_at}
+                style={{ textDecoration: "none" }}
+                onClick={() => generateUrl(recipe)}
+              >
+                <RecipeCard
+                  key={recipe.recipe_id}
+                  imageUrl={recipe.image_url}
+                  title={recipe.title}
+                  subheader={recipe.subheader}
+                />
+              </div>
+            ))}
         </div>
       </section>
       {displayCount < recipes.length && (

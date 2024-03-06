@@ -29,7 +29,7 @@ export default function LoginScreen({
 
   const [username, setUsername] = useState("");
   const [successfulSignUp, setSuccessfulSignUp] = useState(false);
-  const url = "http://localhost:5173/profile/edit"; // might need to remove later
+  const url = "https://cookncollab/profile/edit"; // might need to remove later
 
   //const [passwordError, setPasswordError] = useState("");
 
@@ -50,7 +50,7 @@ export default function LoginScreen({
     const response = await logInWithEmail(email, password);
     console.log(response);
     if (response.success === true) {
-      navigate("/");
+      navigate(`/${username}`);
       window.location.reload();
     } else if (response.fail === false) setAuthError(response.error);
   }
