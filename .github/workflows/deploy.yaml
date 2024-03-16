@@ -5,6 +5,10 @@ on:
     branches:
       - master
 
+env:
+  VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+  VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,9 +21,8 @@ jobs:
           cache: "npm"
       - run: npm ci
       - run: npm run build
-        env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+      - name: Print env variables
+        run: echo $VITE_SUPABASE_URL and $VITE_SUPABASE_ANON_KEY
       - uses: actions/upload-artifact@v4
         with:
           name: build-artifact
