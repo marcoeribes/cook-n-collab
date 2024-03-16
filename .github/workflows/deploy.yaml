@@ -15,5 +15,5 @@ jobs:
         with:
           node-version: 21
           cache: "npm"
-      - run: npm ci
-      - run: npm run build
+      - run: pnpm ci
+      - run: pnpm run build
