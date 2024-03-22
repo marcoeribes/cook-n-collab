@@ -422,7 +422,7 @@ export default function EditRecipeScreen({
                     }}
                   />
                   <img
-                    src="/public/icons/remove.svg"
+                    src="/icons/remove.svg"
                     alt="delete"
                     width="20px"
                     style={{
@@ -442,7 +442,7 @@ export default function EditRecipeScreen({
               ))}
 
               <img
-                src="/public/icons/add-ellipse.svg"
+                src="/icons/add-ellipse.svg"
                 alt="add"
                 width="30px"
                 onClick={() => {
