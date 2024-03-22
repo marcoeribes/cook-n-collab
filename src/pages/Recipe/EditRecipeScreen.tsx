@@ -232,9 +232,6 @@ export default function EditRecipeScreen({
     await handleDirectionsUpdate();
     await handleDirectionsAdd();
     setDeletedDirectionsArray([]);
-    setNewDirectionsArray([]);
-    setTextareaCount(0);
-    setSaveDirectionsClicked(false);
   }
 
   useEffect(() => {
@@ -378,7 +375,7 @@ export default function EditRecipeScreen({
                       }}
                     />
                     <img
-                      src="/public/icons/remove.svg"
+                      src="/icons/remove.svg"
                       alt="delete"
                       width="20px"
                       style={{
@@ -492,7 +489,7 @@ export default function EditRecipeScreen({
                       }}
                     />
                     <img
-                      src="/public/icons/remove.svg"
+                      src="/icons/remove.svg"
                       alt="delete"
                       width="20px"
                       style={{
@@ -542,7 +539,7 @@ export default function EditRecipeScreen({
                     }}
                   />
                   <img
-                    src="/public/icons/remove.svg"
+                    src="/icons/remove.svg"
                     alt="delete"
                     width="20px"
                     style={{
@@ -564,7 +561,7 @@ export default function EditRecipeScreen({
                 </div>
               ))}
               <img
-                src="/public/icons/add-ellipse.svg"
+                src="/icons/add-ellipse.svg"
                 alt="add"
                 width="30px"
                 onClick={() => {
