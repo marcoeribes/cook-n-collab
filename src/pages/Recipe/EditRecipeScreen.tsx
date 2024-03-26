@@ -83,10 +83,6 @@ export default function EditRecipeScreen({
     navigate(`/${usernameParam}/${newTitle}/edit`);
   };
 
-  const navigateToProfile = () => {
-    navigate(`/${usernameParam}`);
-  };
-
   const handleRecipeInfoUpdate = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
