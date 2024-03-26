@@ -29,6 +29,7 @@ import {
 } from "../../../supabase/ingredients.functions";
 import Direction from "../../interfaces/direction.interface";
 import Ingredient from "../../interfaces/ingredient.interface";
+import Button from "../../components/button/Button";
 
 export default function EditRecipeScreen({
   userProps,
@@ -80,6 +81,10 @@ export default function EditRecipeScreen({
 
   const navigateToNewTitleRecipe = () => {
     navigate(`/${usernameParam}/${newTitle}/edit`);
+  };
+
+  const navigateToProfile = () => {
+    navigate(`/${usernameParam}`);
   };
 
   const handleRecipeInfoUpdate = async (
@@ -576,11 +581,18 @@ export default function EditRecipeScreen({
               <br />
               <input
                 type="submit"
-                value="Save"
+                value="Save Directions"
                 className="button tertiary-button"
                 style={{ margin: "10px 0px 40px" }}
               />
             </form>
+            <Button
+              text="Post Recipe"
+              onClick={() => {
+                navigate(`/${usernameParam}/${newTitle}`);
+              }}
+              style="button primary-button"
+            />
           </div>
         </section>
       ) : (
