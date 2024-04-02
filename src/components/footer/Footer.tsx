@@ -3,7 +3,7 @@ import "./Footer.css";
 export default function Footer() {
   return (
     <div className="footer">
-      <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+      <div style={{ display: "flex", flexDirection: "column" }}>
         <div className="icons">
           <a
             href="https://github.com/marcoeribes/cook-n-collab"
