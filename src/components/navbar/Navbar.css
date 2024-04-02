@@ -5,14 +5,14 @@ body {
 }
 
 .nav {
-  height: 80px;
+  height: 60px;
   background-color: #ff9a4d;
   color: white;
   display: flex;
   justify-content: space-between;
   align-items: stretch;
   gap: 2rem;
-  padding: 0 1rem;
+  padding: 0 10px;
 }
 
 .nav-home {
@@ -23,7 +23,7 @@ body {
 }
 
 .nav-site-icon {
-  width: 4.5rem;
+  width: 3rem;
   height: auto;
 }
 
@@ -31,9 +31,9 @@ body {
   font-family: "Fuzzy Bubbles", sans-serif;
   font-weight: 700;
   font-style: bold;
-  font-size: 2.5rem;
+  font-size: 1.75rem;
   color: #fff;
-  padding-top: 1rem;
+  padding-top: 0.5rem;
 }
 
 .nav ul {
@@ -43,7 +43,7 @@ body {
   display: flex;
   gap: 1rem;
   align-items: center;
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .nav a {
@@ -65,8 +65,42 @@ body {
   height: 100%;
 }
 
+@media screen and (min-width: 1800px) {
+  .nav {
+    padding: 0 400px;
+  }
+}
+
+@media screen and (max-width: 1800px) {
+  .nav {
+    padding: 0 300px;
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  .nav {
+    padding: 0 200px;
+  }
+}
+
+@media screen and (max-width: 1250px) {
+  .nav {
+    padding: 0 140px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .nav {
+    padding: 0 20px;
+  }
+}
+
 @media screen and (max-width: 768px) {
   .nav-site-title {
     display: none;
+  }
+
+  .nav {
+    padding: 10px 10px;
   }
 }
