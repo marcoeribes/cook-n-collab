@@ -16,86 +16,79 @@ export default function HomeScreen() {
 
   return (
     <div>
-      <div className="fade-image">
-        <img src="/homepage.webp" alt="Home Page" style={{ width: "100%" }} />
-      </div>
       <div className="content">
         <header>
           <h1 className="home-title">
             Welcome to {isSmallScreen && <br />} Cook 'n' Collab
           </h1>
         </header>
-        <div
+        <main
           className="container"
-          style={{ width: "100%", margin: "20px auto", overflow: "hidden" }}
+          style={{
+            maxWidth: "900px",
+            width: "100%",
+            margin: "20px auto",
+            overflow: "hidden",
+            textAlign: "justify",
+          }}
         >
-          <h2>Welcome to Cook 'N' Collab - Where Recipes Meet Collaboration</h2>
-          <p>
-            At Cook 'N' Collab, we believe that cooking is more than just
-            following a recipe - it's an experience to be shared and evolved.
-            That's why we've created a unique platform where food lovers and
-            culinary enthusiasts come together to create, share, and reinvent
-            recipes.
-          </p>
-
-          <h3>Explore, Share, Collaborate</h3>
-          <ul>
-            <li>
-              <strong>Explore Recipes:</strong> Dive into a vast collection of
-              recipes from around the globe. Whether you're looking for vegan
-              delights, meat-lover feasts, or diet-specific dishes like Paleo or
-              Keto, our community has something for everyone.
-            </li>
-            <li>
-              <strong>Share Your Creations:</strong> Got a recipe that the world
-              needs to try? Upload it with ease and share your culinary
-              expertise with our vibrant community.
-            </li>
-            <li>
-              <strong>Collaborate Like Never Before:</strong> Inspired by the
-              collaborative power of platforms like GitHub, Cook 'N' Collab
-              introduces a new way to cook together.
-            </li>
-          </ul>
-
-          <h3>Features That Bring Recipes to Life</h3>
-          <ul>
-            <li>
-              <strong>Fork and Transform:</strong> See a recipe you like but
-              want to make it your own? Fork it onto your profile and tweak it
-              to your heart's content. Turn a meaty dish vegan, or switch up
-              ingredients for healthier alternatives.
-            </li>
-            <li>
-              <strong>Recipe Discussions and Reviews:</strong> Engage in lively
-              discussions about recipes, share tips, ask questions, and get
-              feedback from fellow cooking aficionados.
-            </li>
-            <li>
-              <strong>Pull Requests for Recipes:</strong> Suggest changes to
-              recipes directly to the author. Like a GitHub pull request, but
-              tastier!
-            </li>
-            <li>
-              <strong>Bookmark Your Favorites:</strong> Save recipes to your
-              profile for easy access anytime. It's like your personal digital
-              cookbook.
-            </li>
-          </ul>
-
-          <h3>Join Our Cooking Community</h3>
-          <p>
-            At Cook 'N' Collab, every dish tells a story, and every recipe is an
-            adventure waiting to be tweaked and transformed. Join us in
-            redefining the cooking experience, one recipe at a time.
-          </p>
-
-          <h3>Ready to Cook and Collaborate?</h3>
-          <p>
-            Sign up today and start your journey with Cook 'N' Collab. Let's
-            make cooking an adventure of collaboration and creativity.
-          </p>
-        </div>
+          <section>
+            <p>
+              Cooking has never been more collaborative! Cook ‘n’ Collab is a
+              platform to post and share recipes with all your followers.
+            </p>
+            <p>
+              It’s like a community cookbook, where everyone on the platform can
+              share and edit recipes for everyone to see.
+            </p>
+          </section>
+          <section>
+            <h2>A Digital Cookbook 📖</h2>
+            <p>
+              Easily upload and store your recipes. Add ingredients, steps,
+              photos, and unique tags.
+            </p>
+          </section>
+          <section>
+            <h2>Collaborate 🤝</h2>
+            <p>
+              Post your recipes publicly to inspire your followers, or keep them
+              private for your eyes only.
+            </p>
+            <p>
+              See a recipe you like? Suggest tweaks or 'fork' it to tailor it to
+              your dietary preferences.
+            </p>
+          </section>
+          <section>
+            <h2>Effortless Management 🗃️</h2>
+            <p>Quickly access all your recipes by searching them.</p>
+          </section>
+          <section>
+            <h2>Seamless Device Sync 📱💻</h2>
+            <p>
+              Whether you're using a smartphone, tablet, laptop, or desktop,
+              your recipes sync across all devices.
+            </p>
+          </section>
+          <section>
+            <h2>Support 🎗️</h2>
+            <p>
+              This is a small project created to encourage more cooking. Have
+              any questions? Reach out to us at{" "}
+              <a href="mailto:contact@cookncollab.com">
+                contact@cookncollab.com
+              </a>
+              .
+            </p>
+          </section>
+          <footer>
+            <p>
+              Join Cook ‘n’ Collab today, and transform the way you cook, share,
+              and enjoy food! 🍳📲🌍
+            </p>
+          </footer>
+        </main>
       </div>
     </div>
   );
