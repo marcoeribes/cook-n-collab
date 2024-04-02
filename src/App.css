@@ -7,4 +7,5 @@ main {
   /* navbar height = 60px */
   /* (min-height: calc(100vh - 250px); */
   min-height: calc(100vh - 230px);
+  max-width: 100%;
 }

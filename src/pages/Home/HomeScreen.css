@@ -1,7 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&display=swap");
 
 .content {
-  width: 80%;
   margin: auto;
   overflow: hidden;
 }
@@ -177,7 +176,8 @@ svg .steam {
   .content {
     width: 100%;
     max-width: 100%;
-    margin: 0 10px;
+    padding: 10px;
+    justify-content: center;
   }
 
   section {
