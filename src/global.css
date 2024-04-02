@@ -8,6 +8,8 @@ body {
   padding: 0;
   background-color: #fff3e0;
   font-family: "Baloo 2", sans-serif;
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 h1,

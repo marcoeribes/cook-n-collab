@@ -1,0 +1,40 @@
+svg .steam {
+  animation: radiate 520s infinite linear, faded infinite 4s linear;
+  stroke: gray;
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#steam-1 {
+  animation: radiate 220s infinite linear, faded infinite 3s linear;
+}
+
+#steam-2 {
+  animation: radiate 230s infinite linear, faded infinite 4s linear;
+}
+
+#steam-3 {
+  animation: radiate 210s infinite linear, faded infinite 3.5s linear;
+}
+
+@keyframes radiate {
+  0% {
+    stroke-dashoffset: 1px;
+  }
+  100% {
+    stroke-dashoffset: 10000px;
+  }
+}
+
+@keyframes faded {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
+    opacity: 1;
+  }
+}

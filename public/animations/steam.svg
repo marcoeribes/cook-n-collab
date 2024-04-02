@@ -1,0 +1,36 @@
+<svg
+  width="380px"
+  height="auto"
+  id="Layer_1"
+  data-name="Layer 1"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="10 0 430 230" <!-- moved to the right -->
+>
+  <path
+    id="steam-1"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    className="steam"
+    d="M426.78,268.95s-17.23,12.9-7,27.5c6.93,9.89,41,24.4,41,40.86,0,24.1-47.58,21.12-50.49,54.64-1.77,20.4,29.25,39.24,29.25,39.24"
+    transform="translate(-295.92 -224.85)"
+    stroke-dasharray="1,42,30"
+  />
+  <path
+    id="steam-2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    className="steam"
+    d="M514.05,229.35c-.17,13.18-32.64,30.57-32.64,48.59,0,26.6,41,39.4,41,55.86,0,24.1-47.58,21.12-50.49,54.64-1.55,17.87,29,39.1,29.25,39.24"
+    transform="translate(-295.92 -224.85)"
+    stroke-dasharray="54,4,16,7,48"
+  />
+  <path
+    id="steam-3"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    className="steam"
+    d="M554.36,268.95s-17.23,12.9-7,27.5c6.93,9.89,41,24.4,41,40.86,0,24.1-47.58,21.12-50.49,54.64-1.77,20.4,29.25,39.24,29.25,39.24"
+    transform="translate(-295.92 -224.85)"
+    stroke-dasharray="48,12,32"
+  />
+</svg>

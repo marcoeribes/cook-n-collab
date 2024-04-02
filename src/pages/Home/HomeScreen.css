@@ -6,19 +6,23 @@
   overflow: hidden;
 }
 
-.text-box {
-  width: 300px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  text-align: justify;
-  padding: 0;
-}
-
 .logo-image {
   order: 2;
   align-self: center;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+@keyframes rise {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(2);
+    opacity: 0;
+  }
 }
 
 .home-title {
@@ -38,6 +42,51 @@
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
+}
+
+.text-box {
+  width: 300px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: justify;
+  padding: 0;
+}
+
+h2 {
+  margin-bottom: -5px;
+}
+
+.box-animation {
+  opacity: 0;
+  animation: fadeIn 2s;
+  animation-fill-mode: forwards;
+  gap: 0rem;
+}
+
+#box1 {
+  animation-delay: 0.5s;
+}
+
+#box2 {
+  animation-delay: 1.5s;
+}
+
+#box3 {
+  animation-delay: 2.5s;
+}
+
+#box4 {
+  animation-delay: 1s;
+}
+
+#box5 {
+  animation-delay: 2s;
+}
+
+#box6 {
+  animation-delay: 3s;
 }
 
 .fade-image {
@@ -69,18 +118,52 @@
   height: 50%; /* Adjust this to control the height of the fade */
 }
 
-.grid-container {
-  display: grid;
-  grid-template-columns: repeat(9, 1fr);
-  grid-template-rows: repeat(9, 3);
-  gap: 10px;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
   to {
+    opacity: 1;
+  }
+}
+
+svg .steam {
+  animation: radiate 520s infinite linear, faded infinite 4s linear;
+  stroke: gray;
+  fill: none;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+#steam-1 {
+  animation: radiate 220s infinite linear, faded infinite 3s linear;
+}
+
+#steam-2 {
+  animation: radiate 230s infinite linear, faded infinite 4s linear;
+}
+
+#steam-3 {
+  animation: radiate 210s infinite linear, faded infinite 3.5s linear;
+}
+
+@keyframes radiate {
+  0% {
+    stroke-dashoffset: 1px;
+  }
+  100% {
+    stroke-dashoffset: 10000px;
+  }
+}
+
+@keyframes faded {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.2;
+  }
+  100% {
     opacity: 1;
   }
 }
@@ -95,7 +178,14 @@
     width: 100%;
     max-width: 100%;
     margin: 0 10px;
-    font-size: 0.8em; /* Reduce the font size */
+  }
+
+  section {
+    margin: 5px 10px;
+  }
+
+  h2 {
+    margin-bottom: -10px;
   }
 
   .home-title {
@@ -112,18 +202,13 @@
     height: auto;
   }
 
-  .content p,
-  .content div {
-    padding: 5px; /* Adjust the padding */
-    margin: 5px; /* Adjust the margins */
-  }
-
   .logo-image {
     order: 0;
     height: auto;
     width: 100%;
     display: flex;
     justify-content: center;
+    align-items: center;
   }
 
   .main-content {
@@ -137,11 +222,8 @@
     height: 30%; /* Adjust this to control the height of the fade on smaller screens */
   }
 
-  .content {
-    width: 100%;
-    max-width: 100%;
-    margin: 0 10px;
-    font-size: 0.8em; /* Reduce the font size */
+  section {
+    margin: 5px 10px;
   }
 
   .home-title {
@@ -157,9 +239,19 @@
     height: auto;
   }
 
-  .content p,
-  .content div {
-    padding: 5px; /* Adjust the padding */
-    margin: 5px; /* Adjust the margins */
+  #box2 {
+    animation-delay: 1s;
+  }
+
+  #box3 {
+    animation-delay: 1.5s;
+  }
+
+  #box4 {
+    animation-delay: 2s;
+  }
+
+  #box5 {
+    animation-delay: 2.5s;
   }
 }
