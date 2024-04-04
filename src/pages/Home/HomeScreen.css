@@ -228,7 +228,6 @@ svg .steam {
 
   .home-title {
     font-family: "Fuzzy Bubbles", sans-serif;
-    font-weight: 400;
     font-size: 4rem;
     margin-bottom: 1rem;
     text-align: center;
@@ -253,5 +252,22 @@ svg .steam {
 
   #box5 {
     animation-delay: 2.5s;
+  }
+}
+
+@media (max-width: 511px) {
+  .home-title {
+    font-size: 3rem;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 411px) {
+  .home-title {
+    font-family: "Fuzzy Bubbles", sans-serif;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    padding: 0 10px;
+    text-align: center;
   }
 }

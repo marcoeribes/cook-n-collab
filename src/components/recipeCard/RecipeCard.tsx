@@ -10,7 +10,9 @@ interface RecipeCardProps {
 const RecipeCard: React.FC<RecipeCardProps> = ({ imageUrl, title }) => {
   return (
     <div className="recipe-card">
-      <img className="recipe-card-image" src={imageUrl} alt={title} />
+      <div className="aspect-ratio-box">
+        <img className="recipe-card-image" src={imageUrl} alt={title} />
+      </div>
       <h4 className="recipe-card-title">{title}</h4>
     </div>
   );

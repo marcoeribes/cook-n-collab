@@ -30,7 +30,7 @@ export default function RecipesScreen() {
   }, []);
 
   return (
-    <section style={{ marginBottom: 100, marginTop: 70 }}>
+    <section>
       <h1 className="recipe-heading">Recipes</h1>
 
       <hr />

@@ -7,9 +7,20 @@
   filter: brightness(80%);
 }
 
-.recipe-card-image {
+.aspect-ratio-box {
+  position: relative;
   width: 100%;
-  height: auto;
+  padding-top: 100%; /* 3/4 = 0.75 which is 75% */
+  overflow: hidden;
+}
+
+.recipe-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Optional based on desired behavior */
 }
 
 .recipe-card-title {

@@ -143,7 +143,7 @@ export default function ProfileScreen({
         <p>Loading...</p>
       ) : (
         <>
-          <h1>Edit Profile</h1>
+          <h1 style={{ margin: 0, paddingTop: 40 }}>Edit Profile</h1>
 
           <section className="profile-info">
             <div>
