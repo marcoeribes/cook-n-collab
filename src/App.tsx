@@ -13,6 +13,7 @@ import EditProfileScreen from "./pages/Profile/EditProfileScreen.tsx";
 import FollowersScreen from "./pages/Followers/FollowersScreen.tsx";
 import ProfileScreen from "./pages/Profile/ProfileScreen.tsx";
 import EditRecipeScreen from "./pages/Recipe/EditRecipeScreen.tsx";
+import ResetPasswordScreen from "./pages/Login/ResetPasswordScreen.tsx";
 
 import Profile from "./interfaces/profile.interface.ts";
 import { getProfile } from "../supabase/profileFunctions.ts";
@@ -63,7 +64,7 @@ function App() {
 
   return (
     <>
-      {currentPath !== "/login" && <Navbar profile={profile} />}
+      {!currentPath.startsWith("/login") && <Navbar profile={profile} />}
       <main className="container">
         <Routes>
           <Route path="/*" element={<h1>Not Found</h1>} />
@@ -102,6 +103,15 @@ function App() {
             path="/login"
             element={
               <LoginScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
+          <Route
+            path="/login/reset"
+            element={
+              <ResetPasswordScreen
                 userProps={user as User}
                 sessionProps={session as Session}
               />

@@ -23,6 +23,7 @@
   font-family: "Fuzzy Bubbles", sans-serif;
   font-weight: 700;
   cursor: pointer;
+  padding-bottom: 30px;
 }
 
 .link {
@@ -36,6 +37,7 @@
 
 .label {
   margin: 10px 0;
+  justify-content: left;
 }
 
 .text-input {
@@ -57,6 +59,22 @@
 
 .text-input:focus {
   border-color: #0366d6;
+}
+
+/* Reset Password */
+
+.side-by-side-buttons-container {
+  padding-top: 40px;
+  display: flex;
+  gap: 20px;
+  justify-content: space-evenly;
+}
+
+.box-title-reset {
+  font-family: "Fuzzy Bubbles", sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  padding-bottom: 0px;
 }
 
 @media screen and (max-width: 480px) {

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { getAllRecipes } from "../../../supabase/recipe.functions";
@@ -22,6 +22,13 @@ export default function RecipesScreen() {
     username && navigate(`/${username[0]?.username}/${recipe.title}`);
   };
 
+  const sortedRecipes = useMemo(() => {
+    return [...recipes].sort(
+      (a, b) =>
+        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    );
+  }, [recipes]);
+
   useEffect(() => {
     getAllRecipes().then((data) => {
       console.log("recipes", data);
@@ -36,27 +43,20 @@ export default function RecipesScreen() {
       <hr />
       <section style={{ display: "flex", justifyContent: "center" }}>
         <div className="recipe-grid">
-          {recipes
-            .slice(0, displayCount)
-            .sort(
-              (a, b) =>
-                new Date(b.created_at).getTime() -
-                new Date(a.created_at).getTime()
-            )
-            .map((recipe) => (
-              <div
-                key={recipe.created_at}
-                style={{ textDecoration: "none" }}
-                onClick={() => generateUrl(recipe)}
-              >
-                <RecipeCard
-                  key={recipe.recipe_id}
-                  imageUrl={recipe.image_url}
-                  title={recipe.title}
-                  subheader={recipe.subheader}
-                />
-              </div>
-            ))}
+          {sortedRecipes.slice(0, displayCount).map((recipe) => (
+            <div
+              key={recipe.created_at}
+              style={{ textDecoration: "none" }}
+              onClick={() => generateUrl(recipe)}
+            >
+              <RecipeCard
+                key={recipe.recipe_id}
+                imageUrl={recipe.image_url}
+                title={recipe.title}
+                subheader={recipe.subheader}
+              />
+            </div>
+          ))}
         </div>
       </section>
       {displayCount < recipes.length && (

@@ -41,3 +41,16 @@ export async function signOut() {
   const { error } = await supabase.auth.signOut();
   if (error) console.error("Error signing out:", error.message);
 }
+
+export async function sendPasswordResetToEmail(email: string, url: string) {
+  const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: url,
+  });
+  if (error) {
+    console.log({ success: false, error: error });
+    return { success: false, error: error };
+  } else {
+    console.log({ success: true, error: error });
+    return { success: true, error: error };
+  }
+}

@@ -127,7 +127,12 @@ export default function LoginScreen({
             )*/}
           </label>
           {!isSignUp && (
-            <p style={{ color: "#1b6990", cursor: "pointer" }}>
+            <p
+              style={{ color: "#1b6990", cursor: "pointer" }}
+              onClick={() => {
+                navigate("reset");
+              }}
+            >
               Forgot Password?
             </p>
           )}
