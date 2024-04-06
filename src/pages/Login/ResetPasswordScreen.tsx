@@ -23,7 +23,7 @@ export default function ResetPasswordScreen({
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const url = "localhost:5173/login/new_password"; // might need to remove later
+  const url = "https://cookncollab.com/login/new-password"; // might need to remove later
 
   async function handleSendPasswordResetToEmail(
     event: React.FormEvent<HTMLFormElement>

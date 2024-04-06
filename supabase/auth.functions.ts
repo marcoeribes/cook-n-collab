@@ -51,6 +51,19 @@ export async function sendPasswordResetToEmail(email: string, url: string) {
     return { success: false, error: error };
   } else {
     console.log({ success: true, data: data });
+    return { success: true, data: data, url: url };
+  }
+}
+
+export async function updatePassword(newPassword: string) {
+  const { data, error } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+  if (error) {
+    console.log({ success: false, error: error });
+    return { success: false, error: error };
+  } else {
+    console.log({ success: true, data: data });
     return { success: true, data: data };
   }
 }
