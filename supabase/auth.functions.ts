@@ -50,7 +50,7 @@ export async function sendPasswordResetToEmail(email: string, url: string) {
     console.log({ success: false, error: error });
     return { success: false, error: error };
   } else {
-    console.log({ success: true, error: error });
-    return { success: true, error: error };
+    console.log({ success: true, data: data });
+    return { success: true, data: data };
   }
 }

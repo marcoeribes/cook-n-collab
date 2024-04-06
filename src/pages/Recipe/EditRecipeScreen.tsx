@@ -294,305 +294,337 @@ export default function EditRecipeScreen({
 
   return (
     <>
-      {user?.id === userId ? (
-        <section style={{}}>
-          <h2 className="recipe-title">Edit Recipe</h2>
-          <div className="center-items">
-            <form
-              onSubmit={handleRecipeInfoUpdate}
-              className="edit-recipe-form"
-            >
-              <label>Change Recipe Title</label>
-              <input
-                type="text"
-                value={newTitle}
-                onChange={(e) => setNewTitle(e.target.value)}
-                className="text-input"
-                style={{ marginBottom: "10px" }}
-                required
-              />
-
-              <label>Edit Description</label>
-              <input
-                type="text"
-                value={newDescription}
-                className="text-input" // Can be Global
-                onChange={(e) => setNewDescription(e.target.value)}
-                style={{ marginBottom: "10px" }}
-              />
-              <input
-                type="submit"
-                value={"Save"}
-                className="button tertiary-button"
-                style={{ margin: "10px 0px 40px" }}
-              />
-            </form>
-          </div>
-          <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
-            <img src={imageUrl} alt="recipe" width="300px" height="auto" />
-          </label>
-          <div className="center-items">
-            <input
-              id="file-upload"
-              type="file"
-              onChange={(e) => {
-                handleUploadImage(e);
-              }}
-            />
-            <div
-              className="button tertiary-button"
-              style={{
-                paddingTop: 4,
-                paddingBottom: 4,
-                width: "82px",
-              }}
-            >
-              <label htmlFor="file-upload">Upload</label>
-            </div>
-          </div>
-
-          {/* Recipe Info Stuff */}
-          <div className="recipe-info-container">
-            <h2>Igredients</h2>
-            <form onSubmit={handleSaveIngredients}>
-              {ingredientsList
-                .sort((a, b) => a.ingredient_id - b.ingredient_id)
-                .map((ingredient, index) => (
-                  <div className="edit-ingredient-container" key={index}>
-                    <input
-                      value={ingredient.ingredient_text}
-                      type="text"
-                      className="text-input"
-                      style={{ paddingRight: 18 }}
-                      onChange={(event) => {
-                        setIngredientsList((prevIngredients: Ingredient[]) => {
-                          const updatedIngredients = [...prevIngredients];
-                          updatedIngredients[index] = {
-                            ...ingredient,
-                            ingredient_text: event.target.value,
-                          } as Ingredient;
-                          return updatedIngredients;
-                        });
-                      }}
-                    />
-                    <img
-                      src="/icons/remove.svg"
-                      alt="delete"
-                      width="20px"
-                      style={{
-                        position: "absolute",
-                        top: "0px",
-                        right: "-3px",
-                      }}
-                      onClick={() => {
-                        const reUpdatedIngredients = ingredientsList.filter(
-                          (ingredient: Ingredient, i: number) => {
-                            if (i === index) {
-                              setDeletedIngredientsList((prevIngredients) => [
-                                ...prevIngredients,
-                                ingredient,
-                              ]);
-                              return false;
-                            } else {
-                              return true;
-                            }
-                          }
-                        );
-                        setIngredientsList(reUpdatedIngredients);
-                      }}
-                    />
-                  </div>
-                ))}
-
-              {Array.from({ length: newIngredientInputCount }, (_, index) => (
-                <div className="edit-ingredient-container" key={index + 1}>
-                  <input
-                    value={newIngredientsList[index]?.ingredient_text || ""}
-                    className="text-input"
-                    onChange={(event) => {
-                      setNewIngredientsList((prevIngredients: Ingredient[]) => {
-                        const newIngredients = [...prevIngredients];
-                        newIngredients[index] = {
-                          ingredient_text: event.target.value,
-                        } as Ingredient;
-                        return newIngredients;
-                      });
-                    }}
-                  />
-                  <img
-                    src="/icons/remove.svg"
-                    alt="delete"
-                    width="20px"
-                    style={{
-                      position: "absolute",
-                      top: "0px",
-                      right: "-3px",
-                    }}
-                    onClick={() => {
-                      const newIngredients = newIngredientsList.filter(
-                        (_, i) => i !== index
-                      );
-                      setNewIngredientsList(newIngredients);
-                      setNewIngredientInputCount(newIngredientInputCount - 1);
-                    }}
-                  />
-                </div>
-              ))}
-
-              <img
-                src="/icons/add-ellipse.svg"
-                alt="add"
-                width="30px"
-                onClick={() => {
-                  if (
-                    newIngredientsList[newIngredientInputCount - 1]
-                      ?.ingredient_text ||
-                    newIngredientsList.length === newIngredientInputCount
-                  ) {
-                    console.log("Adding Ingredient", newIngredientInputCount);
-                    setNewIngredientInputCount(newIngredientInputCount + 1);
-                  }
-                }}
-              />
-              <br />
-              <input
-                type="submit"
-                value="Save Ingredients"
-                className="button tertiary-button"
-                style={{ margin: "10px 0px 40px" }}
-              />
-            </form>
-
-            <h2>Directions</h2>
-            <form onSubmit={handleSaveDirections}>
-              {updatedDirections
-                .sort((a, b) => a.step_number - b.step_number)
-                .map((direction, index) => (
-                  <div
-                    className="edit-direction-container"
-                    key={direction.step_number}
-                  >
-                    <p>{direction.step_number}</p>
-                    <textarea
-                      key={direction.step_number}
-                      value={direction.direction_text}
-                      className="text-input"
-                      onChange={(event) => {
-                        setUpdatedDirections((prevDirections: Direction[]) => {
-                          const updatedDirections = [...prevDirections];
-                          updatedDirections[index] = {
-                            ...direction,
-                            step_number: index + 1,
-                            direction_text: event.target.value,
-                          } as Direction;
-                          return updatedDirections;
-                        });
-                      }}
-                    />
-                    <img
-                      src="/icons/remove.svg"
-                      alt="delete"
-                      width="20px"
-                      style={{
-                        position: "absolute",
-                        top: "0px",
-                        right: "-3px",
-                      }}
-                      onClick={() => {
-                        const reUpdatedDirections = updatedDirections
-                          .filter((_, i) => {
-                            if (i === index) {
-                              setDeletedDirectionsArray((prevDirections) => [
-                                ...prevDirections,
-                                direction,
-                              ]);
-                              return false;
-                            } else {
-                              return true;
-                            }
-                          })
-                          .map((direction, i) => ({
-                            ...direction,
-                            step_number: i + 1,
-                          }));
-                        setUpdatedDirections(reUpdatedDirections);
-                      }}
-                    />
-                  </div>
-                ))}
-
-              {Array.from({ length: textareaCount }, (_, index) => (
-                <div className="edit-direction-container" key={index + 1}>
-                  <p>{updatedDirections.length + index + 1}</p>
-                  <textarea
-                    value={newDirectionsArray[index]?.direction_text}
-                    style={{ width: "100%", height: "auto" }}
-                    className="text-input"
-                    onChange={(event) => {
-                      setNewDirectionsArray((prevDirections: Direction[]) => {
-                        const newDirections = [...prevDirections];
-                        newDirections[index] = {
-                          step_number: updatedDirections.length + index + 1,
-                          direction_text: event.target.value,
-                        } as Direction;
-                        return newDirections;
-                      });
-                    }}
-                  />
-                  <img
-                    src="/icons/remove.svg"
-                    alt="delete"
-                    width="20px"
-                    style={{
-                      position: "absolute",
-                      top: "0px",
-                      right: "-3px",
-                    }}
-                    onClick={() => {
-                      const newDirections = newDirectionsArray
-                        .filter((_, i) => i !== index)
-                        .map((direction, i) => ({
-                          ...direction,
-                          step_number: updatedDirections.length + i + 1,
-                        }));
-                      setNewDirectionsArray(newDirections);
-                      setTextareaCount(textareaCount - 1);
-                    }}
-                  />
-                </div>
-              ))}
-              <img
-                src="/icons/add-ellipse.svg"
-                alt="add"
-                width="30px"
-                onClick={() => {
-                  if (
-                    newDirectionsArray[textareaCount - 1]?.direction_text ||
-                    textareaCount === 0
-                  ) {
-                    setTextareaCount(textareaCount + 1);
-                  }
-                }}
-              />
-              <br />
-              <input
-                type="submit"
-                value="Save Directions"
-                className="button tertiary-button"
-                style={{ margin: "10px 0px 40px" }}
-              />
-            </form>
-            <Button
-              text="Post Recipe"
-              onClick={() => {
-                navigate(`/${usernameParam}/${newTitle}`);
-              }}
-              style="button primary-button"
-            />
-          </div>
-        </section>
+      {user?.id == null || recipeId == null ? (
+        <h1>No recipe found</h1>
       ) : (
-        <p>Access unavailable</p>
+        <>
+          {user?.id === userId ? (
+            <section style={{}}>
+              <h2 className="recipe-title">Edit Recipe</h2>
+              <div className="center-items">
+                <form
+                  onSubmit={handleRecipeInfoUpdate}
+                  className="edit-recipe-form"
+                >
+                  <label>Change Recipe Title</label>
+                  <input
+                    type="text"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    className="text-input"
+                    style={{ marginBottom: "10px" }}
+                    required
+                  />
+
+                  <label>Edit Description</label>
+                  <input
+                    type="text"
+                    value={newDescription}
+                    className="text-input" // Can be Global
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    style={{ marginBottom: "10px" }}
+                  />
+                  <input
+                    type="submit"
+                    value={"Save"}
+                    className="button tertiary-button"
+                    style={{ margin: "10px 0px 40px" }}
+                  />
+                </form>
+              </div>
+              <label htmlFor="file-upload" style={{ cursor: "pointer" }}>
+                <img src={imageUrl} alt="recipe" width="300px" height="auto" />
+              </label>
+              <div className="center-items">
+                <input
+                  id="file-upload"
+                  type="file"
+                  onChange={(e) => {
+                    handleUploadImage(e);
+                  }}
+                />
+                <div
+                  className="button tertiary-button"
+                  style={{
+                    paddingTop: 4,
+                    paddingBottom: 4,
+                    width: "82px",
+                  }}
+                >
+                  <label htmlFor="file-upload">Upload</label>
+                </div>
+              </div>
+
+              {/* Recipe Info Stuff */}
+              <div className="recipe-info-container">
+                <h2>Igredients</h2>
+                <form onSubmit={handleSaveIngredients}>
+                  {ingredientsList
+                    .sort((a, b) => a.ingredient_id - b.ingredient_id)
+                    .map((ingredient, index) => (
+                      <div className="edit-ingredient-container" key={index}>
+                        <input
+                          value={ingredient.ingredient_text}
+                          type="text"
+                          className="text-input"
+                          style={{ paddingRight: 18 }}
+                          onChange={(event) => {
+                            setIngredientsList(
+                              (prevIngredients: Ingredient[]) => {
+                                const updatedIngredients = [...prevIngredients];
+                                updatedIngredients[index] = {
+                                  ...ingredient,
+                                  ingredient_text: event.target.value,
+                                } as Ingredient;
+                                return updatedIngredients;
+                              }
+                            );
+                          }}
+                        />
+                        <img
+                          src="/icons/remove.svg"
+                          alt="delete"
+                          width="20px"
+                          style={{
+                            position: "absolute",
+                            top: "0px",
+                            right: "-3px",
+                          }}
+                          onClick={() => {
+                            const reUpdatedIngredients = ingredientsList.filter(
+                              (ingredient: Ingredient, i: number) => {
+                                if (i === index) {
+                                  setDeletedIngredientsList(
+                                    (prevIngredients) => [
+                                      ...prevIngredients,
+                                      ingredient,
+                                    ]
+                                  );
+                                  return false;
+                                } else {
+                                  return true;
+                                }
+                              }
+                            );
+                            setIngredientsList(reUpdatedIngredients);
+                          }}
+                        />
+                      </div>
+                    ))}
+
+                  {Array.from(
+                    { length: newIngredientInputCount },
+                    (_, index) => (
+                      <div
+                        className="edit-ingredient-container"
+                        key={index + 1}
+                      >
+                        <input
+                          value={
+                            newIngredientsList[index]?.ingredient_text || ""
+                          }
+                          className="text-input"
+                          onChange={(event) => {
+                            setNewIngredientsList(
+                              (prevIngredients: Ingredient[]) => {
+                                const newIngredients = [...prevIngredients];
+                                newIngredients[index] = {
+                                  ingredient_text: event.target.value,
+                                } as Ingredient;
+                                return newIngredients;
+                              }
+                            );
+                          }}
+                        />
+                        <img
+                          src="/icons/remove.svg"
+                          alt="delete"
+                          width="20px"
+                          style={{
+                            position: "absolute",
+                            top: "0px",
+                            right: "-3px",
+                          }}
+                          onClick={() => {
+                            const newIngredients = newIngredientsList.filter(
+                              (_, i) => i !== index
+                            );
+                            setNewIngredientsList(newIngredients);
+                            setNewIngredientInputCount(
+                              newIngredientInputCount - 1
+                            );
+                          }}
+                        />
+                      </div>
+                    )
+                  )}
+
+                  <img
+                    src="/icons/add-ellipse.svg"
+                    alt="add"
+                    width="30px"
+                    onClick={() => {
+                      if (
+                        newIngredientsList[newIngredientInputCount - 1]
+                          ?.ingredient_text ||
+                        newIngredientsList.length === newIngredientInputCount
+                      ) {
+                        console.log(
+                          "Adding Ingredient",
+                          newIngredientInputCount
+                        );
+                        setNewIngredientInputCount(newIngredientInputCount + 1);
+                      }
+                    }}
+                  />
+                  <br />
+                  <input
+                    type="submit"
+                    value="Save Ingredients"
+                    className="button tertiary-button"
+                    style={{ margin: "10px 0px 40px" }}
+                  />
+                </form>
+
+                <h2>Directions</h2>
+                <form onSubmit={handleSaveDirections}>
+                  {updatedDirections
+                    .sort((a, b) => a.step_number - b.step_number)
+                    .map((direction, index) => (
+                      <div
+                        className="edit-direction-container"
+                        key={direction.step_number}
+                      >
+                        <p>{direction.step_number}</p>
+                        <textarea
+                          key={direction.step_number}
+                          value={direction.direction_text}
+                          className="text-input"
+                          onChange={(event) => {
+                            setUpdatedDirections(
+                              (prevDirections: Direction[]) => {
+                                const updatedDirections = [...prevDirections];
+                                updatedDirections[index] = {
+                                  ...direction,
+                                  step_number: index + 1,
+                                  direction_text: event.target.value,
+                                } as Direction;
+                                return updatedDirections;
+                              }
+                            );
+                          }}
+                        />
+                        <img
+                          src="/icons/remove.svg"
+                          alt="delete"
+                          width="20px"
+                          style={{
+                            position: "absolute",
+                            top: "0px",
+                            right: "-3px",
+                          }}
+                          onClick={() => {
+                            const reUpdatedDirections = updatedDirections
+                              .filter((_, i) => {
+                                if (i === index) {
+                                  setDeletedDirectionsArray(
+                                    (prevDirections) => [
+                                      ...prevDirections,
+                                      direction,
+                                    ]
+                                  );
+                                  return false;
+                                } else {
+                                  return true;
+                                }
+                              })
+                              .map((direction, i) => ({
+                                ...direction,
+                                step_number: i + 1,
+                              }));
+                            setUpdatedDirections(reUpdatedDirections);
+                          }}
+                        />
+                      </div>
+                    ))}
+
+                  {Array.from({ length: textareaCount }, (_, index) => (
+                    <div className="edit-direction-container" key={index + 1}>
+                      <p>{updatedDirections.length + index + 1}</p>
+                      <textarea
+                        value={newDirectionsArray[index]?.direction_text}
+                        style={{ width: "100%", height: "auto" }}
+                        className="text-input"
+                        onChange={(event) => {
+                          setNewDirectionsArray(
+                            (prevDirections: Direction[]) => {
+                              const newDirections = [...prevDirections];
+                              newDirections[index] = {
+                                step_number:
+                                  updatedDirections.length + index + 1,
+                                direction_text: event.target.value,
+                              } as Direction;
+                              return newDirections;
+                            }
+                          );
+                        }}
+                      />
+                      <img
+                        src="/icons/remove.svg"
+                        alt="delete"
+                        width="20px"
+                        style={{
+                          position: "absolute",
+                          top: "0px",
+                          right: "-3px",
+                        }}
+                        onClick={() => {
+                          const newDirections = newDirectionsArray
+                            .filter((_, i) => i !== index)
+                            .map((direction, i) => ({
+                              ...direction,
+                              step_number: updatedDirections.length + i + 1,
+                            }));
+                          setNewDirectionsArray(newDirections);
+                          setTextareaCount(textareaCount - 1);
+                        }}
+                      />
+                    </div>
+                  ))}
+                  <img
+                    src="/icons/add-ellipse.svg"
+                    alt="add"
+                    width="30px"
+                    onClick={() => {
+                      if (
+                        newDirectionsArray[textareaCount - 1]?.direction_text ||
+                        textareaCount === 0
+                      ) {
+                        setTextareaCount(textareaCount + 1);
+                      }
+                    }}
+                  />
+                  <br />
+                  <input
+                    type="submit"
+                    value="Save Directions"
+                    className="button tertiary-button"
+                    style={{ margin: "10px 0px 40px" }}
+                  />
+                </form>
+                <Button
+                  text="Post Recipe"
+                  onClick={() => {
+                    navigate(`/${usernameParam}/${newTitle}`);
+                  }}
+                  style="button primary-button"
+                />
+              </div>
+            </section>
+          ) : (
+            <p>Access unavailable</p>
+          )}
+        </>
       )}
     </>
   );

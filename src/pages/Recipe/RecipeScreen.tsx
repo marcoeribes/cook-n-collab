@@ -93,51 +93,56 @@ export default function RecipeScreen({
   }, [recipeId]);
 
   return (
-    <section>
-      <h2 className="recipe-title">{title}</h2>
-      <Link to={`/${username}`} className="recipe-author-link">
-        <h3 className={"recipe-author-text"}>By {username}</h3>
-        <img src={avatarUrl} alt="avatar" className={"recipe-author-avatar"} />
-      </Link>
-      <img src={imageUrl} alt="recipe" className="recipe-image" />
-      <p className="recipe-description">{description}</p>
-      <div className="recipe-info-container">
-        <h3>Ingredients</h3>
-        {ingredients.map((ingredient: { ingredient_text: string }, index) => (
-          <div className="recipe-info-list">
-            <p className="recipe-info-text" key={index}>
-              {ingredient.ingredient_text}
-            </p>
+    <>
+      {username == null || recipeParam == null ? (
+        <h1>No recipe found</h1>
+      ) : (
+        <section>
+          <h2 className="recipe-title">{title}</h2>
+          <Link to={`/${username}`} className="recipe-author-link">
+            <h3 className="recipe-author-text">By {username}</h3>
+            <img
+              src={avatarUrl}
+              alt="avatar"
+              className="recipe-author-avatar"
+            />
+          </Link>
+          <img src={imageUrl} alt="recipe" className="recipe-image" />
+          <p className="recipe-description">{description}</p>
+          <div className="recipe-info-container">
+            <h3>Ingredients</h3>
+            {ingredients.map((ingredient, index) => (
+              <div className="recipe-info-list" key={index}>
+                <p className="recipe-info-text">{ingredient.ingredient_text}</p>
+              </div>
+            ))}
+            <h3>Directions</h3>
+            {directions
+              .sort((a, b) => a.step_number - b.step_number)
+              .map((direction) => (
+                <div className="recipe-info-list" key={direction.step_number}>
+                  <p className="recipe-info-text">
+                    <b>{direction.step_number}</b> {direction.direction_text}
+                  </p>
+                </div>
+              ))}
           </div>
-        ))}
-        <h3>Directions</h3>
-        {directions
-          .sort(
-            (a: { step_number: number }, b: { step_number: number }) =>
-              a.step_number - b.step_number
-          )
-          .map((direction: { step_number: number; direction_text: string }) => (
-            <div className="recipe-info-list">
-              <p className="recipe-info-text" key={direction.step_number}>
-                <b>{direction.step_number}</b> {direction.direction_text}
-              </p>
+          {user?.id === userId && (
+            <div className="recipe-user-buttons">
+              <Button
+                onClick={navigateToEditRecipe}
+                text="Edit Recipe"
+                style="button primary-button"
+              />
+              <Button
+                onClick={handleDeleteRecipe}
+                text="Delete Recipe"
+                style="button secondary-button"
+              />
             </div>
-          ))}
-      </div>
-      {user?.id === userId && (
-        <div className="recipe-user-buttons">
-          <Button
-            onClick={navigateToEditRecipe}
-            text="Edit Recipe"
-            style="button primary-button"
-          />
-          <Button
-            onClick={handleDeleteRecipe}
-            text="Delete Recipe"
-            style="button secondary-button"
-          />
-        </div>
-      )}{" "}
-    </section>
+          )}
+        </section>
+      )}
+    </>
   );
 }

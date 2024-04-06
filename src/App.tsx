@@ -68,28 +68,12 @@ function App() {
       <main className="container">
         <Routes>
           <Route path="/*" element={<h1>Not Found</h1>} />
+          <Route path="/*/*" element={<h1>Recipe Not Found</h1>} />
           <Route path="/profile" element={<h1>Not Accessible</h1>} />
 
           <Route path="/" element={<HomeScreen />} />
           <Route path="/recipes" element={<RecipesScreen />} />
-          <Route
-            path="/:usernameParam/:recipeParam"
-            element={
-              <RecipeScreen
-                userProps={user as User}
-                sessionProps={session as Session}
-              />
-            }
-          />
-          <Route
-            path="/:usernameParam/:recipeParam/edit"
-            element={
-              <EditRecipeScreen
-                userProps={user as User}
-                sessionProps={session as Session}
-              />
-            }
-          />
+
           <Route
             path="/add-recipe"
             element={
@@ -127,6 +111,24 @@ function App() {
             }
           ></Route>
           <Route
+            path="/:usernameParam/:recipeParam"
+            element={
+              <RecipeScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
+          <Route
+            path="/:usernameParam/:recipeParam/edit"
+            element={
+              <EditRecipeScreen
+                userProps={user as User}
+                sessionProps={session as Session}
+              />
+            }
+          />
+          <Route
             path=":param/followers"
             element={
               <FollowersScreen
@@ -155,7 +157,7 @@ function App() {
           />
         </Routes>
       </main>
-      {currentPath !== "/login" && <Footer />}
+      {!currentPath.startsWith("/login") && <Footer />}
     </>
   );
 }
