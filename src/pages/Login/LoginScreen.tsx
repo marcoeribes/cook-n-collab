@@ -8,6 +8,13 @@ import {
   signOut,
 } from "../../../supabase/auth.functions";
 import "./LoginScreen.css";
+import {
+  usernameCharsRegex,
+  usernameLengthRegex,
+  passwordCharsRegex,
+  passwordLengthRegex,
+  emailRegex,
+} from "../../utils/regex";
 
 interface LoginScreenProps {
   userProps: User;
@@ -19,6 +26,7 @@ export default function LoginScreen({
   sessionProps,
 }: LoginScreenProps) {
   const navigate = useNavigate();
+  const url = "https://cookncollab/profile/edit";
 
   const [session, setSession] = useState(sessionProps);
   const [user, setUser] = useState<User | null>(userProps);
@@ -29,14 +37,16 @@ export default function LoginScreen({
 
   const [username, setUsername] = useState("");
   const [successfulSignUp, setSuccessfulSignUp] = useState(false);
-  const url = "https://cookncollab/profile/edit"; // might need to remove later
-
-  //const [passwordError, setPasswordError] = useState("");
 
   const [authError, setAuthError] = useState("");
 
   async function handleSignUp(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const validationResult = await validationCheck(email, username, password);
+    if (validationResult !== "") {
+      setAuthError(validationResult);
+      return; // Exit handleSignUp if validation fails
+    }
     const response = await signUpNewUser(email, password, username, url);
 
     if (response.success === true) {
@@ -60,6 +70,31 @@ export default function LoginScreen({
       console.log("User Logged Out");
       window.location.reload();
     });
+  }
+
+  async function validationCheck(
+    emailInput: string,
+    usernameInput: string,
+    passwordInput: string
+  ): Promise<string> {
+    switch (true) {
+      case emailInput.trim() === "" ||
+        usernameInput.trim() === "" ||
+        passwordInput.trim() === "":
+        return "Please enter all fields";
+      case !emailRegex.test(emailInput):
+        return "Invalid email";
+      case !usernameCharsRegex.test(usernameInput):
+        return "Username can only contain letters and numbers";
+      case !usernameLengthRegex.test(usernameInput):
+        return "Username must be between 4 to 20 characters";
+      case !passwordCharsRegex.test(passwordInput):
+        return "Password must contain at least one digit, one lowercase letter, and one uppercase letter";
+      case !passwordLengthRegex.test(passwordInput):
+        return "Password must be at least 8 characters";
+      default:
+        return ""; // No error
+    }
   }
 
   useEffect(() => {
@@ -122,9 +157,6 @@ export default function LoginScreen({
                 setPassword(e.target.value);
               }}
             />
-            {/*passwordError && (
-              <div style={{ color: "red" }}>{passwordError}</div>
-            )*/}
           </label>
           {!isSignUp && (
             <p
