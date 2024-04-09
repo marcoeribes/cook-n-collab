@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getProfile } from "../../../supabase/profileFunctions";
 import { updatePassword } from "../../../supabase/auth.functions";
 import "./LoginScreen.css";
+import { passwordCharsRegex, passwordLengthRegex } from "../../utils/regex";
 
 interface NewPasswordScreenProps {
   userProps: User;
@@ -23,9 +24,33 @@ export default function NewPasswordScreen({
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [username, setUsername] = useState("");
+  const [authError, setAuthError] = useState("");
 
   async function handlePasswordUpdate(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+
+    switch (true) {
+      case password.trim() === "" || confirmPassword.trim() === "":
+        setAuthError("Please enter all fields");
+        return;
+      case !passwordCharsRegex.test(password) ||
+        !passwordCharsRegex.test(confirmPassword):
+        setAuthError(
+          "Password must contain at least one digit, one lowercase letter, and one uppercase letter"
+        );
+        return;
+      case !passwordLengthRegex.test(password) ||
+        !passwordLengthRegex.test(confirmPassword):
+        setAuthError("Password must be at least 8 characters");
+        return;
+      case password !== confirmPassword:
+        setAuthError("Passwords do not match");
+        return;
+      default:
+        setAuthError("");
+        break;
+    }
+
     console.log("update");
     updatePassword(password).then((result) => {
       if (result.success === true) navigate("/");
@@ -77,6 +102,7 @@ export default function NewPasswordScreen({
             value="Enter"
           />
         </div>
+        <div style={{ color: "red", paddingTop: 40 }}>{authError}</div>
       </form>
     </div>
   );

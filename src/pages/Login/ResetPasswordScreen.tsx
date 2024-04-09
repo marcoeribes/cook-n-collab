@@ -5,6 +5,7 @@ import { getProfile } from "../../../supabase/profileFunctions";
 import { sendPasswordResetToEmail } from "../../../supabase/auth.functions";
 import "./LoginScreen.css";
 import Button from "../../components/button/Button";
+import { emailRegex } from "../../utils/regex";
 
 interface ResetPasswordScreenProps {
   userProps: User;
@@ -16,6 +17,7 @@ export default function ResetPasswordScreen({
   sessionProps,
 }: ResetPasswordScreenProps) {
   const navigate = useNavigate();
+  const url = "https://cookncollab.com/login/new-password";
 
   const [session, setSession] = useState(sessionProps);
   const [user, setUser] = useState<User | null>(userProps);
@@ -23,13 +25,16 @@ export default function ResetPasswordScreen({
 
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const url = "https://cookncollab.com/login/new-password"; // might need to remove later
+  const [authError, setAuthError] = useState("");
 
   async function handleSendPasswordResetToEmail(
     event: React.FormEvent<HTMLFormElement>
   ) {
     event.preventDefault();
-    console.log("reset");
+    if (email.trim() === "" || !emailRegex.test(email)) {
+      setAuthError("Enter valid email");
+      return;
+    } else setAuthError("");
     sendPasswordResetToEmail(email, url).then((result) => {
       setPasswordResetResult(result.success);
     });
@@ -73,6 +78,7 @@ export default function ResetPasswordScreen({
               onChange={(e) => setEmail(e.target.value)}
             />
           </label>
+
           <div className="side-by-side-buttons-container">
             <Button
               text="Go Back"
@@ -86,6 +92,7 @@ export default function ResetPasswordScreen({
               value="Reset"
             />
           </div>
+          <div style={{ color: "red", paddingTop: 36 }}>{authError}</div>
         </form>
       </div>
     );
